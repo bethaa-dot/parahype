@@ -248,7 +248,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
       </button>
       <!-- Hidden Google One Tap / popup anchor -->
       <div id="g_id_onload"
-        data-client_id="790361257297-3c3ua1tj1hhnuea7ffc8d59fuovm8sg6.apps.googleusercontent.com"
+        data-client_id="YOUR_GOOGLE_CLIENT_ID"
         data-callback="handleGoogleCredential"
         data-auto_select="false"
         data-cancel_on_tap_outside="true">
@@ -658,7 +658,7 @@ function toggleMute() {
 
 // ── Google Sign-In ──
 // ⚠️  Replace YOUR_GOOGLE_CLIENT_ID with your actual Client ID from Google Cloud Console
-const GOOGLE_CLIENT_ID = '790361257297-3c3ua1tj1hhnuea7ffc8d59fuovm8sg6.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID';
 
 function triggerGoogleSignIn() {
   if (typeof google === 'undefined') {
@@ -936,16 +936,72 @@ function closeCoach() {
   document.getElementById('coach-panel').classList.remove('open');
 }
 
+// Conversation history for coach — keeps context across the session
+let coachHistory = [];
+
+function buildCoachSystemPrompt() {
+  const donHabits = habits.filter(h=>h.done).length;
+  const totalHabits = habits.length;
+  const today = new Date().toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'});
+  const userName = currentUser ? currentUser.name : 'friend';
+
+  return `You are ParaHype — a warm, witty, deeply empathetic AI hype buddy built specifically for people with ADHD. You are NOT a generic assistant. You are a real presence: enthusiastic but never fake, honest but never harsh, structured but never rigid.
+
+TODAY'S CONTEXT:
+- User's name: ${userName}
+- Date: ${today}
+- Habits completed: ${donHabits} out of ${totalHabits} today
+- XP earned today: ${xpPoints}
+- Active habits: ${habits.map(h=>(h.done?'✓ ':'○ ')+h.name).join(', ')}
+
+YOUR PERSONALITY:
+- You speak like a best friend who genuinely gets ADHD — you've lived it, you get the shame spirals, the paralysis, the hyperfocus, the time blindness
+- You are real. You don't say "Great question!" or "Absolutely!" or "I'd be happy to help!" — ever
+- You use casual language, occasional humor, and warmth — but always stay grounded and practical
+- You never lecture, never say "you should", never make the user feel broken or behind
+- You celebrate tiny wins like they're huge, because for ADHD brains, they ARE huge
+
+TASK BREAKDOWN RULES (when user asks to break something into tasks):
+- ALWAYS ask: what is the deadline, and what do they already have done?
+- Break work into tiny, specific, time-boxed chunks — no vague steps like "research topic"
+- Assign each chunk to a specific day/time slot based on the deadline
+- Lead with the EASIEST or most interesting chunk first — ADHD brains need a win to start
+- Keep each task completable in one 25-min Pomodoro or less
+- After listing tasks, suggest which ONE to start with RIGHT NOW
+- Offer to add tasks to their habit tracker
+
+RESPONSE FORMAT RULES:
+- For task breakdowns: use a clear numbered list with day labels, keep each item one line
+- For emotional support: 2-3 sentences max, warm and direct
+- For quick questions: one punchy sentence if possible
+- Never use bullet points for emotional responses — that feels clinical
+- End task breakdowns with a specific "Start with this right now:" callout
+- Use ✦ sparingly for emphasis — not on every line
+
+Remember: the goal is always to get them from paralyzed → moving. One tiny step at a time.`;
+}
+
 function sendCoach() {
   const inp = document.getElementById('coach-input');
   const text = inp.value.trim();
   if(!text) return;
   inp.value = '';
+
+  // Add to history
+  coachHistory.push({ role: 'user', content: text });
+
   const msgs = document.getElementById('coach-msgs');
   const userDiv = document.createElement('div');
   userDiv.className = 'coach-user';
   userDiv.textContent = text;
   msgs.appendChild(userDiv);
+
+  // Typing indicator
+  const typingDiv = document.createElement('div');
+  typingDiv.className = 'coach-msg';
+  typingDiv.id = 'coach-typing';
+  typingDiv.innerHTML = '<strong style="font-size:10px;color:var(--accent2);display:block;margin-bottom:4px">ParaHype AI</strong><span style="color:var(--muted);font-style:italic">typing...</span>';
+  msgs.appendChild(typingDiv);
   msgs.scrollTop = msgs.scrollHeight;
 
   fetch('https://api.anthropic.com/v1/messages',{
@@ -954,25 +1010,37 @@ function sendCoach() {
     body:JSON.stringify({
       model:'claude-sonnet-4-20250514',
       max_tokens:1000,
-      system:`You are ParaHype, a warm and energetic AI hype buddy for people with ADHD. Your vibe is like a supportive best friend who totally gets ADHD. 
-Keep responses SHORT (2-3 sentences max), warm, and concrete. Use first person. Never lecture. 
-Current user stats: ${xpPoints} XP, ${habits.filter(h=>h.done).length}/${habits.length} habits done today.
-When breaking tasks into steps: give 3-5 tiny actionable steps, numbered. Use encouraging language.`,
-      messages:[{role:'user',content:text}]
+      system: buildCoachSystemPrompt(),
+      messages: coachHistory
     })
   })
   .then(r=>r.json())
   .then(d=>{
-    const reply = d.content?.find(c=>c.type==='text')?.text || "You've got this! I'm right here with you.";
+    const reply = d.content?.find(c=>c.type==='text')?.text || "You've got this. I'm right here with you.";
+
+    // Add assistant reply to history
+    coachHistory.push({ role: 'assistant', content: reply });
+
+    // Keep history from getting too long (last 20 messages)
+    if(coachHistory.length > 20) coachHistory = coachHistory.slice(-20);
+
+    // Remove typing indicator
+    const typing = document.getElementById('coach-typing');
+    if(typing) typing.remove();
+
     const aiDiv = document.createElement('div');
     aiDiv.className = 'coach-msg';
-    aiDiv.innerHTML = '<strong style="font-size:10px;color:var(--accent2);display:block;margin-bottom:4px">ParaHype AI</strong>' + reply;
+    // Render newlines as <br> so task lists display properly
+    const formatted = reply.replace(/\n/g, '<br>');
+    aiDiv.innerHTML = '<strong style="font-size:10px;color:var(--accent2);display:block;margin-bottom:4px">ParaHype AI</strong>' + formatted;
     msgs.appendChild(aiDiv);
     msgs.scrollTop = msgs.scrollHeight;
     speak(reply);
   })
   .catch(()=>{
-    const fallback = "Having a little trouble connecting, but I'm still here cheering for you!";
+    const typing = document.getElementById('coach-typing');
+    if(typing) typing.remove();
+    const fallback = "Having a little trouble connecting right now — but hey, you're still showing up and that counts. Try again in a sec?";
     const aiDiv = document.createElement('div');
     aiDiv.className = 'coach-msg';
     aiDiv.innerHTML = '<strong style="font-size:10px;color:var(--accent2);display:block;margin-bottom:4px">ParaHype AI</strong>' + fallback;
@@ -1002,6 +1070,7 @@ function toggleMic() {
 
 function logout() {
   currentUser = null;
+  coachHistory = [];
   document.getElementById('tab-bar').style.display = 'none';
   ['home','habits','rewards','buddy','me'].forEach(t=>document.getElementById(t+'-screen').classList.remove('active'));
   document.getElementById('login-screen').classList.add('active');
