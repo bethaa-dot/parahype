@@ -14,33 +14,22 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&family=Space+Grotesk:wght@500;600;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --accent:#7C3AED;
-  --accent2:#A78BFA;
-  --teal:#0D9488;
-  --amber:#D97706;
-  --green:#10B981;
-  --red:#EF4444;
-  --bg:#0F0A1E;
-  --surface:#1A1030;
-  --card:#221540;
-  --border:rgba(124,58,237,0.2);
-  --text:#F5F0FF;
-  --muted:#8B7BAA;
-  --font-body:'DM Sans',sans-serif;
-  --font-head:'Space Grotesk',sans-serif;
+  --accent:#7C3AED;--accent2:#A78BFA;--teal:#0D9488;--amber:#D97706;
+  --green:#10B981;--red:#EF4444;--bg:#0F0A1E;--surface:#1A1030;
+  --card:#221540;--border:rgba(124,58,237,0.2);--text:#F5F0FF;
+  --muted:#8B7BAA;--font-body:'DM Sans',sans-serif;--font-head:'Space Grotesk',sans-serif;
 }
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font-body);overflow:hidden}
 #app{height:100vh;display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:relative;overflow:hidden}
-
 .screen{display:none;flex:1;flex-direction:column;overflow:hidden}
 .screen.active{display:flex}
-
 .status-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 20px 6px;font-size:12px;color:var(--muted);flex-shrink:0}
 
+/* Login */
 #login-screen{background:var(--bg);justify-content:center;align-items:center;padding:2rem 1.5rem;gap:0}
 .logo-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:28px}
 .logo-mark{width:72px;height:72px;background:var(--accent);border-radius:22px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
-.app-name{font-family:var(--font-head);font-size:28px;font-weight:700;color:var(--text)}
+.app-name{font-family:var(--font-head);font-size:28px;font-weight:700}
 .tagline{font-size:13px;color:var(--muted);margin-top:4px;text-align:center}
 .auth-box{width:100%;background:var(--surface);border-radius:22px;border:0.5px solid var(--border);padding:20px}
 .auth-tabs{display:flex;gap:4px;background:var(--bg);border-radius:12px;padding:3px;margin-bottom:18px}
@@ -51,23 +40,21 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .field input{width:100%;background:var(--bg);border:0.5px solid var(--border);border-radius:12px;padding:11px 14px;font-size:14px;color:var(--text);font-family:var(--font-body);outline:none}
 .field input:focus{border-color:var(--accent)}
 .btn-primary{width:100%;padding:14px;background:var(--accent);border:none;border-radius:14px;font-size:15px;font-weight:600;color:#fff;cursor:pointer;font-family:var(--font-head);letter-spacing:0.02em;margin-top:4px}
-.divider-text{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--muted);font-size:12px}
-.divider-text::before,.divider-text::after{content:'';flex:1;height:0.5px;background:var(--border)}
-.social-row{display:flex;gap:8px}
-.btn-social{flex:1;padding:11px;background:var(--bg);border:0.5px solid var(--border);border-radius:12px;font-size:13px;color:var(--text);cursor:pointer;font-family:var(--font-body)}
+.google-divider{display:flex;align-items:center;gap:10px;margin:12px 0 4px;color:var(--muted);font-size:12px}
+.google-divider::before,.google-divider::after{content:'';flex:1;height:0.5px;background:var(--border)}
 .btn-google{width:100%;padding:12px;background:#fff;border:none;border-radius:12px;font-size:14px;color:#1F1F1F;cursor:pointer;font-family:var(--font-body);font-weight:500;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:4px;transition:box-shadow 0.15s}
 .btn-google:hover{box-shadow:0 2px 12px rgba(0,0,0,0.15)}
 .btn-google img{width:18px;height:18px}
-.google-divider{display:flex;align-items:center;gap:10px;margin:12px 0 4px;color:var(--muted);font-size:12px}
-.google-divider::before,.google-divider::after{content:'';flex:1;height:0.5px;background:var(--border)}
 .terms{font-size:11px;color:var(--muted);margin-top:16px;text-align:center;line-height:1.5}
 
+/* Tab bar */
 #tab-bar{height:66px;background:var(--surface);border-top:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:0 6px 4px;flex-shrink:0}
-.tab-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 14px;cursor:pointer;border-radius:12px;transition:background 0.1s;background:none;border:none;font-family:var(--font-body)}
+.tab-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 14px;cursor:pointer;border-radius:12px;background:none;border:none;font-family:var(--font-body)}
 .tab-item svg{width:22px;height:22px;color:var(--muted);transition:color 0.15s}
 .tab-item span{font-size:10px;color:var(--muted);font-weight:500;transition:color 0.15s}
 .tab-item.active svg,.tab-item.active span{color:var(--accent2)}
 
+/* Home */
 #home-screen{background:var(--bg)}
 .scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:12px}
 .scroll-area::-webkit-scrollbar{display:none}
@@ -75,7 +62,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .greeting{font-family:var(--font-head);font-size:20px;font-weight:600}
 .greeting-sub{font-size:12px;color:var(--muted);margin-top:3px}
 .avatar{width:40px;height:40px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;font-family:var(--font-head);cursor:pointer;flex-shrink:0}
-.hype-msg{margin:6px 16px;background:var(--surface);border-radius:18px;border:0.5px solid var(--border);padding:14px 16px;display:flex;align-items:flex-start;gap:12px}
+.hype-msg{margin:6px 16px;background:var(--surface);border-radius:18px;border:0.5px solid var(--border);padding:14px 16px;display:flex;align-items:flex-start;gap:12px;cursor:pointer}
 .hype-icon-wrap{width:38px;height:38px;background:rgba(124,58,237,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .hype-sender{font-size:10px;color:var(--accent2);font-weight:600;margin-bottom:4px}
 .hype-body{font-size:13px;color:var(--text);line-height:1.5}
@@ -103,6 +90,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .check-ring{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0}
 .check-ring.done{background:var(--green);border-color:var(--green)}
 
+/* Habits */
 #habits-screen{background:var(--bg)}
 .habits-header{padding:16px 20px 10px;font-family:var(--font-head);font-size:20px;font-weight:600}
 .add-habit-row{display:flex;gap:10px;padding:0 16px 12px}
@@ -115,6 +103,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .sdot.on{background:var(--accent2)}
 .sdot.today{background:var(--amber)}
 
+/* Rewards */
 #rewards-screen{background:var(--bg)}
 .rewards-header{padding:16px 20px 10px;font-family:var(--font-head);font-size:20px;font-weight:600}
 .xp-card{margin:0 16px 14px;background:var(--surface);border-radius:18px;border:0.5px solid var(--border);padding:16px}
@@ -134,6 +123,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .r-badge{display:inline-block;background:var(--green);color:#fff;font-size:10px;padding:3px 10px;border-radius:8px;margin-top:6px;font-weight:600}
 .r-badge.locked{background:rgba(124,58,237,0.2);color:var(--accent2)}
 
+/* Buddy */
 #buddy-screen{background:var(--bg)}
 .buddy-header-area{padding:16px 20px 10px;display:flex;justify-content:space-between;align-items:center}
 .buddy-header-title{font-family:var(--font-head);font-size:20px;font-weight:600}
@@ -150,20 +140,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .subscribe-nudge{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:var(--amber);background:rgba(217,119,6,0.1);border:0.5px solid rgba(217,119,6,0.25);border-radius:8px;padding:3px 8px;cursor:pointer;margin-top:3px;font-weight:500;transition:all 0.15s}
 .subscribe-nudge:hover{background:rgba(217,119,6,0.18)}
 .buddy-status{font-size:11px;color:var(--green);margin-top:2px}
-.pro-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--amber);background:rgba(217,119,6,0.12);border:0.5px solid rgba(217,119,6,0.3);border-radius:8px;padding:2px 7px;font-weight:600;margin-left:4px}
-
-/* ── Subscribe Modal ── */
-.modal-overlay{display:none;position:absolute;inset:0;background:rgba(10,7,20,0.85);z-index:200;align-items:flex-end;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal-sheet{background:var(--surface);border-radius:24px 24px 0 0;border-top:0.5px solid var(--border);padding:24px 20px 36px;width:100%;max-width:430px}
-.modal-handle{width:36px;height:4px;border-radius:2px;background:rgba(124,58,237,0.3);margin:0 auto 20px}
-.modal-title{font-family:var(--font-head);font-size:18px;font-weight:700;margin-bottom:4px}
-.modal-sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5}
-.modal-perks{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
-.perk-row{display:flex;align-items:center;gap:10px;font-size:13px}
-.perk-dot{width:8px;height:8px;border-radius:50%;background:var(--accent2);flex-shrink:0}
-.btn-subscribe{width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),#5B21B6);border:none;border-radius:14px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;font-family:var(--font-head);letter-spacing:0.02em;margin-bottom:10px}
-.btn-cancel-modal{width:100%;padding:12px;background:none;border:none;font-size:13px;color:var(--muted);cursor:pointer;font-family:var(--font-body)}
 .buddy-stats{display:flex;gap:8px}
 .b-stat{flex:1;background:var(--bg);border-radius:12px;padding:10px;text-align:center}
 .b-val{font-family:var(--font-head);font-size:18px;font-weight:700}
@@ -178,6 +154,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .hype-input:focus{border-color:var(--accent)}
 .btn-hype-send{width:44px;height:44px;border-radius:50%;background:var(--accent);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 
+/* Coach */
 #coach-panel{display:none;position:absolute;bottom:66px;left:0;right:0;background:var(--surface);border-top:0.5px solid var(--border);padding:12px 16px;z-index:100;max-height:50vh;overflow-y:auto}
 #coach-panel.open{display:flex;flex-direction:column;gap:8px}
 .coach-msg{padding:10px 14px;border-radius:4px 16px 16px 16px;font-size:13px;line-height:1.5;background:rgba(124,58,237,0.12);max-width:90%}
@@ -191,6 +168,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .btn-mute{width:40px;height:40px;border-radius:50%;background:rgba(124,58,237,0.08);border:0.5px solid var(--border);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s}
 .btn-mute.muted{background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.3);color:var(--red)}
 
+/* Me */
 #me-screen{background:var(--bg)}
 .back-to-landing{display:flex;align-items:center;padding:10px 20px 0}
 .back-to-landing button{background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:var(--font-body);display:flex;align-items:center;gap:6px;padding:0;transition:color 0.15s}
@@ -207,6 +185,20 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .settings-label{font-size:14px}
 .settings-val{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px}
 .btn-logout{width:calc(100% - 32px);margin:0 16px;padding:14px;background:rgba(239,68,68,0.1);border:0.5px solid rgba(239,68,68,0.3);border-radius:14px;font-size:14px;font-weight:600;color:var(--red);cursor:pointer;font-family:var(--font-head)}
+
+/* Modals */
+.modal-overlay{display:none;position:absolute;inset:0;background:rgba(10,7,20,0.85);z-index:200;align-items:flex-end;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-sheet{background:var(--surface);border-radius:24px 24px 0 0;border-top:0.5px solid var(--border);padding:24px 20px 36px;width:100%;max-width:430px}
+.modal-handle{width:36px;height:4px;border-radius:2px;background:rgba(124,58,237,0.3);margin:0 auto 20px}
+.modal-title{font-family:var(--font-head);font-size:18px;font-weight:700;margin-bottom:4px}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5}
+.modal-perks{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.perk-row{display:flex;align-items:center;gap:10px;font-size:13px}
+.perk-dot{width:8px;height:8px;border-radius:50%;background:var(--accent2);flex-shrink:0}
+.btn-subscribe{width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),#5B21B6);border:none;border-radius:14px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;font-family:var(--font-head);letter-spacing:0.02em;margin-bottom:10px}
+.btn-cancel-modal{width:100%;padding:12px;background:none;border:none;font-size:13px;color:var(--muted);cursor:pointer;font-family:var(--font-body)}
+.invite-option{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--bg);border:0.5px solid var(--border);border-radius:14px;text-decoration:none;color:var(--text);font-size:14px;font-weight:500}
 </style>
 </head>
 <body>
@@ -256,10 +248,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     <div class="scroll-area">
       <div class="home-header">
         <div>
-          <div class="greeting" id="home-greeting">Hey, Alexa ✦</div>
+          <div class="greeting" id="home-greeting">Hey there ✦</div>
           <div class="greeting-sub" id="home-sub"></div>
         </div>
-        <div class="avatar" onclick="goTab('me')" id="home-avatar">JD</div>
+        <div class="avatar" onclick="goTab('me')" id="home-avatar">?</div>
       </div>
       <div class="hype-msg">
         <div class="hype-icon-wrap">
@@ -330,14 +322,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     <div class="status-bar"><span>9:41 AM</span><span style="letter-spacing:2px">●●●</span></div>
     <div class="buddy-header-area">
       <span class="buddy-header-title">Buddy hype</span>
-      <button class="btn-invite">+ Invite friend</button>
+      <button class="btn-invite" onclick="inviteFriend()">+ Invite friend</button>
     </div>
     <div class="scroll-area">
       <div class="buddy-card">
         <div class="buddy-top">
           <div class="buddy-avi">✨</div>
           <div style="flex:1">
-            <!-- Name row: display name + edit/lock icon -->
             <div class="buddy-name-row">
               <span class="buddy-name" id="buddy-display-name">Alex M.</span>
               <button class="btn-rename" id="btn-rename" onclick="startRename()" title="Rename buddy" style="display:none">
@@ -347,12 +338,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="3" y="6" width="7" height="5.5" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M4.5 6V4.5a2 2 0 014 0V6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
               </span>
             </div>
-            <!-- Nudge for free users -->
             <div id="rename-nudge" class="subscribe-nudge" onclick="openSubscribeModal()">
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1l1.2 2.5 2.8.4-2 2 .5 2.8L5 7.4 2.5 8.7l.5-2.8-2-2 2.8-.4z" fill="currentColor"/></svg>
               Subscribe to rename
             </div>
-            <!-- Inline rename editor (subscribers only) -->
             <div id="rename-edit" style="display:none;margin-top:4px">
               <input class="buddy-name-input" id="buddy-name-input" maxlength="20" placeholder="Buddy name..."
                 onkeydown="if(event.key==='Enter')saveRename();if(event.key==='Escape')cancelRename()"/>
@@ -371,18 +360,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         </div>
       </div>
       <div class="chat-area" id="buddy-chat">
-        <div class="msg-bubble msg-ai">
-          <div class="msg-ai-name">ParaHype AI</div>
-          Alex just completed their focus session! They're crushing it today. Send them some hype!
-        </div>
+        <div class="msg-bubble msg-ai"><div class="msg-ai-name">ParaHype AI</div>Alex just completed their focus session! They're crushing it today. Send them some hype!</div>
         <div class="msg-bubble msg-user">You're doing amazing!! 🔥</div>
-        <div class="msg-bubble msg-ai">
-          <div class="msg-ai-name">ParaHype AI</div>
-          Alex saw your hype message and gave you +10 bonus XP! Keep cheering each other on.
-        </div>
+        <div class="msg-bubble msg-ai"><div class="msg-ai-name">ParaHype AI</div>Alex saw your hype message and gave you +10 bonus XP! Keep cheering each other on.</div>
       </div>
       <div class="hype-input-row">
-        <input class="hype-input" id="hype-input" placeholder="Send hype..." onkeydown="if(event.key==='Enter')sendHype()"/>
+        <input class="hype-input" id="hype-input" placeholder="Send hype to Alex..." onkeydown="if(event.key==='Enter')sendHype()"/>
         <button class="btn-hype-send" onclick="sendHype()">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M9 4l5 4-5 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
@@ -390,50 +373,26 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     </div>
   </div>
 
-  <!-- SUBSCRIBE MODAL -->
-  <div class="modal-overlay" id="subscribe-modal" onclick="handleModalOverlayClick(event)">
-    <div class="modal-sheet">
-      <div class="modal-handle"></div>
-      <div style="font-size:28px;margin-bottom:10px">⚡</div>
-      <div class="modal-title">Unlock ParaHype Pro</div>
-      <div class="modal-sub">Personalize your experience and get more from your hype buddy.</div>
-      <div class="modal-perks">
-        <div class="perk-row"><div class="perk-dot"></div><span>Rename your buddy to anything you want</span></div>
-        <div class="perk-row"><div class="perk-dot"></div><span>Unlimited AI coach messages</span></div>
-        <div class="perk-row"><div class="perk-dot"></div><span>Custom XP reward categories</span></div>
-        <div class="perk-row"><div class="perk-dot"></div><span>Priority hype notifications</span></div>
-        <div class="perk-row"><div class="perk-dot"></div><span>Early access to new features</span></div>
-      </div>
-      <button class="btn-subscribe" onclick="confirmSubscribe()">Subscribe — $4.99 / month</button>
-      <button class="btn-cancel-modal" onclick="closeSubscribeModal()">Maybe later</button>
-    </div>
-  </div>
-
-  <!-- ME / PROFILE -->
+  <!-- ME -->
   <div id="me-screen" class="screen">
     <div class="status-bar"><span>9:41 AM</span><span style="letter-spacing:2px">●●●</span></div>
-
-    <!-- Back to landing -->
     <div class="back-to-landing">
       <button onclick="goToLanding()">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <path d="M9 2L3 7l6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L3 7l6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         About ParaHype
       </button>
     </div>
-
     <div class="scroll-area">
       <div class="profile-hero">
-        <div class="profile-avi" id="profile-avi">JD</div>
-        <div class="profile-name" id="profile-name">Jordan Davis</div>
+        <div class="profile-avi" id="profile-avi">?</div>
+        <div class="profile-name" id="profile-name">Loading...</div>
         <div class="profile-sub">Member since April 2025 · Level 4</div>
       </div>
       <div class="settings-section">
         <div style="font-size:12px;color:var(--muted);padding:0 4px 8px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em">Account</div>
         <div class="settings-group">
-          <div class="settings-item"><span class="settings-label">Display name</span><span class="settings-val" id="disp-name">Jordan Davis <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 10l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></div>
-          <div class="settings-item"><span class="settings-label">Email</span><span class="settings-val">jordan@email.com <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 10l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></div>
+          <div class="settings-item"><span class="settings-label">Display name</span><span class="settings-val" id="disp-name">— <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 10l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></div>
+          <div class="settings-item"><span class="settings-label">Email</span><span class="settings-val" id="disp-email">— <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 10l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></div>
           <div class="settings-item"><span class="settings-label">Notifications</span><span class="settings-val">On <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 10l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></div>
         </div>
         <div style="font-size:12px;color:var(--muted);padding:0 4px 8px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em">Preferences</div>
@@ -449,7 +408,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     </div>
   </div>
 
-  <!-- AI COACH PANEL -->
+  <!-- COACH PANEL -->
   <div id="coach-panel">
     <div id="coach-msgs">
       <div class="coach-msg"><strong style="font-size:10px;color:var(--accent2);display:block;margin-bottom:4px">ParaHype AI</strong>Hey! I'm your hype buddy. Ask me anything — I can break tasks into small steps, remind you to breathe, or just cheer you on.</div>
@@ -494,23 +453,60 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
       <span>Me</span>
     </button>
   </div>
-</div>
+
+  <!-- INVITE MODAL -->
+  <div class="modal-overlay" id="invite-modal" onclick="if(event.target===this)this.classList.remove('open')">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div style="font-size:28px;margin-bottom:10px">💜</div>
+      <div class="modal-title">Invite a friend</div>
+      <div class="modal-sub">Share ParaHype with someone who could use a hype buddy.</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+        <a id="invite-email-link" href="#" class="invite-option">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="5" width="16" height="11" rx="2" stroke="#A78BFA" stroke-width="1.4"/><path d="M2 7l8 5 8-5" stroke="#A78BFA" stroke-width="1.4" stroke-linecap="round"/></svg>
+          Send via Email
+        </a>
+        <a id="invite-sms-link" href="#" class="invite-option">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 3h12a2 2 0 012 2v7a2 2 0 01-2 2H6l-4 3V5a2 2 0 012-2z" stroke="#A78BFA" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          Send via Message
+        </a>
+      </div>
+      <button class="btn-cancel-modal" onclick="document.getElementById('invite-modal').classList.remove('open')">Cancel</button>
+    </div>
+  </div>
+
+  <!-- SUBSCRIBE MODAL -->
+  <div class="modal-overlay" id="subscribe-modal" onclick="handleModalOverlayClick(event)">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div style="font-size:28px;margin-bottom:10px">⚡</div>
+      <div class="modal-title">Unlock ParaHype Pro</div>
+      <div class="modal-sub">Personalize your experience and get more from your hype buddy.</div>
+      <div class="modal-perks">
+        <div class="perk-row"><div class="perk-dot"></div><span>Rename your buddy to anything you want</span></div>
+        <div class="perk-row"><div class="perk-dot"></div><span>Unlimited AI coach messages</span></div>
+        <div class="perk-row"><div class="perk-dot"></div><span>Custom XP reward categories</span></div>
+        <div class="perk-row"><div class="perk-dot"></div><span>Priority hype notifications</span></div>
+        <div class="perk-row"><div class="perk-dot"></div><span>Early access to new features</span></div>
+      </div>
+      <button class="btn-subscribe" onclick="confirmSubscribe()">Subscribe — $4.99 / month</button>
+      <button class="btn-cancel-modal" onclick="closeSubscribeModal()">Maybe later</button>
+    </div>
+  </div>
+
+</div><!-- end #app -->
 
 <script>
-// ── Mark as returning user immediately ──
-localStorage.setItem('ph_returning', 'true');
-  updateClock(if(sub) sub.textContent = day + ' * ' + now.toLocaleDateSTring('en-US',{month:'numeric',day:'numeric',year:'numeric'}) + ' · How\'s your energy level today?';
+// ── Init ──
+localStorage.setItem('ph_returning','true');
+if(window.speechSynthesis){window.speechSynthesis.getVoices();window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();}
 
-// ── Pre-load voices for SpeechSynthesis ──
-if (window.speechSynthesis) {
-  window.speechSynthesis.getVoices();
-  window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
-}
-
-let currentUser = null;
-let isSubscribed = localStorage.getItem('ph_subscribed') === 'true';
-let buddyName = localStorage.getItem('ph_buddy_name') || 'Alex M.';
-let habits = [
+// ── State ──
+let currentUser=null;
+let isSubscribed=localStorage.getItem('ph_subscribed')==='true';
+let buddyName=localStorage.getItem('ph_buddy_name')||'Alex M.';
+let coachHistory=[];
+let habits=[
   {id:1,name:'Morning medication',done:true,streak:12},
   {id:2,name:'10 min walk',done:true,streak:5},
   {id:3,name:'Drink 8 glasses of water',done:true,streak:3},
@@ -518,287 +514,137 @@ let habits = [
   {id:5,name:'Read 15 minutes',done:false,streak:2},
   {id:6,name:'Screen-free wind down',done:false,streak:0},
 ];
-let xpPoints = 340;
-let timerSecs = 25*60;
-let timerRunning = false;
-let timerInterval = null;
-let timerMode = 'work';
-let coachOpen = false;
-let micListening = false;
-let voiceMuted = false;
-const CIRC = 163.4;
-
-const rewards = [
-  {name:'Coffee break',emoji:'☕',pts:200,unlocked:true},
-  {name:'Game 30 min',emoji:'🎮',pts:500,unlocked:true},
-  {name:'Movie night',emoji:'🎬',pts:800,unlocked:false},
-  {name:'Shopping treat',emoji:'🛍️',pts:1000,unlocked:false},
-  {name:'Spa day',emoji:'🧖',pts:1500,unlocked:false},
-  {name:'Weekend trip',emoji:'✈️',pts:3000,unlocked:false},
+let xpPoints=340,timerSecs=25*60,timerRunning=false,timerInterval=null,timerMode='work';
+let coachOpen=false,micListening=false,voiceMuted=false;
+const CIRC=163.4;
+const rewards=[
+  {name:'Coffee break',emoji:'☕',pts:200},{name:'Game 30 min',emoji:'🎮',pts:500},
+  {name:'Movie night',emoji:'🎬',pts:800},{name:'Shopping treat',emoji:'🛍️',pts:1000},
+  {name:'Spa day',emoji:'🧖',pts:1500},{name:'Weekend trip',emoji:'✈️',pts:3000},
 ];
 
-// ── Subscription & buddy rename ──
-function updateBuddyUI() {
-  const displayName = document.getElementById('buddy-display-name');
-  const renameBtn = document.getElementById('btn-rename');
-  const lockIcon = document.getElementById('buddy-lock');
-  const nudge = document.getElementById('rename-nudge');
-  const hypeInput = document.getElementById('hype-input');
-
-  if (displayName) displayName.textContent = buddyName;
-  if (hypeInput) hypeInput.placeholder = 'Send hype to ' + buddyName.split(' ')[0] + '...';
-
-  if (isSubscribed) {
-    if (renameBtn) renameBtn.style.display = 'flex';
-    if (lockIcon) lockIcon.style.display = 'none';
-    if (nudge) nudge.style.display = 'none';
-  } else {
-    if (renameBtn) renameBtn.style.display = 'none';
-    if (lockIcon) lockIcon.style.display = 'flex';
-    if (nudge) nudge.style.display = 'inline-flex';
-  }
+// ── Clock ──
+function updateClock(){
+  const now=new Date();
+  const t=now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+  ['home-time','habits-time'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t;});
+  const day=now.toLocaleDateString('en-US',{weekday:'long'});
+  const date=now.toLocaleDateString('en-US',{month:'numeric',day:'numeric',year:'numeric'});
+  const sub=document.getElementById('home-sub');
+  if(sub) sub.textContent=day+' · '+date+' · How\'s your energy?';
 }
-
-function startRename() {
-  const edit = document.getElementById('rename-edit');
-  const nameRow = document.querySelector('.buddy-name-row');
-  const inp = document.getElementById('buddy-name-input');
-  if (edit) edit.style.display = 'block';
-  if (nameRow) nameRow.style.display = 'none';
-  if (inp) { inp.value = buddyName; inp.focus(); inp.select(); }
-}
-
-function saveRename() {
-  const inp = document.getElementById('buddy-name-input');
-  const newName = inp ? inp.value.trim() : '';
-  if (newName) {
-    buddyName = newName;
-    localStorage.setItem('ph_buddy_name', buddyName);
-  }
-  cancelRename();
-  updateBuddyUI();
-}
-
-function cancelRename() {
-  const edit = document.getElementById('rename-edit');
-  const nameRow = document.querySelector('.buddy-name-row');
-  if (edit) edit.style.display = 'none';
-  if (nameRow) nameRow.style.display = 'flex';
-}
-
-function openSubscribeModal() {
-  document.getElementById('subscribe-modal').classList.add('open');
-}
-
-function closeSubscribeModal() {
-  document.getElementById('subscribe-modal').classList.remove('open');
-}
-
-function handleModalOverlayClick(e) {
-  if (e.target === document.getElementById('subscribe-modal')) closeSubscribeModal();
-}
-
-function confirmSubscribe() {
-  // In production, this is where you'd trigger your payment flow (Stripe, etc.)
-  // For now, mock the subscription
-  isSubscribed = true;
-  localStorage.setItem('ph_subscribed', 'true');
-  closeSubscribeModal();
-  updateBuddyUI();
-  // Show a brief celebration nudge
-  setTimeout(() => {
-    const nudge = document.getElementById('rename-nudge');
-    if (!nudge) return;
-    const congrats = document.createElement('div');
-    congrats.style.cssText = 'font-size:11px;color:var(--green);margin-top:4px;font-weight:600';
-    congrats.textContent = '✦ Pro unlocked! Tap ✏️ to rename your buddy.';
-    nudge.parentNode.insertBefore(congrats, nudge.nextSibling);
-    setTimeout(() => congrats.remove(), 3500);
-  }, 300);
-}
-
-// ── Voice ──
-function speak(text) {
-  if (!window.speechSynthesis || voiceMuted) return;
-  window.speechSynthesis.cancel();
-  const utt = new SpeechSynthesisUtterance(text);
-  const voices = window.speechSynthesis.getVoices();
-  const preferred = voices.find(v =>
-    v.name.includes('Samantha') ||
-    v.name.includes('Google US English') ||
-    v.name.includes('Karen') ||
-    v.name.includes('Moira')
-  ) || voices.find(v => v.lang === 'en-US') || voices[0];
-  if (preferred) utt.voice = preferred;
-  utt.rate = 0.95;
-  utt.pitch = 1.05;
-  utt.volume = 1;
-  window.speechSynthesis.speak(utt);
-}
-
-function toggleMute() {
-  voiceMuted = !voiceMuted;
-  const btn = document.getElementById('coach-mute');
-  if (btn) btn.classList.toggle('muted', voiceMuted);
-  if (voiceMuted) window.speechSynthesis && window.speechSynthesis.cancel();
-  // Update icon
-  const icon = document.getElementById('mute-icon');
-  if (icon) {
-    icon.innerHTML = voiceMuted
-      ? `<path d="M2 2l11 11M7.5 1.5v3M4 4.5C2.5 5.5 1.5 6.9 1.5 7.5s1 2 2.5 3M11 7v5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><ellipse cx="7.5" cy="7.5" rx="2.5" ry="4" stroke="currentColor" stroke-width="1.4"/>`
-      : `<path d="M7.5 1.5v12M4 4.5C2.5 5.5 1.5 6.9 1.5 7.5s1 2 2.5 3M11 4.5c1.5 1 2.5 2.4 2.5 3s-1 2-2.5 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><ellipse cx="7.5" cy="7.5" rx="2.5" ry="4" stroke="currentColor" stroke-width="1.4"/>`;
-  }
-}
+updateClock();
+setInterval(updateClock,10000);
 
 // ── Google Sign-In ──
-// ⚠️  Replace YOUR_GOOGLE_CLIENT_ID with your actual Client ID from Google Cloud Console
-const GOOGLE_CLIENT_ID = '790361257297-3c3ua1tj1hhnuea7ffc8d59fuovm8sg6.apps.googleusercontent.com';
+// ⚠️ Replace YOUR_GOOGLE_CLIENT_ID with your actual Client ID from Google Cloud Console
+const GOOGLE_CLIENT_ID='YOUR_GOOGLE_CLIENT_ID';
+let googleTokenClient=null;
 
-let googleTokenClient = null;
-
-function initGoogleAuth() {
-  if (typeof google === 'undefined') return;
-  // Use the token client (popup flow) — works reliably on GitHub Pages
-  googleTokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: GOOGLE_CLIENT_ID,
-    scope: 'openid email profile',
-    callback: async (tokenResponse) => {
-      if (tokenResponse.error) {
-        console.error('Google OAuth error:', tokenResponse.error);
-        return;
-      }
-      // Fetch user info using the access token
-      try {
-        const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-          headers: { Authorization: 'Bearer ' + tokenResponse.access_token }
-        });
-        const info = await res.json();
-        const name = info.given_name || info.name || 'Friend';
-        const email = info.email || '';
-        const picture = info.picture || null;
-        loginUser({ name, email, picture, fromGoogle: true });
-      } catch(e) {
-        console.error('Failed to fetch Google user info:', e);
-        loginUser({ name: 'Friend', email: '', picture: null, fromGoogle: true });
-      }
+function initGoogleAuth(){
+  if(typeof google==='undefined') return;
+  googleTokenClient=google.accounts.oauth2.initTokenClient({
+    client_id:GOOGLE_CLIENT_ID,
+    scope:'openid email profile',
+    callback:async(tokenResponse)=>{
+      if(tokenResponse.error){console.error('Google OAuth error:',tokenResponse.error);return;}
+      try{
+        const res=await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+tokenResponse.access_token}});
+        const info=await res.json();
+        loginUser({name:info.given_name||info.name||'Friend',email:info.email||'',picture:info.picture||null,fromGoogle:true});
+      }catch(e){loginUser({name:'Friend',email:'',picture:null,fromGoogle:true});}
     }
   });
 }
 
-function triggerGoogleSignIn() {
-  if (typeof google === 'undefined') {
-    alert('Google Sign-In is still loading — please try again in a moment.');
-    return;
-  }
-  if (!googleTokenClient) initGoogleAuth();
-  if (!googleTokenClient) {
-    alert('Google Sign-In could not initialize. Check your Client ID.');
-    return;
-  }
-  googleTokenClient.requestAccessToken({ prompt: 'select_account' });
+function triggerGoogleSignIn(){
+  if(typeof google==='undefined'){alert('Google Sign-In is still loading — please try again in a moment.');return;}
+  if(!googleTokenClient) initGoogleAuth();
+  if(!googleTokenClient){alert('Google Sign-In could not initialize. Check your Client ID.');return;}
+  googleTokenClient.requestAccessToken({prompt:'select_account'});
 }
 
-// Initialize as soon as the Google script loads
-window.addEventListener('load', () => {
-  // Poll briefly in case the GSI script loads after window.load
-  const poll = setInterval(() => {
-    if (typeof google !== 'undefined') {
-      initGoogleAuth();
-      clearInterval(poll);
-    }
-  }, 200);
-  setTimeout(() => clearInterval(poll), 5000);
+window.addEventListener('load',()=>{
+  const poll=setInterval(()=>{if(typeof google!=='undefined'){initGoogleAuth();clearInterval(poll);}},200);
+  setTimeout(()=>clearInterval(poll),5000);
 });
 
-function loginUser({ name, email, picture, fromGoogle = false }) {
-  const initials = name.slice(0, 2).toUpperCase();
-  currentUser = { name, email, initials, picture, fromGoogle };
+// ── Auth ──
+function switchTab(el,mode){
+  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('login-fields').style.display=mode==='login'?'block':'none';
+  document.getElementById('signup-fields').style.display=mode==='signup'?'block':'none';
+  document.getElementById('auth-btn').textContent=mode==='login'?'Continue':'Create account';
+}
 
-  document.getElementById('home-greeting').textContent = 'Hey, ' + name + ' ✦';
-  document.getElementById('home-avatar').textContent = initials;
+function doAuth(){
+  const nameEl=document.getElementById('signup-name');
+  const name=(nameEl&&nameEl.value.trim())||'Jordan';
+  const emailEl=document.getElementById('login-email')||document.getElementById('signup-email');
+  const email=emailEl?emailEl.value.trim():'';
+  loginUser({name,email,picture:null,fromGoogle:false});
+}
 
-  // If Google user has a profile picture, show it in avatar
-  if (picture) {
-    const avatarEl = document.getElementById('home-avatar');
-    avatarEl.style.backgroundImage = `url(${picture})`;
-    avatarEl.style.backgroundSize = 'cover';
-    avatarEl.style.backgroundPosition = 'center';
-    avatarEl.textContent = '';
-    const profileAvi = document.getElementById('profile-avi');
-    if (profileAvi) {
-      profileAvi.style.backgroundImage = `url(${picture})`;
-      profileAvi.style.backgroundSize = 'cover';
-      profileAvi.style.backgroundPosition = 'center';
-      profileAvi.textContent = '';
-    }
+function loginUser({name,email,picture,fromGoogle=false}){
+  const initials=name.slice(0,2).toUpperCase();
+  currentUser={name,email,initials,picture,fromGoogle};
+  document.getElementById('home-greeting').textContent='Hey, '+name+' ✦';
+  const homeAvatar=document.getElementById('home-avatar');
+  const profileAvi=document.getElementById('profile-avi');
+  if(picture){
+    [homeAvatar,profileAvi].forEach(el=>{
+      if(!el) return;
+      el.style.backgroundImage=`url(${picture})`;
+      el.style.backgroundSize='cover';
+      el.style.backgroundPosition='center';
+      el.textContent='';
+    });
   } else {
-    document.getElementById('profile-avi').textContent = initials;
+    if(homeAvatar) homeAvatar.textContent=initials;
+    if(profileAvi) profileAvi.textContent=initials;
   }
-
-  document.getElementById('profile-name').textContent = name;
-  document.getElementById('disp-name').innerHTML = name + ' <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 10l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
-
+  const chevron=`<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 10l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+  document.getElementById('profile-name').textContent=name;
+  document.getElementById('disp-name').innerHTML=name+' '+chevron;
+  const emailEl=document.getElementById('disp-email');
+  if(emailEl) emailEl.innerHTML=(email||'—')+' '+chevron;
   document.getElementById('login-screen').classList.remove('active');
-  document.getElementById('tab-bar').style.display = 'flex';
+  document.getElementById('tab-bar').style.display='flex';
   goTab('home');
   renderAll();
   updateBuddyUI();
   updateClock();
-  setInterval(updateClock, 10000);
 }
 
-// ── Email/password auth (unchanged flow, now calls loginUser) ──
-function goToLanding() {
-  localStorage.removeItem('ph_returning');
-  window.location.href = 'landing.html';
+function goToLanding(){localStorage.removeItem('ph_returning');window.location.href='landing.html';}
+
+function logout(){
+  currentUser=null;coachHistory=[];
+  document.getElementById('tab-bar').style.display='none';
+  ['home','habits','rewards','buddy','me'].forEach(t=>document.getElementById(t+'-screen').classList.remove('active'));
+  document.getElementById('login-screen').classList.add('active');
+  closeCoach();
 }
 
-function switchTab(el, mode) {
-  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('login-fields').style.display = mode==='login'?'block':'none';
-  document.getElementById('signup-fields').style.display = mode==='signup'?'block':'none';
-  document.getElementById('auth-btn').textContent = mode==='login'?'Continue':'Create account';
-}
-
-function doAuth() {
-  const nameEl = document.getElementById('signup-name');
-  const name = (nameEl && nameEl.value.trim()) || 'Jordan';
-  const emailEl = document.getElementById('login-email') || document.getElementById('signup-email');
-  const email = emailEl ? emailEl.value.trim() : 'user@email.com';
-  loginUser({ name, email, picture: null, fromGoogle: false });
-}
-
-function updateClock() {
-  const now = new Date();
-  const t = now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
-  ['home-time','habits-time'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t;});
-}
-
-function goTab(tab) {
+// ── Navigation ──
+function goTab(tab){
   ['home','habits','rewards','buddy','me'].forEach(t=>{
     document.getElementById(t+'-screen').classList.remove('active');
-    const tb=document.getElementById('tab-'+t);
-    if(tb)tb.classList.remove('active');
+    const tb=document.getElementById('tab-'+t);if(tb)tb.classList.remove('active');
   });
   document.getElementById(tab+'-screen').classList.add('active');
-  const tb=document.getElementById('tab-'+tab);
-  if(tb)tb.classList.add('active');
+  const tb=document.getElementById('tab-'+tab);if(tb)tb.classList.add('active');
   if(tab==='buddy') updateBuddyUI();
-  if(coachOpen && tab!=='home') closeCoach();
+  if(coachOpen&&tab!=='home') closeCoach();
 }
 
-function renderAll() {
-  renderHomeHabits();
-  renderFullHabits();
-  renderRewards();
-  updateStats();
-}
+// ── Render ──
+function renderAll(){renderHomeHabits();renderFullHabits();renderRewards();updateStats();}
 
-function renderHomeHabits() {
-  const el = document.getElementById('home-habit-list');
-  if(!el) return;
-  el.innerHTML = habits.slice(0,4).map(h=>`
+function renderHomeHabits(){
+  const el=document.getElementById('home-habit-list');if(!el) return;
+  el.innerHTML=habits.slice(0,4).map(h=>`
     <div class="habit-item" onclick="toggleHabit(${h.id})">
       <div class="habit-icon-wrap ${h.done?'done':'todo'}">
         ${h.done?`<svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8l4 4 7-7" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`:`<svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="#A78BFA" stroke-width="1" fill="none"/><path d="M8 5v3l2 1.5" stroke="#A78BFA" stroke-width="1.2" stroke-linecap="round" fill="none"/></svg>`}
@@ -813,10 +659,9 @@ function renderHomeHabits() {
     </div>`).join('');
 }
 
-function renderFullHabits() {
-  const el = document.getElementById('full-habit-list');
-  if(!el) return;
-  el.innerHTML = habits.map(h=>`
+function renderFullHabits(){
+  const el=document.getElementById('full-habit-list');if(!el) return;
+  el.innerHTML=habits.map(h=>`
     <div class="habit-full" onclick="toggleHabit(${h.id})">
       <div class="check-ring ${h.done?'done':''}" style="width:28px;height:28px;flex-shrink:0">
         ${h.done?`<svg width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`:''}
@@ -829,136 +674,203 @@ function renderFullHabits() {
     </div>`).join('');
 }
 
-function renderRewards() {
-  const el = document.getElementById('reward-grid');
-  if(!el) return;
-  const unlocked = rewards.map(r=>({...r, unlocked: xpPoints>=r.pts}));
-  el.innerHTML = unlocked.map(r=>`
-    <div class="reward-tile ${r.unlocked?'unlocked':'locked'}">
+function renderRewards(){
+  const el=document.getElementById('reward-grid');if(!el) return;
+  el.innerHTML=rewards.map(r=>{
+    const unlocked=xpPoints>=r.pts;
+    return `<div class="reward-tile ${unlocked?'unlocked':'locked'}">
       <div class="r-emoji">${r.emoji}</div>
       <div class="r-name">${r.name}</div>
       <div class="r-pts">${r.pts} XP</div>
-      <div class="r-badge ${r.unlocked?'':'locked'}">${r.unlocked?'Unlocked':'Locked'}</div>
-    </div>`).join('');
-  const pct = Math.min(100, Math.round((xpPoints/1000)*100));
-  const bar = document.getElementById('xp-bar');
-  if(bar) bar.style.width = pct+'%';
-  const lbl = document.getElementById('xp-count-label');
-  if(lbl) lbl.textContent = xpPoints+' / 1000 XP';
+      <div class="r-badge ${unlocked?'':'locked'}">${unlocked?'Unlocked':'Locked'}</div>
+    </div>`;
+  }).join('');
+  const pct=Math.min(100,Math.round((xpPoints/1000)*100));
+  const bar=document.getElementById('xp-bar');if(bar) bar.style.width=pct+'%';
+  const lbl=document.getElementById('xp-count-label');if(lbl) lbl.textContent=xpPoints+' / 1000 XP';
 }
 
-function updateStats() {
-  const done = habits.filter(h=>h.done).length;
-  const el = document.getElementById('habits-num');
-  if(el) el.textContent = done+'/'+habits.length;
-  const xel = document.getElementById('xp-num');
-  if(xel) xel.textContent = xpPoints;
+function updateStats(){
+  const done=habits.filter(h=>h.done).length;
+  const el=document.getElementById('habits-num');if(el) el.textContent=done+'/'+habits.length;
+  const xel=document.getElementById('xp-num');if(xel) xel.textContent=xpPoints;
 }
 
-function toggleHabit(id) {
-  const h = habits.find(h=>h.id===id);
-  if(!h) return;
-  h.done = !h.done;
-  if(h.done){h.streak++;xpPoints+=20;}
-  else{h.streak=Math.max(0,h.streak-1);xpPoints=Math.max(0,xpPoints-20);}
+function toggleHabit(id){
+  const h=habits.find(h=>h.id===id);if(!h) return;
+  h.done=!h.done;
+  if(h.done){h.streak++;xpPoints+=20;}else{h.streak=Math.max(0,h.streak-1);xpPoints=Math.max(0,xpPoints-20);}
   renderAll();
 }
 
-function addHabit() {
-  const inp = document.getElementById('new-habit-input');
-  const name = inp.value.trim();
-  if(!name) return;
+function addHabit(){
+  const inp=document.getElementById('new-habit-input');
+  const name=inp.value.trim();if(!name) return;
   habits.push({id:Date.now(),name,done:false,streak:0});
-  inp.value = '';
-  renderAll();
+  inp.value='';renderAll();
 }
 
-function toggleTimer() {
+// ── Timer ──
+function toggleTimer(){
   if(timerRunning){
-    clearInterval(timerInterval);
-    timerRunning = false;
-    document.getElementById('timer-btn').textContent = 'Resume';
-    document.getElementById('timer-mode').textContent = 'Paused';
+    clearInterval(timerInterval);timerRunning=false;
+    document.getElementById('timer-btn').textContent='Resume';
+    document.getElementById('timer-mode').textContent='Paused';
   } else {
-    timerRunning = true;
-    document.getElementById('timer-btn').textContent = 'Pause';
-    document.getElementById('timer-mode').textContent = timerMode==='work'?'Focus session':'Break time';
-    timerInterval = setInterval(()=>{
-      timerSecs--;
-      updateTimerDisplay();
+    timerRunning=true;
+    document.getElementById('timer-btn').textContent='Pause';
+    document.getElementById('timer-mode').textContent=timerMode==='work'?'Focus session':'Break time';
+    timerInterval=setInterval(()=>{
+      timerSecs--;updateTimerDisplay();
       if(timerSecs<=0){
-        clearInterval(timerInterval);
-        timerRunning = false;
+        clearInterval(timerInterval);timerRunning=false;
         if(timerMode==='work'){xpPoints+=50;timerMode='break';timerSecs=5*60;updateStats();renderRewards();}
         else{timerMode='work';timerSecs=25*60;}
-        document.getElementById('timer-btn').textContent = 'Start session';
-        document.getElementById('timer-mode').textContent = timerMode==='work'?'Ready to focus':'Break done!';
+        document.getElementById('timer-btn').textContent='Start session';
+        document.getElementById('timer-mode').textContent=timerMode==='work'?'Ready to focus':'Break done!';
         updateTimerDisplay();
       }
     },1000);
   }
 }
 
-function updateTimerDisplay() {
-  const total = timerMode==='work'?25*60:5*60;
-  const pct = timerSecs/total;
-  const m = Math.floor(timerSecs/60).toString().padStart(2,'0');
-  const s = (timerSecs%60).toString().padStart(2,'0');
-  const el = document.getElementById('timer-display');
-  if(el) el.textContent = m+':'+s;
-  const ring = document.getElementById('timer-ring');
-  if(ring) ring.setAttribute('stroke-dashoffset', (CIRC*(1-pct)).toFixed(1));
+function updateTimerDisplay(){
+  const total=timerMode==='work'?25*60:5*60,pct=timerSecs/total;
+  const m=Math.floor(timerSecs/60).toString().padStart(2,'0');
+  const s=(timerSecs%60).toString().padStart(2,'0');
+  const el=document.getElementById('timer-display');if(el) el.textContent=m+':'+s;
+  const ring=document.getElementById('timer-ring');if(ring) ring.setAttribute('stroke-dashoffset',(CIRC*(1-pct)).toFixed(1));
 }
 
-function sendHype() {
-  const inp = document.getElementById('hype-input');
-  const text = inp.value.trim();
-  if(!text) return;
-  inp.value = '';
-  const chat = document.getElementById('buddy-chat');
-  const div = document.createElement('div');
-  div.className = 'msg-bubble msg-user';
-  div.textContent = text;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
+// ── Buddy ──
+function sendHype(){
+  const inp=document.getElementById('hype-input');
+  const text=inp.value.trim();if(!text) return;
+  inp.value='';
+  const chat=document.getElementById('buddy-chat');
+  const div=document.createElement('div');div.className='msg-bubble msg-user';div.textContent=text;
+  chat.appendChild(div);chat.scrollTop=chat.scrollHeight;
   setTimeout(()=>{
-    const reply = document.createElement('div');
-    reply.className = 'msg-bubble msg-ai';
-    reply.innerHTML = '<div class="msg-ai-name">ParaHype AI</div>Alex saw your message and loved it! +10 bonus XP for spreading the hype.';
-    chat.appendChild(reply);
-    chat.scrollTop = chat.scrollHeight;
-    xpPoints += 10;
-    updateStats();
-    renderRewards();
-  }, 1200);
+    const reply=document.createElement('div');reply.className='msg-bubble msg-ai';
+    reply.innerHTML=`<div class="msg-ai-name">ParaHype AI</div>${buddyName.split(' ')[0]} saw your message and loved it! +10 bonus XP for spreading the hype.`;
+    chat.appendChild(reply);chat.scrollTop=chat.scrollHeight;
+    xpPoints+=10;updateStats();renderRewards();
+  },1200);
 }
 
-function toggleCoach() {
-  coachOpen = !coachOpen;
-  document.getElementById('coach-panel').classList.toggle('open', coachOpen);
+function updateBuddyUI(){
+  const displayName=document.getElementById('buddy-display-name');
+  const renameBtn=document.getElementById('btn-rename');
+  const lockIcon=document.getElementById('buddy-lock');
+  const nudge=document.getElementById('rename-nudge');
+  const hypeInput=document.getElementById('hype-input');
+  if(displayName) displayName.textContent=buddyName;
+  if(hypeInput) hypeInput.placeholder='Send hype to '+buddyName.split(' ')[0]+'...';
+  if(isSubscribed){
+    if(renameBtn) renameBtn.style.display='flex';
+    if(lockIcon) lockIcon.style.display='none';
+    if(nudge) nudge.style.display='none';
+  } else {
+    if(renameBtn) renameBtn.style.display='none';
+    if(lockIcon) lockIcon.style.display='flex';
+    if(nudge) nudge.style.display='inline-flex';
+  }
+}
+
+function startRename(){
+  const edit=document.getElementById('rename-edit');
+  const nameRow=document.querySelector('.buddy-name-row');
+  const inp=document.getElementById('buddy-name-input');
+  if(edit) edit.style.display='block';
+  if(nameRow) nameRow.style.display='none';
+  if(inp){inp.value=buddyName;inp.focus();inp.select();}
+}
+
+function saveRename(){
+  const inp=document.getElementById('buddy-name-input');
+  const newName=inp?inp.value.trim():'';
+  if(newName){buddyName=newName;localStorage.setItem('ph_buddy_name',buddyName);}
+  cancelRename();updateBuddyUI();
+}
+
+function cancelRename(){
+  const edit=document.getElementById('rename-edit');
+  const nameRow=document.querySelector('.buddy-name-row');
+  if(edit) edit.style.display='none';
+  if(nameRow) nameRow.style.display='flex';
+}
+
+// ── Invite ──
+function inviteFriend(){
+  const inviterName=currentUser?currentUser.name:'Your friend';
+  const appUrl='https://bethaa-dot.github.io/parahype';
+  const message=`${inviterName} invited you to join ParaHype — the ADHD hype buddy app! Come be my buddy and let's keep each other on track 💜\n\n${appUrl}`;
+  const subject=`${inviterName} wants you on ParaHype!`;
+  if(navigator.share){navigator.share({title:'Join me on ParaHype!',text:message,url:appUrl});return;}
+  document.getElementById('invite-email-link').href=`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+  document.getElementById('invite-sms-link').href=`sms:?&body=${encodeURIComponent(message)}`;
+  document.getElementById('invite-modal').classList.add('open');
+}
+
+// ── Subscribe ──
+function openSubscribeModal(){document.getElementById('subscribe-modal').classList.add('open');}
+function closeSubscribeModal(){document.getElementById('subscribe-modal').classList.remove('open');}
+function handleModalOverlayClick(e){if(e.target===document.getElementById('subscribe-modal'))closeSubscribeModal();}
+
+function confirmSubscribe(){
+  isSubscribed=true;localStorage.setItem('ph_subscribed','true');
+  closeSubscribeModal();updateBuddyUI();
+  setTimeout(()=>{
+    const nudge=document.getElementById('rename-nudge');if(!nudge) return;
+    const congrats=document.createElement('div');
+    congrats.style.cssText='font-size:11px;color:var(--green);margin-top:4px;font-weight:600';
+    congrats.textContent='✦ Pro unlocked! Tap ✏️ to rename your buddy.';
+    nudge.parentNode.insertBefore(congrats,nudge.nextSibling);
+    setTimeout(()=>congrats.remove(),3500);
+  },300);
+}
+
+// ── Voice ──
+function speak(text){
+  if(!window.speechSynthesis||voiceMuted) return;
+  window.speechSynthesis.cancel();
+  const utt=new SpeechSynthesisUtterance(text);
+  const voices=window.speechSynthesis.getVoices();
+  const preferred=voices.find(v=>v.name.includes('Samantha')||v.name.includes('Google US English')||v.name.includes('Karen')||v.name.includes('Moira'))||voices.find(v=>v.lang==='en-US')||voices[0];
+  if(preferred) utt.voice=preferred;
+  utt.rate=0.95;utt.pitch=1.05;utt.volume=1;
+  window.speechSynthesis.speak(utt);
+}
+
+function toggleMute(){
+  voiceMuted=!voiceMuted;
+  const btn=document.getElementById('coach-mute');if(btn) btn.classList.toggle('muted',voiceMuted);
+  if(voiceMuted&&window.speechSynthesis) window.speechSynthesis.cancel();
+  const icon=document.getElementById('mute-icon');
+  if(icon) icon.innerHTML=voiceMuted
+    ?`<path d="M2 2l11 11M7.5 1.5v3M4 4.5C2.5 5.5 1.5 6.9 1.5 7.5s1 2 2.5 3M11 7v5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><ellipse cx="7.5" cy="7.5" rx="2.5" ry="4" stroke="currentColor" stroke-width="1.4"/>`
+    :`<path d="M7.5 1.5v12M4 4.5C2.5 5.5 1.5 6.9 1.5 7.5s1 2 2.5 3M11 4.5c1.5 1 2.5 2.4 2.5 3s-1 2-2.5 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><ellipse cx="7.5" cy="7.5" rx="2.5" ry="4" stroke="currentColor" stroke-width="1.4"/>`;
+}
+
+// ── AI Coach ──
+function toggleCoach(){
+  coachOpen=!coachOpen;
+  document.getElementById('coach-panel').classList.toggle('open',coachOpen);
   if(coachOpen) document.getElementById('coach-input').focus();
 }
 
-function closeCoach() {
-  coachOpen = false;
-  document.getElementById('coach-panel').classList.remove('open');
-}
+function closeCoach(){coachOpen=false;document.getElementById('coach-panel').classList.remove('open');}
 
-// Conversation history for coach — keeps context across the session
-let coachHistory = [];
-
-function buildCoachSystemPrompt() {
-  const donHabits = habits.filter(h=>h.done).length;
-  const totalHabits = habits.length;
-  const today = new Date().toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'});
-  const userName = currentUser ? currentUser.name : 'friend';
-
+function buildCoachSystemPrompt(){
+  const donHabits=habits.filter(h=>h.done).length;
+  const today=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  const userName=currentUser?currentUser.name:'friend';
   return `You are ParaHype — a warm, witty, deeply empathetic AI hype buddy built specifically for people with ADHD. You are NOT a generic assistant. You are a real presence: enthusiastic but never fake, honest but never harsh, structured but never rigid.
 
 TODAY'S CONTEXT:
 - User's name: ${userName}
 - Date: ${today}
-- Habits completed: ${donHabits} out of ${totalHabits} today
+- Habits completed: ${donHabits} out of ${habits.length} today
 - XP earned today: ${xpPoints}
 - Active habits: ${habits.map(h=>(h.done?'✓ ':'○ ')+h.name).join(', ')}
 
@@ -970,7 +882,7 @@ YOUR PERSONALITY:
 - You celebrate tiny wins like they're huge, because for ADHD brains, they ARE huge
 
 TASK BREAKDOWN RULES (when user asks to break something into tasks):
-- ALWAYS ask: what is the deadline, and what do they already have done?
+- Acknowledge the deadline first, then ask what they've already done (unless they told you)
 - Break work into tiny, specific, time-boxed chunks — no vague steps like "research topic"
 - Assign each chunk to a specific day/time slot based on the deadline
 - Lead with the EASIEST or most interesting chunk first — ADHD brains need a win to start
@@ -989,104 +901,60 @@ RESPONSE FORMAT RULES:
 Remember: the goal is always to get them from paralyzed → moving. One tiny step at a time.`;
 }
 
-function sendCoach() {
-  const inp = document.getElementById('coach-input');
-  const text = inp.value.trim();
-  if(!text) return;
-  inp.value = '';
-
-  // Add to history
-  coachHistory.push({ role: 'user', content: text });
-
-  const msgs = document.getElementById('coach-msgs');
-  const userDiv = document.createElement('div');
-  userDiv.className = 'coach-user';
-  userDiv.textContent = text;
+function sendCoach(){
+  const inp=document.getElementById('coach-input');
+  const text=inp.value.trim();if(!text) return;
+  inp.value='';
+  coachHistory.push({role:'user',content:text});
+  const msgs=document.getElementById('coach-msgs');
+  const userDiv=document.createElement('div');userDiv.className='coach-user';userDiv.textContent=text;
   msgs.appendChild(userDiv);
-
-  // Typing indicator
-  const typingDiv = document.createElement('div');
-  typingDiv.className = 'coach-msg';
-  typingDiv.id = 'coach-typing';
-  typingDiv.innerHTML = '<strong style="font-size:10px;color:var(--accent2);display:block;margin-bottom:4px">ParaHype AI</strong><span style="color:var(--muted);font-style:italic">typing...</span>';
-  msgs.appendChild(typingDiv);
-  msgs.scrollTop = msgs.scrollHeight;
+  const typingDiv=document.createElement('div');typingDiv.className='coach-msg';typingDiv.id='coach-typing';
+  typingDiv.innerHTML='<strong style="font-size:10px;color:var(--accent2);display:block;margin-bottom:4px">ParaHype AI</strong><span style="color:var(--muted);font-style:italic">typing...</span>';
+  msgs.appendChild(typingDiv);msgs.scrollTop=msgs.scrollHeight;
 
   fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',
-      max_tokens:1000,
-      system: buildCoachSystemPrompt(),
-      messages: coachHistory
-    })
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:buildCoachSystemPrompt(),messages:coachHistory})
   })
   .then(r=>r.json())
   .then(d=>{
-    const reply = d.content?.find(c=>c.type==='text')?.text || "You've got this. I'm right here with you.";
-
-    // Add assistant reply to history
-    coachHistory.push({ role: 'assistant', content: reply });
-
-    // Keep history from getting too long (last 20 messages)
-    if(coachHistory.length > 20) coachHistory = coachHistory.slice(-20);
-
-    // Remove typing indicator
-    const typing = document.getElementById('coach-typing');
-    if(typing) typing.remove();
-
-    const aiDiv = document.createElement('div');
-    aiDiv.className = 'coach-msg';
-    // Render newlines as <br> so task lists display properly
-    const formatted = reply.replace(/\n/g, '<br>');
-    aiDiv.innerHTML = '<strong style="font-size:10px;color:var(--accent2);display:block;margin-bottom:4px">ParaHype AI</strong>' + formatted;
-    msgs.appendChild(aiDiv);
-    msgs.scrollTop = msgs.scrollHeight;
+    const reply=d.content?.find(c=>c.type==='text')?.text||"You've got this. I'm right here with you.";
+    coachHistory.push({role:'assistant',content:reply});
+    if(coachHistory.length>20) coachHistory=coachHistory.slice(-20);
+    const typing=document.getElementById('coach-typing');if(typing) typing.remove();
+    const aiDiv=document.createElement('div');aiDiv.className='coach-msg';
+    aiDiv.innerHTML='<strong style="font-size:10px;color:var(--accent2);display:block;margin-bottom:4px">ParaHype AI</strong>'+reply.replace(/\n/g,'<br>');
+    msgs.appendChild(aiDiv);msgs.scrollTop=msgs.scrollHeight;
     speak(reply);
   })
   .catch(()=>{
-    const typing = document.getElementById('coach-typing');
-    if(typing) typing.remove();
-    const fallback = "Having a little trouble connecting right now — but hey, you're still showing up and that counts. Try again in a sec?";
-    const aiDiv = document.createElement('div');
-    aiDiv.className = 'coach-msg';
-    aiDiv.innerHTML = '<strong style="font-size:10px;color:var(--accent2);display:block;margin-bottom:4px">ParaHype AI</strong>' + fallback;
-    msgs.appendChild(aiDiv);
-    msgs.scrollTop = msgs.scrollHeight;
+    const typing=document.getElementById('coach-typing');if(typing) typing.remove();
+    const fallback="Having a little trouble connecting right now — but hey, you're still showing up and that counts. Try again in a sec?";
+    const aiDiv=document.createElement('div');aiDiv.className='coach-msg';
+    aiDiv.innerHTML='<strong style="font-size:10px;color:var(--accent2);display:block;margin-bottom:4px">ParaHype AI</strong>'+fallback;
+    msgs.appendChild(aiDiv);msgs.scrollTop=msgs.scrollHeight;
     speak(fallback);
   });
 }
 
-function toggleMic() {
-  micListening = !micListening;
-  const btn = document.getElementById('coach-mic');
-  if(btn) btn.classList.toggle('listening', micListening);
-  if(micListening && 'webkitSpeechRecognition' in window){
-    const rec = new webkitSpeechRecognition();
-    rec.onresult = e=>{
-      document.getElementById('coach-input').value = e.results[0][0].transcript;
-      micListening=false; btn.classList.remove('listening');
-      setTimeout(sendCoach,300);
+function toggleMic(){
+  micListening=!micListening;
+  const btn=document.getElementById('coach-mic');if(btn) btn.classList.toggle('listening',micListening);
+  if(micListening&&'webkitSpeechRecognition' in window){
+    const rec=new webkitSpeechRecognition();
+    rec.onresult=e=>{
+      document.getElementById('coach-input').value=e.results[0][0].transcript;
+      micListening=false;btn.classList.remove('listening');setTimeout(sendCoach,300);
     };
-    rec.onerror = rec.onend = ()=>{micListening=false; btn.classList.remove('listening');};
+    rec.onerror=rec.onend=()=>{micListening=false;btn.classList.remove('listening');};
     rec.start();
-  } else {
-    micListening=false; if(btn)btn.classList.remove('listening');
-  }
+  } else {micListening=false;if(btn)btn.classList.remove('listening');}
 }
 
-function logout() {
-  currentUser = null;
-  coachHistory = [];
-  document.getElementById('tab-bar').style.display = 'none';
-  ['home','habits','rewards','buddy','me'].forEach(t=>document.getElementById(t+'-screen').classList.remove('active'));
-  document.getElementById('login-screen').classList.add('active');
-  closeCoach();
-}
-
-document.getElementById('home-screen').addEventListener('click', e=>{
-  if(e.target.closest('.hype-icon-wrap') || e.target.closest('.hype-msg')) toggleCoach();
+// ── Events ──
+document.getElementById('home-screen').addEventListener('click',e=>{
+  if(e.target.closest('.hype-icon-wrap')||e.target.closest('.hype-msg')) toggleCoach();
 });
 </script>
 </body>
