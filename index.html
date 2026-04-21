@@ -246,13 +246,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"/>
         Continue with Google
       </button>
-      <!-- Hidden Google One Tap / popup anchor -->
-      <div id="g_id_onload"
-        data-client_id="790361257297-3c3ua1tj1hhnuea7ffc8d59fuovm8sg6.apps.googleusercontent.com"
-        data-callback="handleGoogleCredential"
-        data-auto_select="false"
-        data-cancel_on_tap_outside="true">
-      </div>
     </div>
     <div class="terms">By continuing you agree to our<br>Terms of Service &amp; Privacy Policy</div>
   </div>
@@ -658,49 +651,63 @@ function toggleMute() {
 
 // ── Google Sign-In ──
 // ⚠️  Replace YOUR_GOOGLE_CLIENT_ID with your actual Client ID from Google Cloud Console
-const GOOGLE_CLIENT_ID = '790361257297-3c3ua1tj1hhnuea7ffc8d59fuovm8sg6.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID';
 
-function triggerGoogleSignIn() {
-  if (typeof google === 'undefined') {
-    alert('Google Sign-In is loading, please try again in a moment.');
-    return;
-  }
-  google.accounts.id.initialize({
+let googleTokenClient = null;
+
+function initGoogleAuth() {
+  if (typeof google === 'undefined') return;
+  // Use the token client (popup flow) — works reliably on GitHub Pages
+  googleTokenClient = google.accounts.oauth2.initTokenClient({
     client_id: GOOGLE_CLIENT_ID,
-    callback: handleGoogleCredential,
-    auto_select: false,
-    cancel_on_tap_outside: true,
-  });
-  google.accounts.id.prompt((notification) => {
-    // If One Tap is suppressed (e.g. user dismissed before), fall back to popup
-    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-      google.accounts.id.renderButton(
-        document.createElement('div'), // off-screen
-        { theme: 'outline', size: 'large' }
-      );
-      // Open popup manually
-      google.accounts.oauth2.initTokenClient({
-        client_id: GOOGLE_CLIENT_ID,
-        scope: 'email profile',
-        callback: () => {},
-      }).requestAccessToken();
+    scope: 'openid email profile',
+    callback: async (tokenResponse) => {
+      if (tokenResponse.error) {
+        console.error('Google OAuth error:', tokenResponse.error);
+        return;
+      }
+      // Fetch user info using the access token
+      try {
+        const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: 'Bearer ' + tokenResponse.access_token }
+        });
+        const info = await res.json();
+        const name = info.given_name || info.name || 'Friend';
+        const email = info.email || '';
+        const picture = info.picture || null;
+        loginUser({ name, email, picture, fromGoogle: true });
+      } catch(e) {
+        console.error('Failed to fetch Google user info:', e);
+        loginUser({ name: 'Friend', email: '', picture: null, fromGoogle: true });
+      }
     }
   });
 }
 
-function handleGoogleCredential(response) {
-  // Decode the JWT credential to get user info (no backend needed for basic profile)
-  try {
-    const payload = JSON.parse(atob(response.credential.split('.')[1]));
-    const name = payload.given_name || payload.name || 'Friend';
-    const email = payload.email || '';
-    const picture = payload.picture || null;
-    loginUser({ name, email, picture, fromGoogle: true });
-  } catch(e) {
-    console.error('Google credential parse error:', e);
-    loginUser({ name: 'Friend', email: '', picture: null, fromGoogle: true });
+function triggerGoogleSignIn() {
+  if (typeof google === 'undefined') {
+    alert('Google Sign-In is still loading — please try again in a moment.');
+    return;
   }
+  if (!googleTokenClient) initGoogleAuth();
+  if (!googleTokenClient) {
+    alert('Google Sign-In could not initialize. Check your Client ID.');
+    return;
+  }
+  googleTokenClient.requestAccessToken({ prompt: 'select_account' });
 }
+
+// Initialize as soon as the Google script loads
+window.addEventListener('load', () => {
+  // Poll briefly in case the GSI script loads after window.load
+  const poll = setInterval(() => {
+    if (typeof google !== 'undefined') {
+      initGoogleAuth();
+      clearInterval(poll);
+    }
+  }, 200);
+  setTimeout(() => clearInterval(poll), 5000);
+});
 
 function loginUser({ name, email, picture, fromGoogle = false }) {
   const initials = name.slice(0, 2).toUpperCase();
