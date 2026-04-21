@@ -531,7 +531,7 @@ function updateClock(){
   const day=now.toLocaleDateString('en-US',{weekday:'long'});
   const date=now.toLocaleDateString('en-US',{month:'numeric',day:'numeric',year:'numeric'});
   const sub=document.getElementById('home-sub');
-  if(sub) sub.textContent=day+' · '+date+' · How\'s your energy?';
+  if(sub) sub.textContent=day+' · '+date+' · How\'s your energy level today?';
 }
 updateClock();
 setInterval(updateClock,10000);
