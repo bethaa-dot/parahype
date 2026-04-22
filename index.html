@@ -48,6 +48,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .btn-google:hover{box-shadow:0 2px 12px rgba(0,0,0,0.15)}
 .btn-google img{width:18px;height:18px}
 .terms{font-size:11px;color:var(--muted);margin-top:16px;text-align:center;line-height:1.5}
+.auth-error{display:none;background:rgba(239,68,68,0.08);border:0.5px solid rgba(239,68,68,0.3);border-radius:10px;padding:10px 13px;font-size:12px;color:#F87171;margin-top:10px;line-height:1.5}
+.auth-error.visible{display:block}
+.field input.invalid{border-color:rgba(239,68,68,0.5)}
 
 /* ── Vibe Onboarding ── */
 #vibe-screen{background:var(--bg);justify-content:flex-start;padding:0;overflow:hidden}
@@ -262,14 +265,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <button class="auth-tab" onclick="switchTab(this,'signup')">Sign up</button>
       </div>
       <div id="login-fields">
-        <div class="field"><label>Email</label><input type="email" placeholder="you@email.com" id="login-email"/></div>
-        <div class="field"><label>Password</label><input type="password" placeholder="••••••••" id="login-pass"/></div>
+        <div class="field"><label>Email</label><input type="email" placeholder="you@email.com" id="login-email" onkeydown="if(event.key==='Enter')doAuth()"/></div>
+        <div class="field"><label>Password</label><input type="password" placeholder="••••••••" id="login-pass" onkeydown="if(event.key==='Enter')doAuth()"/></div>
       </div>
       <div id="signup-fields" style="display:none">
-        <div class="field"><label>Your name</label><input type="text" placeholder="First name" id="signup-name"/></div>
-        <div class="field"><label>Email</label><input type="email" placeholder="you@email.com" id="signup-email"/></div>
-        <div class="field"><label>Password</label><input type="password" placeholder="Create password" id="signup-pass"/></div>
+        <div class="field"><label>Your name</label><input type="text" placeholder="First name" id="signup-name" onkeydown="if(event.key==='Enter')doAuth()"/></div>
+        <div class="field"><label>Email</label><input type="email" placeholder="you@email.com" id="signup-email" onkeydown="if(event.key==='Enter')doAuth()"/></div>
+        <div class="field"><label>Password</label><input type="password" placeholder="Create password" id="signup-pass" onkeydown="if(event.key==='Enter')doAuth()"/></div>
       </div>
+      <div class="auth-error" id="auth-error"></div>
       <button class="btn-primary" onclick="doAuth()" id="auth-btn">Continue</button>
       <div class="google-divider">or</div>
       <button class="btn-google" onclick="triggerGoogleSignIn()">
@@ -617,7 +621,7 @@ Sample phrases: "Take your time", "One breath at a time", "You're exactly where 
   },
   gentle: {
     id: 'gentle',
-    name: 'Gabe',
+    name: 'Layla',
     label: 'Gentle',
     emoji: '💜',
     color: '#C084FC',
@@ -628,7 +632,7 @@ Sample phrases: "Take your time", "One breath at a time", "You're exactly where 
     sample: '"No rush at all. I\'m right here whenever you\'re ready. You\'re safe."',
     timerBtn: 'Ready when you are',
     nudge: 'No pressure today. I\'m here with you every step. Even one small thing counts.',
-    personality: `Your name is Gabe. You are GENTLE — warm, patient, and completely non-judgmental. You never pressure.
+    personality: `Your name is Layla. You are GENTLE — warm, patient, and completely non-judgmental. You never pressure.
 STYLE: Soft, reassuring. Use "whenever you're ready", "no rush", "I'm here". Validate feelings before giving advice. Never give more than 2 tasks at once.
 NEVER use urgency language. NEVER mention failure or missed streaks harshly.
 Sample phrases: "You're safe here", "That sounds really hard", "Whenever you're ready", "I'm proud of you just for showing up"`
@@ -920,7 +924,7 @@ function saveVibeChange() {
 // GOOGLE AUTH
 // ═══════════════════════════════════════
 // ⚠️ Replace YOUR_GOOGLE_CLIENT_ID with your actual Client ID
-const GOOGLE_CLIENT_ID = '790361257297-3c3ua1tj1hhnuea7ffc8d59fuovm8sg6.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID';
 let googleTokenClient = null;
 
 function initGoogleAuth(){
@@ -962,12 +966,75 @@ function switchTab(el,mode){
   document.getElementById('auth-btn').textContent=mode==='login'?'Continue':'Create account';
 }
 
+function showAuthError(msg) {
+  const el = document.getElementById('auth-error');
+  if(el){ el.textContent = msg; el.classList.add('visible'); }
+}
+
+function clearAuthError() {
+  const el = document.getElementById('auth-error');
+  if(el) el.classList.remove('visible');
+  document.querySelectorAll('.field input').forEach(i => i.classList.remove('invalid'));
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
+
 function doAuth(){
-  const nameEl=document.getElementById('signup-name');
-  const name=(nameEl&&nameEl.value.trim())||'Jordan';
-  const emailEl=document.getElementById('login-email')||document.getElementById('signup-email');
-  const email=emailEl?emailEl.value.trim():'';
-  loginUser({name,email,picture:null,fromGoogle:false});
+  clearAuthError();
+  const isLogin = document.getElementById('login-fields').style.display !== 'none';
+
+  if(isLogin) {
+    const email = document.getElementById('login-email').value.trim();
+    const pass  = document.getElementById('login-pass').value;
+
+    if(!email) {
+      document.getElementById('login-email').classList.add('invalid');
+      showAuthError('Please enter your email address.');
+      return;
+    }
+    if(!isValidEmail(email)) {
+      document.getElementById('login-email').classList.add('invalid');
+      showAuthError('Please enter a valid email address.');
+      return;
+    }
+    if(!pass || pass.length < 6) {
+      document.getElementById('login-pass').classList.add('invalid');
+      showAuthError('Password must be at least 6 characters.');
+      return;
+    }
+    // ✅ Valid login — proceed
+    loginUser({ name: email.split('@')[0], email, picture: null, fromGoogle: false });
+
+  } else {
+    const name  = document.getElementById('signup-name').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const pass  = document.getElementById('signup-pass').value;
+
+    if(!name) {
+      document.getElementById('signup-name').classList.add('invalid');
+      showAuthError('Please enter your first name.');
+      return;
+    }
+    if(!email) {
+      document.getElementById('signup-email').classList.add('invalid');
+      showAuthError('Please enter your email address.');
+      return;
+    }
+    if(!isValidEmail(email)) {
+      document.getElementById('signup-email').classList.add('invalid');
+      showAuthError('Please enter a valid email address.');
+      return;
+    }
+    if(!pass || pass.length < 6) {
+      document.getElementById('signup-pass').classList.add('invalid');
+      showAuthError('Password must be at least 6 characters.');
+      return;
+    }
+    // ✅ Valid signup — proceed
+    loginUser({ name, email, picture: null, fromGoogle: false });
+  }
 }
 
 function loginUser({name,email,picture,fromGoogle=false}){
