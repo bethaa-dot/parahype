@@ -52,6 +52,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .auth-error.visible{display:block}
 .field input.invalid{border-color:rgba(239,68,68,0.5)}
 
+/* ── Loading overlay ── */
+#loading-overlay{display:none;position:absolute;inset:0;background:rgba(15,10,30,0.85);z-index:500;align-items:center;justify-content:center;flex-direction:column;gap:14px}
+#loading-overlay.show{display:flex}
+.loading-dots{display:flex;gap:6px}
+.loading-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:ldot 1.2s ease-in-out infinite}
+.loading-dot:nth-child(2){animation-delay:0.2s;background:var(--accent2)}
+.loading-dot:nth-child(3){animation-delay:0.4s;background:#C084FC}
+@keyframes ldot{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}
+.loading-text{font-size:13px;color:var(--muted);font-family:var(--font-body)}
+
 /* ── Vibe Onboarding ── */
 #vibe-screen{background:var(--bg);justify-content:flex-start;padding:0;overflow:hidden}
 .vibe-header{padding:28px 20px 16px;text-align:center}
@@ -576,6 +586,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     </div>
   </div>
 
+  <!-- LOADING OVERLAY -->
+  <div id="loading-overlay">
+    <div class="loading-dots">
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+    </div>
+    <div class="loading-text" id="loading-text">Loading your hype...</div>
+  </div>
+
 </div><!-- end #app -->
 
 <script>
@@ -861,9 +881,9 @@ function confirmVibe() {
   if(!pendingVibe) return;
   currentVibe = pendingVibe;
   localStorage.setItem('ph_vibe', currentVibe);
-  // Clear any previous buddy name so vibe default name is used
   if(!buddyName) buddyName = null;
   updateAllVibeUI();
+  scheduleSave();
   document.getElementById('vibe-screen').classList.remove('active');
   document.getElementById('tab-bar').style.display = 'flex';
   goTab('home');
@@ -913,11 +933,100 @@ function saveVibeChange() {
   if(!pendingVibe) return;
   currentVibe = pendingVibe;
   localStorage.setItem('ph_vibe', currentVibe);
-  // Reset buddy name to new vibe default when vibe changes (unless they've set a custom one)
   if(!localStorage.getItem('ph_buddy_name')) buddyName = null;
-  coachHistory = []; // Fresh start with new personality
+  coachHistory = [];
   updateAllVibeUI();
+  scheduleSave();
   document.getElementById('vibe-change-sheet').classList.remove('open');
+}
+
+// ═══════════════════════════════════════
+// API CONFIG — routes through Cloudflare Worker
+// ⚠️ Replace with your deployed worker URL after deploying worker.js
+// e.g. https://parahype-api.YOUR-USERNAME.workers.dev
+// ═══════════════════════════════════════
+const WORKER_URL = 'https://parahype-api.betha-a.workers.dev';
+
+// ── Password hashing (SHA-256, client-side) ──
+async function hashPassword(password) {
+  const msgBuffer = new TextEncoder().encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// ── Unique user ID generator ──
+function generateUID() {
+  return 'ph_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+}
+
+// ── Loading overlay ──
+function showLoading(text = 'Loading your hype...') {
+  const el = document.getElementById('loading-overlay');
+  const txt = document.getElementById('loading-text');
+  if (txt) txt.textContent = text;
+  if (el) el.classList.add('show');
+}
+
+function hideLoading() {
+  const el = document.getElementById('loading-overlay');
+  if (el) el.classList.remove('show');
+}
+
+// ── DB helpers ──
+async function dbCall(action, body) {
+  try {
+    const res = await fetch(`${WORKER_URL}/db`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action, ...body })
+    });
+    if (!res.ok) {
+      console.warn('DB error:', await res.text());
+      return null;
+    }
+    return await res.json();
+  } catch(e) {
+    console.warn('DB call failed:', e);
+    return null;
+  }
+}
+
+async function dbFindUser(email) {
+  const res = await dbCall('findOne', { filter: { email } });
+  return res?.document || null;
+}
+
+async function dbCreateUser(userData) {
+  const res = await dbCall('insertOne', { document: userData });
+  return res?.insertedId || null;
+}
+
+async function dbSaveUser(email, fields) {
+  await dbCall('updateOne', {
+    filter: { email },
+    update: { $set: { ...fields, updatedAt: new Date().toISOString() } },
+    upsert: true
+  });
+}
+
+// Save current app state to DB (debounced — waits 1.5s after last change)
+let saveTimer = null;
+function scheduleSave() {
+  if (!currentUser?.email) return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    dbSaveUser(currentUser.email, {
+      vibe:         currentVibe,
+      buddyName:    buddyName,
+      isSubscribed: isSubscribed,
+      xpTotal:      xpPoints,
+      xpToday:      xpPoints,
+      streak:       parseInt(document.getElementById('streak-num')?.textContent || '0'),
+      habits:       habits,
+      lastSeen:     new Date().toISOString(),
+    });
+  }, 1500);
 }
 
 // ═══════════════════════════════════════
@@ -937,8 +1046,39 @@ function initGoogleAuth(){
       try{
         const res=await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+tokenResponse.access_token}});
         const info=await res.json();
-        loginUser({name:info.given_name||info.name||'Friend',email:info.email||'',picture:info.picture||null,fromGoogle:true});
-      }catch(e){loginUser({name:'Friend',email:'',picture:null,fromGoogle:true});}
+        const name=info.given_name||info.name||'Friend';
+        const email=info.email||'';
+        const picture=info.picture||null;
+
+        showLoading('Signing you in...');
+
+        // Check if user exists in DB, create if not
+        let dbUser = await dbFindUser(email);
+        if(!dbUser) {
+          dbUser = {
+            uid: generateUID(),
+            name, email, picture,
+            fromGoogle: true,
+            passwordHash: null,
+            vibe: null, buddyName: null,
+            isSubscribed: false,
+            xpTotal: 0, xpToday: 0, streak: 0,
+            habits: [],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            lastSeen: new Date().toISOString(),
+          };
+          await dbCreateUser(dbUser);
+        } else {
+          restoreUserState(dbUser);
+        }
+
+        hideLoading();
+        loginUser({name, email, picture, fromGoogle:true, dbUser});
+      }catch(e){
+        hideLoading();
+        loginUser({name:'Friend',email:'',picture:null,fromGoogle:true});
+      }
     }
   });
 }
@@ -981,7 +1121,7 @@ function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 }
 
-function doAuth(){
+async function doAuth(){
   clearAuthError();
   const isLogin = document.getElementById('login-fields').style.display !== 'none';
 
@@ -989,55 +1129,93 @@ function doAuth(){
     const email = document.getElementById('login-email').value.trim();
     const pass  = document.getElementById('login-pass').value;
 
-    if(!email) {
-      document.getElementById('login-email').classList.add('invalid');
-      showAuthError('Please enter your email address.');
+    if(!email) { document.getElementById('login-email').classList.add('invalid'); showAuthError('Please enter your email address.'); return; }
+    if(!isValidEmail(email)) { document.getElementById('login-email').classList.add('invalid'); showAuthError('Please enter a valid email address.'); return; }
+    if(!pass || pass.length < 6) { document.getElementById('login-pass').classList.add('invalid'); showAuthError('Password must be at least 6 characters.'); return; }
+
+    showLoading('Signing you in...');
+    const hashed = await hashPassword(pass);
+    const user = await dbFindUser(email);
+    hideLoading();
+
+    if(!user) {
+      showAuthError('No account found with that email. Please sign up first.');
       return;
     }
-    if(!isValidEmail(email)) {
-      document.getElementById('login-email').classList.add('invalid');
-      showAuthError('Please enter a valid email address.');
-      return;
-    }
-    if(!pass || pass.length < 6) {
+    if(user.passwordHash !== hashed) {
       document.getElementById('login-pass').classList.add('invalid');
-      showAuthError('Password must be at least 6 characters.');
+      showAuthError('Incorrect password. Please try again.');
       return;
     }
-    // ✅ Valid login — proceed
-    loginUser({ name: email.split('@')[0], email, picture: null, fromGoogle: false });
+
+    // ✅ Authenticated — restore their saved state
+    restoreUserState(user);
+    loginUser({ name: user.name, email: user.email, picture: user.picture || null, fromGoogle: false, dbUser: user });
 
   } else {
     const name  = document.getElementById('signup-name').value.trim();
     const email = document.getElementById('signup-email').value.trim();
     const pass  = document.getElementById('signup-pass').value;
 
-    if(!name) {
-      document.getElementById('signup-name').classList.add('invalid');
-      showAuthError('Please enter your first name.');
-      return;
-    }
-    if(!email) {
+    if(!name) { document.getElementById('signup-name').classList.add('invalid'); showAuthError('Please enter your first name.'); return; }
+    if(!email) { document.getElementById('signup-email').classList.add('invalid'); showAuthError('Please enter your email address.'); return; }
+    if(!isValidEmail(email)) { document.getElementById('signup-email').classList.add('invalid'); showAuthError('Please enter a valid email address.'); return; }
+    if(!pass || pass.length < 6) { document.getElementById('signup-pass').classList.add('invalid'); showAuthError('Password must be at least 6 characters.'); return; }
+
+    showLoading('Creating your account...');
+
+    // Check if account already exists
+    const existing = await dbFindUser(email);
+    if(existing) {
+      hideLoading();
       document.getElementById('signup-email').classList.add('invalid');
-      showAuthError('Please enter your email address.');
+      showAuthError('An account with that email already exists. Please log in.');
       return;
     }
-    if(!isValidEmail(email)) {
-      document.getElementById('signup-email').classList.add('invalid');
-      showAuthError('Please enter a valid email address.');
-      return;
-    }
-    if(!pass || pass.length < 6) {
-      document.getElementById('signup-pass').classList.add('invalid');
-      showAuthError('Password must be at least 6 characters.');
-      return;
-    }
-    // ✅ Valid signup — proceed
-    loginUser({ name, email, picture: null, fromGoogle: false });
+
+    const hashed = await hashPassword(pass);
+    const uid = generateUID();
+    const newUser = {
+      uid,
+      name,
+      email,
+      passwordHash: hashed,
+      picture: null,
+      fromGoogle: false,
+      vibe: null,
+      buddyName: null,
+      isSubscribed: false,
+      xpTotal: 0,
+      xpToday: 0,
+      streak: 0,
+      habits: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      lastSeen: new Date().toISOString(),
+    };
+
+    await dbCreateUser(newUser);
+    hideLoading();
+
+    // ✅ Account created — go to onboarding
+    loginUser({ name, email, picture: null, fromGoogle: false, dbUser: newUser });
   }
 }
 
-function loginUser({name,email,picture,fromGoogle=false}){
+function restoreUserState(dbUser) {
+  if(!dbUser) return;
+  if(dbUser.vibe)         { currentVibe = dbUser.vibe; localStorage.setItem('ph_vibe', currentVibe); }
+  if(dbUser.buddyName)    { buddyName = dbUser.buddyName; localStorage.setItem('ph_buddy_name', buddyName); }
+  if(dbUser.isSubscribed) { isSubscribed = true; localStorage.setItem('ph_subscribed', 'true'); }
+  if(dbUser.xpToday)      xpPoints = dbUser.xpToday;
+  if(dbUser.habits && dbUser.habits.length > 0) habits = dbUser.habits;
+  if(dbUser.streak) {
+    const el = document.getElementById('streak-num');
+    if(el) el.textContent = dbUser.streak;
+  }
+}
+
+function loginUser({name,email,picture,fromGoogle=false,dbUser=null}){
   const initials=name.slice(0,2).toUpperCase();
   currentUser={name,email,initials,picture,fromGoogle};
 
@@ -1059,8 +1237,11 @@ function loginUser({name,email,picture,fromGoogle=false}){
   const chevron=`<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 10l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
   document.getElementById('profile-name').textContent=name;
   document.getElementById('disp-name').innerHTML=name+' '+chevron;
-  const emailEl=document.getElementById('disp-email');
-  if(emailEl) emailEl.innerHTML=(email||'—')+' '+chevron;
+  const emailDisp=document.getElementById('disp-email');
+  if(emailDisp) emailDisp.innerHTML=(email||'—')+' '+chevron;
+
+  // Update last seen in DB
+  if(email) dbSaveUser(email, { name, picture: picture||null, lastSeen: new Date().toISOString() });
 
   document.getElementById('login-screen').classList.remove('active');
 
@@ -1168,6 +1349,7 @@ function toggleHabit(id){
   h.done=!h.done;
   if(h.done){h.streak++;xpPoints+=25;}else{h.streak=Math.max(0,h.streak-1);xpPoints=Math.max(0,xpPoints-25);}
   renderAll();
+  scheduleSave();
 }
 
 function addHabit(){
@@ -1175,6 +1357,7 @@ function addHabit(){
   const name=inp.value.trim();if(!name) return;
   habits.push({id:Date.now(),name,done:false,streak:0});
   inp.value='';renderAll();
+  scheduleSave();
 }
 
 // ═══════════════════════════════════════
@@ -1194,7 +1377,7 @@ function toggleTimer(){
       timerSecs--;updateTimerDisplay();
       if(timerSecs<=0){
         clearInterval(timerInterval);timerRunning=false;
-        if(timerMode==='work'){xpPoints+=75;timerMode='break';timerSecs=5*60;updateStats();renderRewards();}
+        if(timerMode==='work'){xpPoints+=75;timerMode='break';timerSecs=5*60;updateStats();renderRewards();scheduleSave();}
         else{timerMode='work';timerSecs=25*60;}
         document.getElementById('timer-btn').textContent=v.timerBtn;
         document.getElementById('timer-mode').textContent=timerMode==='work'?'Ready to focus':'Break done!';
@@ -1251,6 +1434,7 @@ function saveRename(){
     localStorage.setItem('ph_buddy_name',buddyName);
   }
   cancelRename();updateAllVibeUI();
+  scheduleSave();
 }
 
 function cancelRename(){
@@ -1284,6 +1468,7 @@ function handleModalOverlayClick(e){if(e.target===document.getElementById('subsc
 function confirmSubscribe(){
   isSubscribed=true;localStorage.setItem('ph_subscribed','true');
   closeSubscribeModal();updateAllVibeUI();
+  scheduleSave();
   setTimeout(()=>{
     const nudge=document.getElementById('rename-nudge');if(!nudge) return;
     const congrats=document.createElement('div');
@@ -1373,7 +1558,7 @@ function sendCoach(){
   msgs.appendChild(typingDiv);msgs.scrollTop=msgs.scrollHeight;
   setCoachThinking(true);
 
-  fetch('https://api.anthropic.com/v1/messages',{
+  fetch(`${WORKER_URL}/ai`,{
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:buildCoachSystemPrompt(),messages:coachHistory})
   })
