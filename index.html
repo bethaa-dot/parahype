@@ -6,944 +6,186 @@
 <meta name="theme-color" content="#0F0A1E"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="apple-mobile-web-app-title" content="ParaHype"/>
-<title>ParaHype — Your Parallel Hype Buddy</title>
+<title>ParaHype</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{
-  --accent:#7C3AED;--accent2:#A78BFA;--accent-glow:rgba(124,58,237,0.35);
-  --teal:#0D9488;--amber:#D97706;--green:#10B981;--red:#EF4444;
-  --bg:#0F0A1E;--surface:#1A1030;--card:#221540;--card-hover:#2A1A50;
-  --border:rgba(124,58,237,0.15);--border-active:rgba(124,58,237,0.4);
-  --text:#F5F0FF;--muted:#9384B0;--dim:#6B5C8A;
-  --font:'Nunito',system-ui,sans-serif;--font-head:'Fredoka',system-ui,sans-serif;
-  --safe-top:env(safe-area-inset-top,0px);
-  --safe-bottom:env(safe-area-inset-bottom,0px);
-  --tab-h:64px;
-}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);overflow:hidden;overscroll-behavior:none}
-#app{height:100%;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden;background:var(--bg)}
-
-/* Splash */
-#splash{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity 0.5s,visibility 0.5s}
-#splash.gone{opacity:0;visibility:hidden;pointer-events:none}
-.splash-mascot{width:100px;height:100px;animation:bounce-in 0.6s cubic-bezier(0.34,1.56,0.64,1) both}
-.splash-name{font-family:var(--font-head);font-size:32px;font-weight:700;animation:fade-up-in 0.6s ease 0.2s both}
-.splash-tag{font-size:13px;color:var(--muted);animation:fade-up-in 0.6s ease 0.35s both}
-.splash-dots{display:flex;gap:6px;animation:fade-up-in 0.6s ease 0.5s both}
-.splash-dots span{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:dot-pulse 1.2s ease-in-out infinite}
-.splash-dots span:nth-child(2){animation-delay:0.15s}
-.splash-dots span:nth-child(3){animation-delay:0.3s}
-@keyframes bounce-in{0%{opacity:0;transform:scale(0.3)}50%{transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
-@keyframes fade-up-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-@keyframes dot-pulse{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}
-
-.screen{display:none;flex:1;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(8px);transition:opacity 0.25s ease,transform 0.25s ease;padding-top:var(--safe-top)}
-.screen.active{display:flex;opacity:1;transform:translateY(0)}
-.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain}
-.scroll-area::-webkit-scrollbar{display:none}
-
-/* Login */
-#login-screen{justify-content:center;align-items:center;padding:2rem 1.5rem;position:relative;overflow:hidden}
-#login-screen::before{content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:150vw;height:150vw;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,0.08) 0%,transparent 60%);pointer-events:none}
-.logo-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:24px;position:relative;z-index:1}
-.app-name{font-family:var(--font-head);font-size:30px;font-weight:700;margin-top:8px}
-.tagline{font-size:13px;color:var(--muted);margin-top:2px;text-align:center}
-.auth-box{width:100%;max-width:380px;background:var(--surface);border-radius:24px;border:0.5px solid var(--border);padding:22px;position:relative;z-index:1}
-.auth-tabs{display:flex;gap:4px;background:var(--bg);border-radius:14px;padding:3px;margin-bottom:18px}
-.auth-tab{flex:1;padding:10px;text-align:center;font-size:13px;font-weight:700;color:var(--muted);border-radius:12px;cursor:pointer;transition:all 0.2s;border:none;background:transparent;font-family:var(--font)}
-.auth-tab.active{background:var(--accent);color:#fff;box-shadow:0 2px 12px var(--accent-glow)}
-.field{margin-bottom:14px}
-.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600}
-.field input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:12px 14px;font-size:14px;color:var(--text);font-family:var(--font);outline:none;transition:border-color 0.2s,box-shadow 0.2s}
-.field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,58,237,0.15)}
-.field input::placeholder{color:var(--dim)}
-.btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,#7C3AED,#6D28D9);border:none;border-radius:16px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;font-family:var(--font-head);margin-top:4px;box-shadow:0 4px 16px var(--accent-glow);transition:transform 0.1s}
-.btn-primary:active{transform:scale(0.97)}
-.btn-primary:disabled{opacity:0.5;pointer-events:none}
-.divider-text{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--dim);font-size:12px}
-.divider-text::before,.divider-text::after{content:'';flex:1;height:0.5px;background:var(--border)}
-.social-row{display:flex;gap:8px}
-.btn-social{flex:1;padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:14px;font-size:13px;color:var(--text);cursor:pointer;font-family:var(--font);font-weight:600}
-.btn-google{width:100%;padding:13px;background:#fff;border:1px solid #dadce0;border-radius:16px;font-size:14px;font-weight:600;color:#3c4043;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:10px;transition:background 0.15s,box-shadow 0.15s}
-.btn-google:hover{background:#f7f8f8;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
-.btn-google:active{background:#eee}
-.btn-google:disabled{opacity:0.5;pointer-events:none}
-.auth-error{color:var(--red);font-size:12px;text-align:center;margin-top:8px;font-weight:600;min-height:18px}
-.terms{font-size:11px;color:var(--dim);margin-top:18px;text-align:center;line-height:1.6;position:relative;z-index:1}
-
-/* Tab bar */
-#tab-bar{height:var(--tab-h);background:var(--surface);border-top:0.5px solid var(--border);display:none;align-items:stretch;justify-content:space-around;padding:0 4px;padding-bottom:var(--safe-bottom);flex-shrink:0;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);position:relative;z-index:50}
-.tab-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 10px;cursor:pointer;transition:all 0.15s;background:none;border:none;font-family:var(--font);position:relative;min-width:56px}
-.tab-item svg{width:22px;height:22px;color:var(--dim);transition:color 0.2s,transform 0.2s}
-.tab-item span{font-size:10px;color:var(--dim);font-weight:600;transition:color 0.2s}
-.tab-item.active svg{color:var(--accent2);transform:scale(1.1)}
-.tab-item.active span{color:var(--accent2)}
-.tab-item.active::before{content:'';position:absolute;top:0;left:25%;right:25%;height:2.5px;background:var(--accent);border-radius:0 0 4px 4px}
-
-/* Home */
-.home-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px 10px}
-.greeting{font-family:var(--font-head);font-size:22px;font-weight:700}
-.greeting-sub{font-size:12px;color:var(--muted);margin-top:2px}
-.avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#A78BFA);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;font-family:var(--font-head);cursor:pointer;flex-shrink:0;box-shadow:0 2px 12px var(--accent-glow);transition:transform 0.15s}
-.avatar:active{transform:scale(0.92)}
-.hype-msg{margin:8px 16px;background:linear-gradient(135deg,rgba(124,58,237,0.08),rgba(13,148,136,0.05));border-radius:20px;border:0.5px solid var(--border);padding:16px;display:flex;align-items:flex-start;gap:12px;cursor:pointer;transition:border-color 0.2s}
-.hype-msg:active{border-color:var(--border-active)}
-.hype-mascot{flex-shrink:0}
-.hype-sender{font-size:10px;color:var(--accent2);font-weight:700;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.05em}
-.hype-body{font-size:13px;color:var(--text);line-height:1.55}
-.stats-row{display:flex;gap:10px;padding:8px 16px}
-.stat-card{flex:1;background:var(--surface);border-radius:16px;border:0.5px solid var(--border);padding:14px 10px;text-align:center}
-.stat-num{font-family:var(--font-head);font-size:24px;font-weight:700}
-.stat-lbl{font-size:10px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600}
-.focus-card{margin:6px 16px 10px;background:var(--surface);border-radius:20px;border:0.5px solid var(--border);padding:18px;display:flex;align-items:center;justify-content:space-between}
-.timer-display{font-family:var(--font-head);font-size:32px;font-weight:700}
-.timer-mode{font-size:11px;color:var(--accent2);margin-top:2px;margin-bottom:10px;font-weight:600}
-.btn-start{padding:10px 22px;background:linear-gradient(135deg,#7C3AED,#6D28D9);border:none;border-radius:14px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:var(--font-head);box-shadow:0 2px 10px var(--accent-glow);transition:transform 0.1s}
-.btn-start:active{transform:scale(0.95)}
-.timer-ring-wrap{position:relative;width:68px;height:68px}
-.timer-ring-wrap svg{transform:rotate(-90deg)}
-.section-row{display:flex;justify-content:space-between;align-items:center;padding:16px 16px 8px}
-.section-title{font-family:var(--font-head);font-size:15px;font-weight:700}
-.section-link{font-size:12px;color:var(--accent2);cursor:pointer;font-weight:600}
-.habit-item{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:0.5px solid rgba(124,58,237,0.06);cursor:pointer;transition:background 0.15s}
-.habit-item:active{background:rgba(124,58,237,0.04)}
-.habit-icon-wrap{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.habit-icon-wrap.done{background:rgba(16,185,129,0.12)}
-.habit-icon-wrap.todo{background:rgba(124,58,237,0.08)}
-.habit-name{font-size:14px;font-weight:600;flex:1}
-.habit-name.done{text-decoration:line-through;color:var(--muted)}
-.habit-xp{font-size:11px;color:var(--muted);margin-top:2px;font-weight:500}
-.check-ring{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;transition:all 0.25s;flex-shrink:0}
-.check-ring.done{background:var(--green);border-color:var(--green);animation:check-pop 0.3s cubic-bezier(0.34,1.56,0.64,1)}
-@keyframes check-pop{0%{transform:scale(0.5)}100%{transform:scale(1)}}
-
-/* Habits screen */
-.screen-header{padding:18px 20px 12px;font-family:var(--font-head);font-size:22px;font-weight:700}
-.add-habit-row{display:flex;gap:10px;padding:0 16px 14px}
-.habit-input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:12px 16px;font-size:14px;color:var(--text);font-family:var(--font);outline:none;transition:border-color 0.2s}
-.habit-input:focus{border-color:var(--accent)}
-.habit-input::placeholder{color:var(--dim)}
-.btn-add{padding:12px 18px;background:linear-gradient(135deg,#7C3AED,#6D28D9);border:none;border-radius:16px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:var(--font-head);white-space:nowrap;box-shadow:0 2px 10px var(--accent-glow);transition:transform 0.1s}
-.btn-add:active{transform:scale(0.95)}
-.habit-full{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:0.5px solid rgba(124,58,237,0.06);cursor:pointer;transition:background 0.15s}
-.habit-full:active{background:rgba(124,58,237,0.04)}
-.streak-dots{display:flex;gap:4px;margin-top:4px}
-.sdot{width:8px;height:8px;border-radius:50%;background:rgba(124,58,237,0.12)}
-.sdot.on{background:var(--accent2)}
-.sdot.today{background:var(--amber)}
-.btn-delete-habit{width:28px;height:28px;border-radius:50%;border:1px solid rgba(239,68,68,0.2);background:rgba(239,68,68,0.06);color:var(--red);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;transition:all 0.15s;opacity:0.5}
-.btn-delete-habit:active{opacity:1;transform:scale(0.9)}
-
-/* Rewards */
-.xp-card{margin:0 16px 14px;background:linear-gradient(135deg,var(--surface),rgba(124,58,237,0.06));border-radius:20px;border:0.5px solid var(--border);padding:18px}
-.xp-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.xp-level{font-family:var(--font-head);font-size:15px;font-weight:700;color:var(--accent2)}
-.xp-count{font-size:12px;color:var(--muted);font-weight:600}
-.xp-bar-bg{height:12px;background:rgba(124,58,237,0.1);border-radius:12px;overflow:hidden}
-.xp-bar-fill{height:100%;background:linear-gradient(90deg,#7C3AED,#A78BFA);border-radius:12px;transition:width 0.6s;position:relative}
-.xp-bar-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);animation:shimmer 2s linear infinite}
-@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-.xp-total-row{display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:0.5px solid var(--border)}
-.xp-total-label{font-size:12px;color:var(--muted);font-weight:600}
-.xp-total-val{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--amber)}
-.reward-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 20px}
-.reward-tile{background:var(--surface);border-radius:18px;border:0.5px solid var(--border);padding:18px 14px;text-align:center;cursor:pointer;transition:all 0.2s}
-.reward-tile:active{transform:scale(0.96)}
-.reward-tile.locked{opacity:0.4}
-.reward-tile.unlocked{border-color:rgba(16,185,129,0.3);background:linear-gradient(135deg,var(--surface),rgba(16,185,129,0.04))}
-.r-emoji{font-size:32px;margin-bottom:8px}
-.r-name{font-size:13px;font-weight:700;margin-bottom:4px}
-.r-pts{font-size:11px;color:var(--muted);font-weight:500}
-.r-badge{display:inline-block;font-size:10px;padding:4px 12px;border-radius:10px;margin-top:8px;font-weight:700}
-.r-badge.unlocked{background:rgba(16,185,129,0.15);color:var(--green)}
-.r-badge.locked{background:rgba(124,58,237,0.1);color:var(--accent2)}
-
-/* Buddy */
-.buddy-header-area{padding:18px 20px 10px;display:flex;justify-content:space-between;align-items:center}
-.buddy-header-title{font-family:var(--font-head);font-size:22px;font-weight:700}
-.btn-invite{padding:8px 16px;background:rgba(124,58,237,0.1);border:1px solid var(--accent);border-radius:24px;font-size:12px;color:var(--accent2);cursor:pointer;font-family:var(--font);font-weight:700;transition:all 0.2s}
-.btn-invite:active{background:rgba(124,58,237,0.2);transform:scale(0.96)}
-.buddy-card{margin:0 16px 12px;background:var(--surface);border-radius:20px;border:0.5px solid var(--border);padding:18px}
-.buddy-top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
-.buddy-avi{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,rgba(124,58,237,0.2),rgba(13,148,136,0.15));border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
-.buddy-name{font-family:var(--font-head);font-size:16px;font-weight:700}
-.buddy-status{font-size:11px;color:var(--green);margin-top:2px;font-weight:600}
-.buddy-stats{display:flex;gap:8px}
-.b-stat{flex:1;background:var(--bg);border-radius:14px;padding:12px 8px;text-align:center}
-.b-val{font-family:var(--font-head);font-size:20px;font-weight:700}
-.b-lbl{font-size:10px;color:var(--muted);margin-top:2px;font-weight:600}
+:root{--accent:#7C3AED;--accent2:#A78BFA;--teal:#0D9488;--amber:#D97706;--green:#10B981;--red:#EF4444;--bg:#0F0A1E;--surface:#1A1030;--card:#221540;--border:rgba(124,58,237,0.2);--text:#F5F0FF;--muted:#8B7BAA;--fb:'DM Sans',sans-serif;--fh:'Space Grotesk',sans-serif;--vibe-color:#7C3AED;--vibe-glow:rgba(124,58,237,0.3);--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px)}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--fb);overflow:hidden}
+#app{height:100%;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.screen{display:none;flex:1;flex-direction:column;overflow:hidden;padding-top:var(--safe-top)}.screen.active{display:flex}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}.scroll-area::-webkit-scrollbar{display:none}
+#login-screen{justify-content:center;align-items:center;padding:2rem 1.5rem}
+.logo-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:24px}
+.logo-mark{width:72px;height:72px;background:var(--accent);border-radius:22px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.app-name{font-family:var(--fh);font-size:28px;font-weight:700}.tagline{font-size:13px;color:var(--muted);margin-top:4px}
+.auth-box{width:100%;max-width:380px;background:var(--surface);border-radius:22px;border:0.5px solid var(--border);padding:20px}
+.auth-tabs{display:flex;gap:4px;background:var(--bg);border-radius:12px;padding:3px;margin-bottom:18px}
+.auth-tab{flex:1;padding:8px;text-align:center;font-size:13px;font-weight:600;color:var(--muted);border-radius:10px;cursor:pointer;border:none;background:transparent;font-family:var(--fb)}.auth-tab.active{background:var(--accent);color:#fff}
+.field{margin-bottom:14px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600}
+.field input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:11px 14px;font-size:14px;color:var(--text);font-family:var(--fb);outline:none}.field input:focus{border-color:var(--accent)}.field input::placeholder{color:#6B5C8A}
+.btn-primary{width:100%;padding:14px;background:var(--accent);border:none;border-radius:14px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;font-family:var(--fh);margin-top:4px}.btn-primary:disabled{opacity:0.5}
+.auth-error{color:var(--red);font-size:12px;text-align:center;margin-top:8px;min-height:16px}
+.google-divider{display:flex;align-items:center;gap:10px;margin:12px 0 4px;color:var(--muted);font-size:12px}.google-divider::before,.google-divider::after{content:'';flex:1;height:0.5px;background:var(--border)}
+.btn-google{width:100%;padding:12px;background:#fff;border:none;border-radius:12px;font-size:14px;color:#1F1F1F;cursor:pointer;font-family:var(--fb);font-weight:500;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:4px}.btn-google img{width:18px;height:18px}
+.terms{font-size:11px;color:var(--muted);margin-top:16px;text-align:center;line-height:1.5}
+#vibe-screen{justify-content:flex-start;padding:0;overflow:hidden}
+.vibe-header{padding:28px 20px 16px;text-align:center}.vibe-header h2{font-family:var(--fh);font-size:22px;font-weight:700;margin-bottom:6px}.vibe-header p{font-size:13px;color:var(--muted);line-height:1.5}
+.vibe-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px;overflow-y:auto;flex:1;padding-bottom:16px}
+.vibe-card{background:var(--surface);border-radius:20px;border:1.5px solid var(--border);padding:18px 14px;cursor:pointer;transition:all 0.2s;text-align:center}.vibe-card:active{transform:scale(0.97)}.vibe-card.selected{border-color:var(--vibe-color)}
+.vibe-avatar-preview{width:52px;height:52px;margin:0 auto 8px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px}
+.vibe-name{font-family:var(--fh);font-size:14px;font-weight:700;margin-bottom:2px}.vibe-label{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px}.vibe-sample{font-size:11px;color:var(--muted);line-height:1.4;font-style:italic}
+.vibe-footer{padding:16px 20px 24px;flex-shrink:0}
+.btn-vibe-confirm{width:100%;padding:14px;background:var(--accent);border:none;border-radius:14px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;font-family:var(--fh);opacity:0.4;transition:opacity 0.2s}.btn-vibe-confirm.ready{opacity:1}
+#tab-bar{height:64px;background:var(--surface);border-top:0.5px solid var(--border);display:none;align-items:center;justify-content:space-around;padding:0 6px;padding-bottom:var(--safe-bottom);flex-shrink:0}
+.tab-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 12px;cursor:pointer;background:none;border:none;font-family:var(--fb)}.tab-item svg{width:22px;height:22px;color:var(--muted)}.tab-item span{font-size:10px;color:var(--muted);font-weight:600}.tab-item.active svg,.tab-item.active span{color:var(--accent2)}
+.home-header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px 8px}.greeting{font-family:var(--fh);font-size:20px;font-weight:700}.greeting-sub{font-size:12px;color:var(--muted);margin-top:3px}
+.avatar{width:40px;height:40px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;font-family:var(--fh);cursor:pointer;flex-shrink:0}
+.hype-msg{margin:6px 16px;background:var(--surface);border-radius:18px;border:0.5px solid var(--border);padding:14px 16px;display:flex;align-items:flex-start;gap:12px;cursor:pointer}
+.hype-icon-wrap{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;border:2px solid var(--border)}
+.hype-sender{font-size:10px;color:var(--accent2);font-weight:700;margin-bottom:4px}.hype-body{font-size:13px;line-height:1.5}
+.stats-row{display:flex;gap:10px;padding:10px 16px}.stat-card{flex:1;background:var(--surface);border-radius:14px;border:0.5px solid var(--border);padding:12px;text-align:center}.stat-num{font-family:var(--fh);font-size:22px;font-weight:700}.stat-lbl{font-size:10px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600}
+.focus-card{margin:0 16px 10px;background:var(--surface);border-radius:18px;border:0.5px solid var(--border);padding:16px;display:flex;align-items:center;justify-content:space-between}
+.timer-display{font-family:var(--fh);font-size:28px;font-weight:700}.timer-mode{font-size:11px;color:var(--accent2);margin-top:2px;margin-bottom:10px;font-weight:600}
+.btn-start{padding:9px 20px;background:var(--accent);border:none;border-radius:12px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:var(--fh)}
+.timer-ring-wrap{position:relative;width:64px;height:64px}.timer-ring-wrap svg{transform:rotate(-90deg)}
+.section-row{display:flex;justify-content:space-between;align-items:center;padding:14px 16px 8px}.section-title{font-family:var(--fh);font-size:14px;font-weight:700}.section-link{font-size:12px;color:var(--accent2);cursor:pointer;font-weight:600}
+.habit-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:0.5px solid rgba(124,58,237,0.08);cursor:pointer}
+.habit-icon-wrap{width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.habit-icon-wrap.done{background:rgba(16,185,129,0.12)}.habit-icon-wrap.todo{background:rgba(124,58,237,0.1)}
+.habit-name{font-size:14px;font-weight:600;flex:1}.habit-name.done{text-decoration:line-through;color:var(--muted)}.habit-xp{font-size:11px;color:var(--muted);margin-top:2px}
+.check-ring{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}.check-ring.done{background:var(--green);border-color:var(--green)}
+.screen-header{padding:16px 20px 10px;font-family:var(--fh);font-size:20px;font-weight:700}
+.add-habit-row{display:flex;gap:10px;padding:0 16px 12px}.habit-input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:11px 14px;font-size:14px;color:var(--text);font-family:var(--fb);outline:none}.habit-input:focus{border-color:var(--accent)}.habit-input::placeholder{color:#6B5C8A}
+.btn-add{padding:11px 16px;background:var(--accent);border:none;border-radius:14px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:var(--fh);white-space:nowrap}
+.habit-full{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:0.5px solid rgba(124,58,237,0.08);cursor:pointer}
+.streak-dots{display:flex;gap:3px;margin-top:3px}.sdot{width:7px;height:7px;border-radius:50%;background:rgba(124,58,237,0.15)}.sdot.on{background:var(--accent2)}.sdot.today{background:var(--amber)}
+.btn-del{width:24px;height:24px;border-radius:50%;border:1px solid rgba(239,68,68,0.2);background:rgba(239,68,68,0.06);color:var(--red);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;opacity:0.5}
+.xp-card{margin:0 16px 14px;background:var(--surface);border-radius:18px;border:0.5px solid var(--border);padding:16px}.xp-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.xp-level{font-family:var(--fh);font-size:14px;font-weight:700;color:var(--accent2)}.xp-count{font-size:12px;color:var(--muted);font-weight:600}
+.xp-bar-bg{height:10px;background:rgba(124,58,237,0.12);border-radius:10px;overflow:hidden}.xp-bar-fill{height:100%;background:var(--accent);border-radius:10px;transition:width 0.6s}
+.xp-total-row{display:flex;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:0.5px solid var(--border)}.xp-total-label{font-size:12px;color:var(--muted);font-weight:600}.xp-total-val{font-family:var(--fh);font-size:14px;font-weight:700;color:var(--amber)}
+.reward-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 16px}
+.reward-tile{background:var(--surface);border-radius:16px;border:0.5px solid var(--border);padding:16px;text-align:center}.reward-tile.locked{opacity:0.4}.reward-tile.unlocked{border-color:rgba(16,185,129,0.3)}
+.r-emoji{font-size:28px;margin-bottom:8px}.r-name{font-size:13px;font-weight:600;margin-bottom:4px}.r-pts{font-size:11px;color:var(--muted)}.r-badge{display:inline-block;font-size:10px;padding:3px 10px;border-radius:8px;margin-top:6px;font-weight:700}.r-badge.unlocked{background:rgba(16,185,129,0.15);color:var(--green)}.r-badge.locked{background:rgba(124,58,237,0.15);color:var(--accent2)}
+.buddy-header-area{padding:16px 20px 10px;display:flex;justify-content:space-between;align-items:center}.buddy-header-title{font-family:var(--fh);font-size:20px;font-weight:700}
+.btn-invite{padding:7px 14px;background:rgba(124,58,237,0.15);border:0.5px solid var(--accent);border-radius:20px;font-size:12px;color:var(--accent2);cursor:pointer;font-family:var(--fb);font-weight:700}
+.buddy-card{margin:0 16px 12px;background:var(--surface);border-radius:18px;border:0.5px solid var(--border);padding:16px}.buddy-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.buddy-avi{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;border:2px solid var(--vibe-color);background:var(--bg)}
+.buddy-name{font-family:var(--fh);font-size:15px;font-weight:700}.buddy-status{font-size:11px;color:var(--green);margin-top:2px;font-weight:600}
+.buddy-stats{display:flex;gap:8px}.b-stat{flex:1;background:var(--bg);border-radius:12px;padding:10px;text-align:center}.b-val{font-family:var(--fh);font-size:18px;font-weight:700}.b-lbl{font-size:10px;color:var(--muted);margin-top:2px;font-weight:600}
 .buddy-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px;line-height:1.6}
-.chat-area{margin:0 16px;display:flex;flex-direction:column;gap:8px;padding-bottom:14px}
-.msg-bubble{padding:12px 16px;border-radius:18px;font-size:13px;line-height:1.55;max-width:82%;animation:msg-in 0.3s ease both}
-@keyframes msg-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.msg-ai{background:rgba(124,58,237,0.08);border-radius:4px 18px 18px 18px}
-.msg-ai-name{font-size:10px;color:var(--accent2);font-weight:700;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.04em}
-.msg-user{background:linear-gradient(135deg,#7C3AED,#6D28D9);border-radius:18px 4px 18px 18px;align-self:flex-end;color:#fff;font-weight:500}
-.hype-input-row{display:flex;gap:10px;padding:0 16px 16px}
-.hype-input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:12px 18px;font-size:14px;color:var(--text);font-family:var(--font);outline:none;transition:border-color 0.2s}
-.hype-input:focus{border-color:var(--accent)}
-.hype-input::placeholder{color:var(--dim)}
-.btn-send{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#6D28D9);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 10px var(--accent-glow);transition:transform 0.1s}
-.btn-send:active{transform:scale(0.9)}
-
-/* Coach */
-#coach-panel{position:fixed;inset:0;z-index:200;display:none;flex-direction:column;background:var(--bg)}
-#coach-panel.open{display:flex}
+.chat-area{margin:0 16px;display:flex;flex-direction:column;gap:8px;padding-bottom:12px}
+.msg-bubble{padding:10px 14px;border-radius:16px;font-size:13px;line-height:1.5;max-width:80%}.msg-ai{background:rgba(124,58,237,0.12);border-radius:4px 16px 16px 16px}.msg-ai-name{font-size:10px;color:var(--accent2);font-weight:700;margin-bottom:4px}
+.msg-user{background:var(--accent);border-radius:16px 4px 16px 16px;align-self:flex-end;color:#fff}
+.hype-input-row{display:flex;gap:10px;padding:0 16px 14px}.hype-input{flex:1;background:var(--surface);border:0.5px solid var(--border);border-radius:24px;padding:11px 16px;font-size:14px;color:var(--text);font-family:var(--fb);outline:none}.hype-input:focus{border-color:var(--accent)}.hype-input::placeholder{color:#6B5C8A}
+.btn-send{width:44px;height:44px;border-radius:50%;background:var(--accent);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#coach-panel{position:fixed;inset:0;z-index:200;display:none;flex-direction:column;background:var(--bg)}#coach-panel.open{display:flex}
 .coach-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;padding-top:calc(16px + var(--safe-top));border-bottom:0.5px solid var(--border);flex-shrink:0}
-.coach-header-left{display:flex;align-items:center;gap:12px}
-.coach-title{font-family:var(--font-head);font-size:17px;font-weight:700}
-.coach-subtitle{font-size:11px;color:var(--muted);font-weight:500}
-.btn-close-coach{width:36px;height:36px;border-radius:50%;background:var(--surface);border:0.5px solid var(--border);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center}
-.coach-msgs{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;display:flex;flex-direction:column;gap:10px}
-.coach-msgs::-webkit-scrollbar{display:none}
-.coach-msg{padding:14px 16px;border-radius:4px 18px 18px 18px;font-size:14px;line-height:1.6;background:rgba(124,58,237,0.08);max-width:88%;animation:msg-in 0.3s ease both}
-.coach-msg-name{font-size:10px;color:var(--accent2);font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:6px}
-.coach-user{background:linear-gradient(135deg,#7C3AED,#6D28D9);border-radius:18px 4px 18px 18px;align-self:flex-end;color:#fff;max-width:88%;padding:14px 16px;font-size:14px;line-height:1.6;font-weight:500;animation:msg-in 0.3s ease both}
-.coach-typing{padding:14px 16px;border-radius:4px 18px 18px 18px;background:rgba(124,58,237,0.08);max-width:88%;display:flex;gap:4px;align-items:center}
-.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:dot-pulse 1.2s ease-in-out infinite}
-.typing-dot:nth-child(2){animation-delay:0.15s}
-.typing-dot:nth-child(3){animation-delay:0.3s}
+.coach-header-left{display:flex;align-items:center;gap:12px}.coach-avi{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;border:1.5px solid var(--vibe-color)}
+.coach-title{font-family:var(--fh);font-size:16px;font-weight:700}.coach-subtitle{font-size:11px;color:var(--muted)}
+.btn-close{width:36px;height:36px;border-radius:50%;background:var(--surface);border:0.5px solid var(--border);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.coach-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}.coach-msgs::-webkit-scrollbar{display:none}
+.coach-msg{padding:12px 16px;border-radius:4px 16px 16px 16px;font-size:14px;line-height:1.6;background:rgba(124,58,237,0.08);max-width:88%}.coach-msg-name{font-size:10px;color:var(--accent2);font-weight:700;margin-bottom:4px}
+.coach-user{background:var(--accent);border-radius:16px 4px 16px 16px;align-self:flex-end;color:#fff;max-width:88%;padding:12px 16px;font-size:14px;line-height:1.6}
+.coach-typing{padding:12px 16px;border-radius:4px 16px 16px 16px;background:rgba(124,58,237,0.08);display:flex;gap:4px}
+.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:tdot 1.2s ease-in-out infinite}.typing-dot:nth-child(2){animation-delay:0.15s}.typing-dot:nth-child(3){animation-delay:0.3s}
+@keyframes tdot{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}
 .coach-input-row{display:flex;gap:10px;padding:14px 16px;padding-bottom:calc(14px + var(--safe-bottom));border-top:0.5px solid var(--border);flex-shrink:0;background:var(--surface)}
-.coach-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:24px;padding:12px 16px;font-size:14px;color:var(--text);font-family:var(--font);outline:none}
-.coach-input:focus{border-color:var(--accent)}
-.coach-input::placeholder{color:var(--dim)}
-.btn-mic{width:42px;height:42px;border-radius:50%;background:rgba(124,58,237,0.1);border:1px solid var(--border);color:var(--accent2);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s}
-.btn-mic.listening{background:rgba(239,68,68,0.15);border-color:var(--red);color:var(--red);animation:pulse-mic 1s ease-in-out infinite}
-@keyframes pulse-mic{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.3)}50%{box-shadow:0 0 0 8px rgba(239,68,68,0)}}
-.btn-send-coach{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#6D28D9);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 10px var(--accent-glow);transition:transform 0.1s}
-.btn-send-coach:active{transform:scale(0.9)}
-
-/* Profile */
-.profile-hero{padding:28px 20px 18px;display:flex;flex-direction:column;align-items:center;gap:6px}
-.profile-avi{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#A78BFA);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:#fff;font-family:var(--font-head);margin-bottom:6px;box-shadow:0 4px 20px var(--accent-glow)}
-.profile-name{font-family:var(--font-head);font-size:22px;font-weight:700}
-.profile-sub{font-size:13px;color:var(--muted);font-weight:500}
-.settings-section{margin:0 16px 16px}
-.settings-group-label{font-size:11px;color:var(--muted);padding:0 4px 8px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em}
-.settings-group{background:var(--surface);border-radius:18px;border:0.5px solid var(--border);overflow:hidden;margin-bottom:14px}
-.settings-item{display:flex;align-items:center;justify-content:space-between;padding:15px 16px;border-bottom:0.5px solid rgba(124,58,237,0.06)}
-.settings-item:last-child{border-bottom:none}
-.settings-label{font-size:14px;font-weight:600}
-.settings-val{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px;font-weight:500}
-.btn-logout{width:calc(100% - 32px);padding:15px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:16px;font-size:14px;font-weight:700;color:var(--red);cursor:pointer;font-family:var(--font-head);margin:0 16px;transition:all 0.15s}
-.btn-logout:active{transform:scale(0.98)}
-
-/* Invite Modal */
-.modal-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal-sheet{width:100%;max-width:430px;background:var(--surface);border-radius:24px 24px 0 0;padding:24px 20px;padding-bottom:calc(24px + var(--safe-bottom));animation:slide-up 0.3s cubic-bezier(0.34,1.56,0.64,1) both}
-@keyframes slide-up{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-handle{width:36px;height:4px;background:var(--dim);border-radius:4px;margin:0 auto 20px}
-.modal-title{font-family:var(--font-head);font-size:20px;font-weight:700;margin-bottom:6px;text-align:center}
-.modal-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:20px;line-height:1.5}
-.invite-methods{display:flex;flex-direction:column;gap:10px}
-.invite-method{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--bg);border-radius:16px;border:0.5px solid var(--border);cursor:pointer;transition:all 0.2s}
-.invite-method:active{border-color:var(--accent)}
-.invite-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.invite-method-name{font-size:14px;font-weight:700}
-.invite-method-desc{font-size:11px;color:var(--muted);margin-top:1px}
-.invite-code-box{margin-top:16px;background:var(--bg);border-radius:16px;border:0.5px solid var(--border);padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
+.coach-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:24px;padding:10px 14px;font-size:14px;color:var(--text);font-family:var(--fb);outline:none}.coach-input:focus{border-color:var(--accent)}.coach-input::placeholder{color:#6B5C8A}
+.btn-mic{width:40px;height:40px;border-radius:50%;background:rgba(124,58,237,0.15);border:0.5px solid var(--border);color:var(--accent2);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}.btn-mic.listening{background:rgba(239,68,68,0.15);border-color:var(--red);color:var(--red)}
+.btn-send-coach{width:40px;height:40px;border-radius:50%;background:var(--accent);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.back-to-landing{padding:10px 20px 0}.back-to-landing button{background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:var(--fb);display:flex;align-items:center;gap:6px}
+.profile-hero{padding:16px 20px;display:flex;flex-direction:column;align-items:center;gap:6px}.profile-avi{width:72px;height:72px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:#fff;font-family:var(--fh);margin-bottom:4px}
+.profile-name{font-family:var(--fh);font-size:20px;font-weight:700}.profile-sub{font-size:13px;color:var(--muted)}
+.settings-section{margin:0 16px 16px}.sg-label{font-size:12px;color:var(--muted);padding:0 4px 8px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em}
+.settings-group{background:var(--surface);border-radius:16px;border:0.5px solid var(--border);overflow:hidden;margin-bottom:12px}
+.settings-item{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:0.5px solid rgba(124,58,237,0.08);cursor:pointer}.settings-item:last-child{border-bottom:none}
+.settings-label{font-size:14px;font-weight:600}.settings-val{font-size:13px;color:var(--muted);font-weight:500}
+.btn-logout{width:calc(100% - 32px);margin:0 16px;padding:14px;background:rgba(239,68,68,0.1);border:0.5px solid rgba(239,68,68,0.3);border-radius:14px;font-size:14px;font-weight:700;color:var(--red);cursor:pointer;font-family:var(--fh)}
+.modal-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center}.modal-overlay.open{display:flex}
+.modal-sheet{width:100%;max-width:430px;background:var(--surface);border-radius:24px 24px 0 0;padding:24px 20px;padding-bottom:calc(24px + var(--safe-bottom))}
+.modal-handle{width:36px;height:4px;background:rgba(124,58,237,0.3);border-radius:2px;margin:0 auto 20px}.modal-title{font-family:var(--fh);font-size:18px;font-weight:700;margin-bottom:4px;text-align:center}.modal-sub{font-size:13px;color:var(--muted);margin-bottom:20px;text-align:center;line-height:1.5}
+.invite-method{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--bg);border-radius:14px;border:0.5px solid var(--border);cursor:pointer;margin-bottom:10px}.invite-method-name{font-size:14px;font-weight:700}.invite-method-desc{font-size:11px;color:var(--muted);margin-top:1px}
+.invite-code-box{background:var(--bg);border-radius:14px;border:0.5px solid var(--border);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;margin-top:10px}
 .invite-code{font-family:monospace;font-size:16px;font-weight:600;color:var(--accent2);letter-spacing:0.08em}
-.btn-copy{padding:8px 16px;background:var(--accent);border:none;border-radius:10px;font-size:12px;font-weight:700;color:#fff;cursor:pointer;font-family:var(--font)}
-.accept-row{display:flex;gap:10px;margin-top:12px}
-.accept-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:11px 14px;font-size:14px;color:var(--text);font-family:var(--font);outline:none;text-transform:uppercase;letter-spacing:0.05em}
-.accept-input::placeholder{color:var(--dim);text-transform:none;letter-spacing:normal}
-.btn-accept{padding:11px 16px;background:var(--green);border:none;border-radius:14px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:var(--font-head);white-space:nowrap}
-.btn-close-modal{width:100%;padding:14px;background:transparent;border:1px solid var(--border);border-radius:16px;font-size:14px;font-weight:700;color:var(--muted);cursor:pointer;font-family:var(--font);margin-top:14px}
-
-.toast{position:fixed;top:calc(20px + var(--safe-top));left:50%;transform:translateX(-50%) translateY(-100px);background:var(--card);border:0.5px solid var(--border);border-radius:16px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--text);z-index:500;box-shadow:0 8px 32px rgba(0,0,0,0.4);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap}
-.toast.show{transform:translateX(-50%) translateY(0)}
-.chevron{width:14px;height:14px}
+.btn-copy{padding:8px 14px;background:var(--accent);border:none;border-radius:10px;font-size:12px;font-weight:700;color:#fff;cursor:pointer}
+.accept-row{display:flex;gap:10px;margin-top:12px}.accept-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:11px 14px;font-size:14px;color:var(--text);font-family:var(--fb);outline:none;text-transform:uppercase}.accept-input::placeholder{color:#6B5C8A;text-transform:none}
+.btn-accept{padding:11px 16px;background:var(--green);border:none;border-radius:14px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:var(--fh)}
+.btn-close-modal{width:100%;padding:12px;background:none;border:1px solid var(--border);border-radius:14px;font-size:13px;color:var(--muted);cursor:pointer;font-family:var(--fb);margin-top:14px}
+.toast{position:fixed;top:calc(20px + var(--safe-top));left:50%;transform:translateX(-50%) translateY(-100px);background:var(--card);border:0.5px solid var(--border);border-radius:16px;padding:12px 20px;font-size:13px;font-weight:600;z-index:500;box-shadow:0 8px 32px rgba(0,0,0,0.4);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap}.toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
-
-<div id="splash">
-  <div class="splash-mascot" id="splash-mascot"></div>
-  <div class="splash-name">ParaHype</div>
-  <div class="splash-tag">your parallel hype buddy</div>
-  <div class="splash-dots"><span></span><span></span><span></span></div>
-</div>
 <div class="toast" id="toast"></div>
-
-<!-- Invite Modal -->
-<div class="modal-overlay" id="invite-modal">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Invite a Hype Buddy</div>
-    <div class="modal-sub">Share your code or enter a friend's code to connect.</div>
-    <div class="invite-methods">
-      <div class="invite-method" onclick="inviteAction('share')">
-        <div class="invite-icon" style="background:rgba(59,130,246,0.1)">📤</div>
-        <div><div class="invite-method-name">Share invite link</div><div class="invite-method-desc">Send via text, email, or social</div></div>
-      </div>
-    </div>
-    <div class="invite-code-box">
-      <span class="invite-code" id="invite-code">HYPE-...</span>
-      <button class="btn-copy" onclick="copyInviteCode()">Copy</button>
-    </div>
-    <div class="accept-row">
-      <input class="accept-input" id="accept-code-input" placeholder="Enter friend's code"/>
-      <button class="btn-accept" onclick="acceptInvite()">Join</button>
-    </div>
-    <button class="btn-close-modal" onclick="closeInviteModal()">Close</button>
-  </div>
-</div>
-
+<div class="modal-overlay" id="invite-modal"><div class="modal-sheet"><div class="modal-handle"></div><div class="modal-title">Invite a Hype Buddy</div><div class="modal-sub">Share your code or enter a friend's code.</div><div class="invite-method" onclick="inviteShare()"><div style="font-size:20px">&#x1F4E4;</div><div><div class="invite-method-name">Share invite link</div><div class="invite-method-desc">Send via text, email, or social</div></div></div><div class="invite-code-box"><span class="invite-code" id="invite-code">HYPE-...</span><button class="btn-copy" onclick="copyCode()">Copy</button></div><div class="accept-row"><input class="accept-input" id="accept-input" placeholder="Enter friend's code"/><button class="btn-accept" onclick="acceptInvite()">Join</button></div><button class="btn-close-modal" onclick="closeModal('invite-modal')">Close</button></div></div>
 <div id="app">
-  <!-- LOGIN -->
-  <div id="login-screen" class="screen active">
-    <div class="logo-wrap">
-      <div id="login-mascot"></div>
-      <div class="app-name">ParaHype</div>
-      <div class="tagline">your parallel hype buddy for ADHD</div>
-    </div>
-    <div class="auth-box">
-      <div class="auth-tabs">
-        <button class="auth-tab active" onclick="switchAuthTab(this,'login')">Log in</button>
-        <button class="auth-tab" onclick="switchAuthTab(this,'signup')">Sign up</button>
-      </div>
-      <div id="login-fields">
-        <div class="field"><label>Email</label><input type="email" placeholder="you@email.com" id="login-email"/></div>
-        <div class="field"><label>Password</label><input type="password" placeholder="••••••••" id="login-pass"/></div>
-      </div>
-      <div id="signup-fields" style="display:none">
-        <div class="field"><label>Your name</label><input type="text" placeholder="First name" id="signup-name"/></div>
-        <div class="field"><label>Email</label><input type="email" placeholder="you@email.com" id="signup-email"/></div>
-        <div class="field"><label>Password</label><input type="password" placeholder="Create password" id="signup-pass"/></div>
-      </div>
-      <button class="btn-primary" onclick="doAuth()" id="auth-btn">Continue</button>
-      <div class="auth-error" id="auth-error"></div>
-      <div class="divider-text">or</div>
-      <button class="btn-google" onclick="googleSignIn()" id="google-btn">
-        <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 2.58 9 3.58z" fill="#EA4335"/></svg>
-        Continue with Google
-      </button>
-    </div>
-    <div class="terms">By continuing you agree to our<br>Terms of Service &amp; Privacy Policy</div>
-  </div>
-
-  <!-- HOME -->
-  <div id="home-screen" class="screen">
-    <div class="scroll-area">
-      <div class="home-header">
-        <div><div class="greeting" id="home-greeting">Hey ✦</div><div class="greeting-sub" id="home-sub"></div></div>
-        <div class="avatar" onclick="goTab('me')" id="home-avatar">?</div>
-      </div>
-      <div class="hype-msg" onclick="openCoach()">
-        <div class="hype-mascot" id="home-mascot-sm"></div>
-        <div><div class="hype-sender">ParaHype AI</div><div class="hype-body" id="daily-nudge">Tap here to chat with your hype buddy!</div></div>
-      </div>
-      <div class="stats-row">
-        <div class="stat-card"><div class="stat-num" style="color:var(--accent2)" id="streak-num">0</div><div class="stat-lbl">Streak</div></div>
-        <div class="stat-card"><div class="stat-num" id="habits-num">0/0</div><div class="stat-lbl">Habits</div></div>
-        <div class="stat-card"><div class="stat-num" style="color:var(--amber)" id="xp-num">0</div><div class="stat-lbl">XP Today</div></div>
-      </div>
-      <div class="focus-card">
-        <div>
-          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:600">Focus timer</div>
-          <div class="timer-display" id="timer-display">25:00</div>
-          <div class="timer-mode" id="timer-mode">Ready to focus</div>
-          <button class="btn-start" id="timer-btn" onclick="toggleTimer()">Start session</button>
-        </div>
-        <div class="timer-ring-wrap">
-          <svg width="68" height="68" viewBox="0 0 68 68"><circle cx="34" cy="34" r="28" fill="none" stroke="rgba(124,58,237,0.1)" stroke-width="6"/><circle cx="34" cy="34" r="28" fill="none" stroke="url(#tg)" stroke-width="6" stroke-dasharray="175.9" id="timer-ring" stroke-dashoffset="0" stroke-linecap="round"/><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#A78BFA"/></linearGradient></defs></svg>
-        </div>
-      </div>
-      <div class="section-row"><span class="section-title">Today's habits</span><span class="section-link" onclick="goTab('habits')">See all →</span></div>
-      <div id="home-habit-list"></div>
-      <div style="height:16px"></div>
-    </div>
-  </div>
-
-  <!-- HABITS -->
-  <div id="habits-screen" class="screen">
-    <div class="screen-header">Habits</div>
-    <div class="add-habit-row">
-      <input class="habit-input" id="new-habit-input" placeholder="Add a new habit..." onkeydown="if(event.key==='Enter')addHabit()"/>
-      <button class="btn-add" onclick="addHabit()">+ Add</button>
-    </div>
-    <div class="scroll-area" id="full-habit-list"></div>
-  </div>
-
-  <!-- REWARDS -->
-  <div id="rewards-screen" class="screen">
-    <div class="scroll-area">
-      <div class="screen-header">Rewards</div>
-      <div class="xp-card">
-        <div class="xp-top"><span class="xp-level" id="xp-level-label">Level 1</span><span class="xp-count" id="xp-count-label">0 XP</span></div>
-        <div class="xp-bar-bg"><div class="xp-bar-fill" id="xp-bar" style="width:0%"></div></div>
-        <div class="xp-total-row"><span class="xp-total-label">Lifetime XP</span><span class="xp-total-val" id="xp-total-val">0</span></div>
-      </div>
-      <div class="section-row"><span class="section-title">Your rewards</span></div>
-      <div class="reward-grid" id="reward-grid"></div>
-    </div>
-  </div>
-
-  <!-- BUDDY -->
-  <div id="buddy-screen" class="screen">
-    <div class="buddy-header-area"><span class="buddy-header-title">Hype Buddy</span><button class="btn-invite" onclick="openInviteModal()">+ Invite friend</button></div>
-    <div class="scroll-area" id="buddy-scroll">
-      <div id="buddy-content"></div>
-      <div class="chat-area" id="buddy-chat"></div>
-      <div class="hype-input-row" id="hype-input-row" style="display:none">
-        <input class="hype-input" id="hype-input" placeholder="Send hype..." onkeydown="if(event.key==='Enter')sendHype()"/>
-        <button class="btn-send" onclick="sendHype()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M9 4l5 4-5 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ME -->
-  <div id="me-screen" class="screen">
-    <div class="scroll-area">
-      <div class="profile-hero">
-        <div class="profile-avi" id="profile-avi">?</div>
-        <div class="profile-name" id="profile-name">—</div>
-        <div class="profile-sub" id="profile-sub">—</div>
-      </div>
-      <div class="settings-section">
-        <div class="settings-group-label">Account</div>
-        <div class="settings-group">
-          <div class="settings-item"><span class="settings-label">Display name</span><span class="settings-val" id="disp-name">—</span></div>
-          <div class="settings-item"><span class="settings-label">Email</span><span class="settings-val" id="disp-email">—</span></div>
-          <div class="settings-item"><span class="settings-label">Notifications</span><span class="settings-val">On</span></div>
-        </div>
-        <div class="settings-group-label">Preferences</div>
-        <div class="settings-group">
-          <div class="settings-item"><span class="settings-label">Focus duration</span><span class="settings-val">25 min</span></div>
-          <div class="settings-item"><span class="settings-label">Break duration</span><span class="settings-val">5 min</span></div>
-          <div class="settings-item"><span class="settings-label">AI coaching</span><span class="settings-val">Enabled</span></div>
-        </div>
-      </div>
-      <button class="btn-logout" onclick="logout()">Log out</button>
-      <div style="height:24px"></div>
-    </div>
-  </div>
-
-  <!-- COACH -->
-  <div id="coach-panel">
-    <div class="coach-header">
-      <div class="coach-header-left"><div id="coach-mascot-sm"></div><div><div class="coach-title">Hype Buddy</div><div class="coach-subtitle">Your AI coach</div></div></div>
-      <button class="btn-close-coach" onclick="closeCoach()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
-    </div>
-    <div class="coach-msgs" id="coach-msgs"></div>
-    <div class="coach-input-row">
-      <button class="btn-mic" id="coach-mic" onclick="toggleMic()"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="5.5" y="1" width="5" height="7" rx="2.5"/><path d="M2 8c0 3.3 2.7 6 6 6s6-2.7 6-6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="14" x2="8" y2="16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
-      <input class="coach-input" id="coach-input" placeholder="Talk to your hype buddy..." onkeydown="if(event.key==='Enter')sendCoach()"/>
-      <button class="btn-send-coach" onclick="sendCoach()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    </div>
-  </div>
-
-  <!-- TAB BAR -->
-  <div id="tab-bar">
-    <button class="tab-item active" id="tab-home" onclick="goTab('home')"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l8-6 8 6v9a1 1 0 01-1 1h-4v-5H8v5H4a1 1 0 01-1-1V9z" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Home</span></button>
-    <button class="tab-item" id="tab-habits" onclick="goTab('habits')"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M7.5 11l2.5 2.5 4.5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Habits</span></button>
-    <button class="tab-item" id="tab-rewards" onclick="goTab('rewards')"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 3l2 4 4.5.6-3.3 3.2.8 4.5L11 13.5l-4 2.3.8-4.5L4.5 7.6 9 7z" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Rewards</span></button>
-    <button class="tab-item" id="tab-buddy" onclick="goTab('buddy')"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3.5"/><path d="M2 19a6 6 0 0112 0"/><circle cx="17" cy="9" r="2.5"/><path d="M20 17a3.5 3.5 0 00-5 0"/></svg><span>Hype Buddy</span></button>
-    <button class="tab-item" id="tab-me" onclick="goTab('me')"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="9" r="4"/><path d="M4 20a7 7 0 0114 0"/></svg><span>Me</span></button>
-  </div>
+<div id="login-screen" class="screen active"><div class="logo-wrap"><div class="logo-mark"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="16" fill="rgba(255,255,255,0.12)"/><path d="M13 20l5 5 9-10" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="30" cy="11" r="5" fill="#A78BFA"/><circle cx="30" cy="11" r="3" fill="#7C3AED"/></svg></div><div class="app-name">ParaHype</div><div class="tagline">your parallel hype buddy for ADHD</div></div><div class="auth-box"><div class="auth-tabs"><button class="auth-tab active" onclick="switchAuthTab(this,'login')">Log in</button><button class="auth-tab" onclick="switchAuthTab(this,'signup')">Sign up</button></div><div id="login-fields"><div class="field"><label>Email</label><input type="email" placeholder="you@email.com" id="login-email"/></div><div class="field"><label>Password</label><input type="password" placeholder="--------" id="login-pass"/></div></div><div id="signup-fields" style="display:none"><div class="field"><label>Your name</label><input type="text" placeholder="First name" id="signup-name"/></div><div class="field"><label>Email</label><input type="email" placeholder="you@email.com" id="signup-email"/></div><div class="field"><label>Password</label><input type="password" placeholder="Create password" id="signup-pass"/></div></div><button class="btn-primary" onclick="doAuth()" id="auth-btn">Continue</button><div class="auth-error" id="auth-error"></div><div class="google-divider">or</div><button class="btn-google" onclick="googleSignIn()" id="google-btn"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G"/>Continue with Google</button></div><div class="terms">By continuing you agree to our<br>Terms of Service &amp; Privacy Policy</div></div>
+<div id="vibe-screen" class="screen"><div class="vibe-header"><h2>Meet your hype buddy</h2><p>Choose the vibe that fits your brain. You can change it anytime.</p></div><div class="vibe-grid" id="vibe-grid"></div><div class="vibe-footer"><button class="btn-vibe-confirm" id="vibe-confirm-btn" onclick="confirmVibe()">Choose your buddy</button></div></div>
+<div id="home-screen" class="screen"><div class="scroll-area"><div class="home-header"><div><div class="greeting" id="home-greeting">Hey</div><div class="greeting-sub" id="home-sub"></div></div><div class="avatar" onclick="goTab('me')" id="home-avatar">?</div></div><div class="hype-msg" onclick="openCoach()"><div class="hype-icon-wrap" id="home-buddy-icon">?</div><div><div class="hype-sender" id="home-buddy-name">ParaHype AI</div><div class="hype-body" id="daily-nudge">Tap here to chat with your buddy!</div></div></div><div class="stats-row"><div class="stat-card"><div class="stat-num" style="color:#A78BFA" id="streak-num">0</div><div class="stat-lbl">Streak</div></div><div class="stat-card"><div class="stat-num" id="habits-num">0/0</div><div class="stat-lbl">Habits</div></div><div class="stat-card"><div class="stat-num" style="color:#D97706" id="xp-num">0</div><div class="stat-lbl">XP Today</div></div></div><div class="focus-card"><div><div style="font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:600">Focus timer</div><div class="timer-display" id="timer-display">25:00</div><div class="timer-mode" id="timer-mode">Ready to focus</div><button class="btn-start" id="timer-btn" onclick="toggleTimer()">Start session</button></div><div class="timer-ring-wrap"><svg width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="rgba(124,58,237,0.15)" stroke-width="6"/><circle cx="32" cy="32" r="26" fill="none" stroke="#7C3AED" stroke-width="6" stroke-dasharray="163.4" id="timer-ring" stroke-dashoffset="0" stroke-linecap="round"/></svg></div></div><div class="section-row"><span class="section-title">Today's habits</span><span class="section-link" onclick="goTab('habits')">See all</span></div><div id="home-habit-list"></div><div style="height:16px"></div></div></div>
+<div id="habits-screen" class="screen"><div class="screen-header">Habits</div><div class="add-habit-row"><input class="habit-input" id="new-habit-input" placeholder="Add a new habit..." onkeydown="if(event.key==='Enter')addHabit()"/><button class="btn-add" onclick="addHabit()">+ Add</button></div><div class="scroll-area" id="full-habit-list"></div></div>
+<div id="rewards-screen" class="screen"><div class="scroll-area"><div class="screen-header">Rewards</div><div class="xp-card"><div class="xp-top"><span class="xp-level" id="xp-level-label">Level 1</span><span class="xp-count" id="xp-count-label">0 XP</span></div><div class="xp-bar-bg"><div class="xp-bar-fill" id="xp-bar" style="width:0%"></div></div><div class="xp-total-row"><span class="xp-total-label">Lifetime XP</span><span class="xp-total-val" id="xp-total-val">0</span></div></div><div class="section-row"><span class="section-title">Your rewards</span></div><div class="reward-grid" id="reward-grid"></div></div></div>
+<div id="buddy-screen" class="screen"><div class="buddy-header-area"><span class="buddy-header-title">Hype Buddy</span><button class="btn-invite" onclick="openInvite()">+ Invite friend</button></div><div class="scroll-area"><div id="buddy-content"></div><div class="chat-area" id="buddy-chat"></div></div><div class="hype-input-row" id="hype-row" style="display:none"><input class="hype-input" id="hype-input" placeholder="Send hype..." onkeydown="if(event.key==='Enter')sendHype()"/><button class="btn-send" onclick="sendHype()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M9 4l5 4-5 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+<div id="me-screen" class="screen"><div class="back-to-landing"><button onclick="window.location.href='landing.html'"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L3 7l6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> About ParaHype</button></div><div class="scroll-area"><div class="profile-hero"><div class="profile-avi" id="profile-avi">?</div><div class="profile-name" id="profile-name">-</div><div class="profile-sub" id="profile-sub">-</div></div><div class="settings-section"><div class="sg-label">Account</div><div class="settings-group"><div class="settings-item"><span class="settings-label">Display name</span><span class="settings-val" id="disp-name">-</span></div><div class="settings-item"><span class="settings-label">Email</span><span class="settings-val" id="disp-email">-</span></div></div><div class="sg-label">Your Buddy</div><div class="settings-group"><div class="settings-item"><span class="settings-label">Buddy vibe</span><span class="settings-val" id="vibe-setting">-</span></div></div><div class="sg-label">Preferences</div><div class="settings-group"><div class="settings-item"><span class="settings-label">Focus duration</span><span class="settings-val">25 min</span></div><div class="settings-item"><span class="settings-label">AI coaching</span><span class="settings-val">Enabled</span></div></div></div><button class="btn-logout" onclick="logout()">Log out</button><div style="height:20px"></div></div></div>
+<div id="coach-panel"><div class="coach-header"><div class="coach-header-left"><div class="coach-avi" id="coach-avi">?</div><div><div class="coach-title" id="coach-name">Buddy</div><div class="coach-subtitle" id="coach-vibe-label">Your AI buddy</div></div></div><button class="btn-close" onclick="closeCoach()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button></div><div class="coach-msgs" id="coach-msgs"></div><div class="coach-input-row"><button class="btn-mic" id="coach-mic" onclick="toggleMic()"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="5.5" y="1" width="5" height="7" rx="2.5"/><path d="M2 8c0 3.3 2.7 6 6 6s6-2.7 6-6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="14" x2="8" y2="16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><input class="coach-input" id="coach-input" placeholder="Talk to your buddy..." onkeydown="if(event.key==='Enter')sendCoach()"/><button class="btn-send-coach" onclick="sendCoach()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+<div id="tab-bar"><button class="tab-item active" id="tab-home" onclick="goTab('home')"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l8-6 8 6v9a1 1 0 01-1 1h-4v-5H8v5H4a1 1 0 01-1-1V9z" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Home</span></button><button class="tab-item" id="tab-habits" onclick="goTab('habits')"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M7.5 11l2.5 2.5 4.5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Habits</span></button><button class="tab-item" id="tab-rewards" onclick="goTab('rewards')"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 3l2 4 4.5.6-3.3 3.2.8 4.5L11 13.5l-4 2.3.8-4.5L4.5 7.6 9 7z" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Rewards</span></button><button class="tab-item" id="tab-buddy" onclick="goTab('buddy')"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3.5"/><path d="M2 19a6 6 0 0112 0"/><circle cx="17" cy="9" r="2.5"/><path d="M20 17a3.5 3.5 0 00-5 0"/></svg><span>Hype Buddy</span></button><button class="tab-item" id="tab-me" onclick="goTab('me')"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="9" r="4"/><path d="M4 20a7 7 0 0114 0"/></svg><span>Me</span></button></div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════
-// CONFIG — Change this to your deployed Worker URL
-// ═══════════════════════════════════════════════════════════
-const API = 'https://parahype-api.betha-a.workers.dev';
-
-// ═══════════════════════════════════════════════════════════
-// MASCOT
-// ═══════════════════════════════════════════════════════════
-function M(s=80){const i='m'+Math.random().toString(36).slice(2,6);return`<svg width="${s}" height="${s}" viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="52" stroke="url(#${i}a)" stroke-width="2" opacity=".4"/><circle cx="60" cy="60" r="46" stroke="url(#${i}b)" stroke-width="1" opacity=".25"/><path d="M60 16L92 40 88 80 60 104 32 80 28 40Z" fill="url(#${i}c)" stroke="url(#${i}d)" stroke-width="1.5"/><path d="M42 42L78 42 82 72 60 88 38 72Z" fill="url(#${i}e)" opacity=".9"/><rect x="44" y="52" width="10" height="10" rx="3" fill="#fff" opacity=".95"/><rect x="66" y="52" width="10" height="10" rx="3" fill="#fff" opacity=".95"/><rect x="46" y="54" width="6" height="6" rx="2" fill="#1A1030"/><rect x="68" y="54" width="6" height="6" rx="2" fill="#1A1030"/><circle cx="50" cy="55.5" r="1.5" fill="#fff" opacity=".9"/><circle cx="72" cy="55.5" r="1.5" fill="#fff" opacity=".9"/><path d="M50 70Q60 78 70 70" stroke="#E0CBFF" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M56 38L60 30 64 38" stroke="#FBBF24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="60" y1="30" x2="60" y2="25" stroke="#FBBF24" stroke-width="2" stroke-linecap="round"/><circle cx="22" cy="30" r="2" fill="#A78BFA" opacity=".5"/><circle cx="98" cy="35" r="1.5" fill="#0D9488" opacity=".5"/><defs><linearGradient id="${i}c" x1=".3" y1="0" x2=".7" y2="1"><stop stop-color="#7C3AED"/><stop offset="1" stop-color="#5B21B6"/></linearGradient><linearGradient id="${i}e" x1=".5" y1="0" x2=".5" y2="1"><stop stop-color="rgba(167,139,250,.15)"/><stop offset="1" stop-color="rgba(124,58,237,.08)"/></linearGradient><linearGradient id="${i}d" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#A78BFA" stop-opacity=".6"/><stop offset="1" stop-color="#7C3AED" stop-opacity=".2"/></linearGradient><linearGradient id="${i}a" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#A78BFA"/><stop offset="1" stop-color="#0D9488"/></linearGradient><linearGradient id="${i}b" x1="1" y1="0" x2="0" y2="1"><stop stop-color="#D97706"/><stop offset="1" stop-color="#7C3AED"/></linearGradient></defs></svg>`;}
-document.getElementById('splash-mascot').innerHTML=M(100);
-document.getElementById('login-mascot').innerHTML=M(88);
-document.getElementById('home-mascot-sm').innerHTML=M(42);
-document.getElementById('coach-mascot-sm').innerHTML=M(36);
-
-// ═══════════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════════
-let token = localStorage.getItem('ph_token') || null;
-let user = null;           // {id, name, email, initials, xpTotal}
-let habits = [];           // from /api/habits
-let daily = null;          // from /api/daily
-let rewards = [];          // from /api/rewards
-let streak = 0;
-let buddies = [];          // from /api/buddies
-let activeBuddy = null;    // currently selected buddy pair
-let timerSecs=25*60, timerRunning=false, timerInterval=null, timerMode='work', micListening=false;
-const CIRC=175.9;
-const levels=[{n:'Starter',min:0,max:500},{n:'Building',min:500,max:1500},{n:'Focused',min:1500,max:3000},{n:'Unstoppable',min:3000,max:6000},{n:'Legend',min:6000,max:15000}];
-function getLevel(xp){for(let i=levels.length-1;i>=0;i--)if(xp>=levels[i].min)return{num:i+1,...levels[i]};return{num:1,...levels[0]};}
-
-// ═══════════════════════════════════════════════════════════
-// API HELPERS
-// ═══════════════════════════════════════════════════════════
-async function api(path, opts={}) {
-  const headers = {'Content-Type':'application/json'};
-  if(token) headers['Authorization'] = 'Bearer '+token;
-  const res = await fetch(API+path, {method:opts.method||'GET', headers, body:opts.body?JSON.stringify(opts.body):undefined});
-  const data = await res.json();
-  if(!res.ok) throw new Error(data.error||'API error');
-  return data;
-}
-
-// ═══════════════════════════════════════════════════════════
-// SPLASH + AUTO-LOGIN
-// ═══════════════════════════════════════════════════════════
-(async()=>{
-  if(token){
-    try{
-      const me = await api('/api/auth/me');
-      user = me;
-      enterApp();
-    } catch{ token=null; localStorage.removeItem('ph_token'); }
-  }
-  setTimeout(()=>document.getElementById('splash').classList.add('gone'),1600);
-})();
-
-// ═══════════════════════════════════════════════════════════
-// AUTH
-// ═══════════════════════════════════════════════════════════
-let authMode='login';
-function switchAuthTab(el,mode){
-  authMode=mode;
-  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('login-fields').style.display=mode==='login'?'block':'none';
-  document.getElementById('signup-fields').style.display=mode==='signup'?'block':'none';
-  document.getElementById('auth-btn').textContent=mode==='login'?'Continue':'Create account';
-  document.getElementById('auth-error').textContent='';
-}
-
-async function doAuth(){
-  const btn=document.getElementById('auth-btn');
-  const errEl=document.getElementById('auth-error');
-  errEl.textContent='';
-  btn.disabled=true;
-  try{
-    let data;
-    if(authMode==='signup'){
-      const name=document.getElementById('signup-name').value.trim();
-      const email=document.getElementById('signup-email').value.trim();
-      const password=document.getElementById('signup-pass').value;
-      if(!email||!password){errEl.textContent='Email and password required';btn.disabled=false;return;}
-      data=await api('/api/auth/signup',{method:'POST',body:{email,password,name}});
-    } else {
-      const email=document.getElementById('login-email').value.trim();
-      const password=document.getElementById('login-pass').value;
-      if(!email||!password){errEl.textContent='Email and password required';btn.disabled=false;return;}
-      data=await api('/api/auth/login',{method:'POST',body:{email,password}});
-    }
-    token=data.token;
-    localStorage.setItem('ph_token',token);
-    user=data.user;
-    enterApp();
-  } catch(e){
-    errEl.textContent=e.message||'Something went wrong';
-  }
-  btn.disabled=false;
-}
-
-// Google Sign-In
-const GOOGLE_CLIENT_ID = '790361257297-3c3ua1tj1hhnuea7ffc8d59fuovm8sg6.apps.googleusercontent.com';
-
-function googleSignIn(){
-  const errEl=document.getElementById('auth-error');
-  errEl.textContent='';
-  const btn=document.getElementById('google-btn');
-  btn.disabled=true;
-
-  google.accounts.id.initialize({
-    client_id: GOOGLE_CLIENT_ID,
-    callback: handleGoogleResponse,
-    auto_select: false,
-  });
-  google.accounts.id.prompt((notification)=>{
-    if(notification.isNotDisplayed()||notification.isSkippedMoment()){
-      // Fallback: use popup flow
-      google.accounts.oauth2.initTokenClient({
-        client_id: GOOGLE_CLIENT_ID,
-        scope: 'email profile',
-        callback: async(tokenResponse)=>{
-          if(tokenResponse.access_token){
-            try{
-              // Get user info from Google
-              const res=await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{
-                headers:{'Authorization':'Bearer '+tokenResponse.access_token}
-              });
-              const profile=await res.json();
-              await sendGoogleToAPI(null, profile);
-            }catch(e){errEl.textContent='Google sign-in failed';btn.disabled=false;}
-          } else {btn.disabled=false;}
-        },
-      }).requestAccessToken();
-    }
-  });
-}
-
-async function handleGoogleResponse(response){
-  if(response.credential){
-    await sendGoogleToAPI(response.credential, null);
-  }
-}
-
-async function sendGoogleToAPI(idToken, profile){
-  const errEl=document.getElementById('auth-error');
-  const btn=document.getElementById('google-btn');
-  try{
-    const body = idToken ? {idToken} : {profile};
-    const data=await api('/api/auth/google',{method:'POST',body});
-    token=data.token;
-    localStorage.setItem('ph_token',token);
-    user=data.user;
-    enterApp();
-  }catch(e){
-    errEl.textContent=e.message||'Google sign-in failed';
-  }
-  btn.disabled=false;
-}
-
-async function enterApp(){
-  applyUserUI();
-  document.getElementById('login-screen').classList.remove('active');
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('tab-bar').style.display='flex';
-  goTab('home');
-  await loadAllData();
-  setTimeout(()=>dailyCoachSummary(),1500);
-}
-
-function applyUserUI(){
-  if(!user) return;
-  const n=user.name||user.displayName||'Friend';
-  const h=new Date().getHours();
-  const tod=h<12?'Good morning!':h<17?'Keep going!':'Almost there!';
-  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  document.getElementById('home-greeting').textContent='Hey, '+n+' ✦';
-  document.getElementById('home-sub').textContent=days[new Date().getDay()]+' · '+tod;
-  document.getElementById('home-avatar').textContent=user.initials||n.slice(0,2).toUpperCase();
-  document.getElementById('profile-avi').textContent=user.initials||n.slice(0,2).toUpperCase();
-  document.getElementById('profile-name').textContent=user.displayName||n;
-  document.getElementById('profile-sub').textContent='Level '+getLevel(user.xpTotal||0).num;
-  document.getElementById('disp-name').textContent=user.displayName||n;
-  document.getElementById('disp-email').textContent=user.email||'';
-}
-
-// ═══════════════════════════════════════════════════════════
-// LOAD ALL DATA FROM API
-// ═══════════════════════════════════════════════════════════
-async function loadAllData(){
-  try{
-    const [habitsRes, dailyRes, rewardsRes, streakRes, buddiesRes] = await Promise.all([
-      api('/api/habits'),
-      api('/api/daily'),
-      api('/api/rewards'),
-      api('/api/stats/streak'),
-      api('/api/buddies').catch(()=>({buddies:[]})),
-    ]);
-    habits = habitsRes.habits||[];
-    daily = dailyRes.daily||{completedHabits:[],xpEarned:0};
-    rewards = rewardsRes.rewards||[];
-    user.xpTotal = rewardsRes.xpTotal||user.xpTotal||0;
-    streak = streakRes.streak||0;
-    buddies = buddiesRes.buddies||[];
-    activeBuddy = buddies[0]||null;
-    renderAll();
-  } catch(e){ console.error('loadAllData error:',e); }
-}
-
-// ═══════════════════════════════════════════════════════════
-// NAVIGATION
-// ═══════════════════════════════════════════════════════════
-let currentTab='home';
-function goTab(tab){
-  ['home','habits','rewards','buddy','me'].forEach(t=>{
-    document.getElementById(t+'-screen').classList.remove('active');
-    document.getElementById(t+'-screen').style.display='none';
-    const tb=document.getElementById('tab-'+t);if(tb)tb.classList.remove('active');
-  });
-  const target=document.getElementById(tab+'-screen');
-  target.style.display='flex';
-  requestAnimationFrame(()=>target.classList.add('active'));
-  const tb=document.getElementById('tab-'+tab);if(tb)tb.classList.add('active');
-  currentTab=tab;
-  if(tab==='buddy') renderBuddyScreen();
-  if(tab==='rewards') loadRewards();
-}
-
-// ═══════════════════════════════════════════════════════════
-// RENDER
-// ═══════════════════════════════════════════════════════════
-function isCompleted(habitId){return(daily?.completedHabits||[]).includes(habitId);}
-
-function renderAll(){renderHomeHabits();renderFullHabits();renderRewards();updateStats();}
-
-function renderHomeHabits(){
-  const el=document.getElementById('home-habit-list');if(!el)return;
-  el.innerHTML=habits.slice(0,4).map(h=>{const done=isCompleted(h._id);return`
-    <div class="habit-item" onclick="toggleHabit('${h._id}')">
-      <div class="habit-icon-wrap ${done?'done':'todo'}">${done?'<svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8l4 4 7-7" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>':'<svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="#A78BFA" stroke-width="1" fill="none"/></svg>'}</div>
-      <div style="flex:1"><div class="habit-name ${done?'done':''}">${h.name}</div><div class="habit-xp">${done?'+20 XP earned':h.streak+'d streak · +20 XP'}</div></div>
-      <div class="check-ring ${done?'done':''}">${done?'<svg width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div>
-    </div>`;}).join('');
-}
-
-function renderFullHabits(){
-  const el=document.getElementById('full-habit-list');if(!el)return;
-  el.innerHTML=habits.map(h=>{const done=isCompleted(h._id);return`
-    <div class="habit-full">
-      <div class="check-ring ${done?'done':''}" style="width:28px;height:28px;flex-shrink:0;cursor:pointer" onclick="toggleHabit('${h._id}')">
-        ${done?'<svg width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}
-      </div>
-      <div style="flex:1;cursor:pointer" onclick="toggleHabit('${h._id}')">
-        <div class="habit-name ${done?'done':''}">${h.name}</div>
-        <div class="streak-dots">${[6,5,4,3,2,1,0].map(i=>'<div class="sdot'+(i<h.streak?' on':'')+(i===0&&!done?' today':'')+'"></div>').join('')}</div>
-      </div>
-      <div style="font-size:12px;color:var(--muted);font-weight:600;margin-right:8px">${h.streak}d</div>
-      <button class="btn-delete-habit" onclick="deleteHabit('${h._id}')" title="Remove">×</button>
-    </div>`;}).join('');
-}
-
-function renderRewards(){
-  const el=document.getElementById('reward-grid');if(!el)return;
-  const xp=user?.xpTotal||0;
-  el.innerHTML=rewards.map(r=>{const u=r.unlocked;return`
-    <div class="reward-tile ${u?'unlocked':'locked'}"><div class="r-emoji">${r.emoji}</div><div class="r-name">${r.name}</div><div class="r-pts">${r.xpRequired} XP</div><div class="r-badge ${u?'unlocked':'locked'}">${u?'✓ Unlocked':'Locked'}</div></div>`;}).join('');
-  const lv=getLevel(xp);
-  const pct=Math.min(100,Math.round(((xp-lv.min)/(lv.max-lv.min))*100));
-  document.getElementById('xp-bar').style.width=pct+'%';
-  document.getElementById('xp-level-label').textContent='Level '+lv.num+' — '+lv.n;
-  document.getElementById('xp-count-label').textContent=xp+' / '+lv.max+' XP';
-  document.getElementById('xp-total-val').textContent=(xp).toLocaleString();
-}
-
-function updateStats(){
-  const done=(daily?.completedHabits||[]).length;
-  document.getElementById('habits-num').textContent=done+'/'+habits.length;
-  document.getElementById('xp-num').textContent=daily?.xpEarned||0;
-  document.getElementById('streak-num').textContent=streak;
-}
-
-async function loadRewards(){
-  try{const r=await api('/api/rewards');rewards=r.rewards||[];user.xpTotal=r.xpTotal||0;renderRewards();}catch{}
-}
-
-// ═══════════════════════════════════════════════════════════
-// HABITS — API calls
-// ═══════════════════════════════════════════════════════════
-async function toggleHabit(habitId){
-  try{
-    const res=await api('/api/daily/toggle',{method:'POST',body:{habitId}});
-    daily=res.daily;
-    habits=res.habits||habits;
-    user.xpTotal=res.xpTotal;
-    streak= await api('/api/stats/streak').then(r=>r.streak).catch(()=>streak);
-    renderAll();
-    if(res.action==='completed') showToast('+20 XP! Keep it going!');
-  } catch(e){showToast('Error: '+e.message);}
-}
-
-async function addHabit(){
-  const inp=document.getElementById('new-habit-input');
-  const name=inp.value.trim();if(!name)return;
-  try{
-    await api('/api/habits',{method:'POST',body:{name}});
-    inp.value='';
-    const h=await api('/api/habits');habits=h.habits||[];
-    renderAll();
-    showToast('Habit added! 💪');
-  }catch(e){showToast('Error: '+e.message);}
-}
-
-async function deleteHabit(habitId){
-  try{
-    await api('/api/habits/'+habitId,{method:'DELETE'});
-    const h=await api('/api/habits');habits=h.habits||[];
-    renderAll();
-    showToast('Habit removed');
-  }catch(e){showToast('Error: '+e.message);}
-}
-
-// ═══════════════════════════════════════════════════════════
-// TIMER
-// ═══════════════════════════════════════════════════════════
-function toggleTimer(){
-  if(timerRunning){clearInterval(timerInterval);timerRunning=false;document.getElementById('timer-btn').textContent='Resume';document.getElementById('timer-mode').textContent='Paused';}
-  else{timerRunning=true;document.getElementById('timer-btn').textContent='Pause';document.getElementById('timer-mode').textContent=timerMode==='work'?'Focus session':'Break time';
-    timerInterval=setInterval(()=>{timerSecs--;updateTimerDisplay();
-      if(timerSecs<=0){clearInterval(timerInterval);timerRunning=false;
-        if(timerMode==='work'){recordFocusSession();timerMode='break';timerSecs=5*60;}
-        else{timerMode='work';timerSecs=25*60;}
-        document.getElementById('timer-btn').textContent='Start session';
-        document.getElementById('timer-mode').textContent=timerMode==='work'?'Ready to focus':'Break done!';
-        updateTimerDisplay();}
-    },1000);}
-}
-function updateTimerDisplay(){const t=timerMode==='work'?25*60:5*60,p=timerSecs/t,m=Math.floor(timerSecs/60).toString().padStart(2,'0'),s=(timerSecs%60).toString().padStart(2,'0');document.getElementById('timer-display').textContent=m+':'+s;document.getElementById('timer-ring').setAttribute('stroke-dashoffset',(CIRC*(1-p)).toFixed(1));}
-
-async function recordFocusSession(){
-  try{const r=await api('/api/daily/focus',{method:'POST',body:{minutes:25}});user.xpTotal=r.xpTotal;daily={...daily,xpEarned:(daily?.xpEarned||0)+50};renderAll();showToast('+50 XP! Focus session complete! 🧠');}catch{}
-}
-
-// ═══════════════════════════════════════════════════════════
-// BUDDY — real data from API
-// ═══════════════════════════════════════════════════════════
-function renderBuddyScreen(){
-  const content=document.getElementById('buddy-content');
-  const inputRow=document.getElementById('hype-input-row');
-  if(!activeBuddy){
-    content.innerHTML='<div class="buddy-empty">No buddies yet!<br>Tap "+ Invite friend" to add one.</div>';
-    inputRow.style.display='none';
-    return;
-  }
-  const b=activeBuddy;
-  content.innerHTML=`<div class="buddy-card"><div class="buddy-top">
-    <div class="buddy-avi">🔥</div><div><div class="buddy-name">${b.user.name}</div><div class="buddy-status">● Active</div></div></div>
-    <div class="buddy-stats">
-      <div class="b-stat"><div class="b-val" style="color:var(--accent2)">${b.today.habitsDone||0}</div><div class="b-lbl">Done</div></div>
-      <div class="b-stat"><div class="b-val">${b.today.habitsDone||0}/${b.today.habitsTotal||0}</div><div class="b-lbl">Habits</div></div>
-      <div class="b-stat"><div class="b-val" style="color:var(--amber)">${b.today.xpEarned||0}</div><div class="b-lbl">XP today</div></div>
-    </div></div>`;
-  inputRow.style.display='flex';
-  document.getElementById('hype-input').placeholder='Send hype to '+b.user.name+'...';
-  loadBuddyMessages();
-}
-
-async function loadBuddyMessages(){
-  if(!activeBuddy)return;
-  try{
-    const r=await api('/api/buddies/'+activeBuddy.buddyPairId+'/messages');
-    const chat=document.getElementById('buddy-chat');
-    chat.innerHTML=(r.messages||[]).map(m=>{
-      const isMe=m.senderId===(user?.id||user?._id);
-      return isMe?`<div class="msg-bubble msg-user">${esc(m.message)}</div>`
-        :`<div class="msg-bubble msg-ai"><div class="msg-ai-name">${esc(activeBuddy.user.name)}</div>${esc(m.message)}</div>`;
-    }).join('');
-    chat.scrollTop=chat.scrollHeight;
-  }catch{}
-}
-
-async function sendHype(){
-  if(!activeBuddy)return;
-  const inp=document.getElementById('hype-input');
-  const text=inp.value.trim();if(!text)return;
-  inp.value='';
-  const chat=document.getElementById('buddy-chat');
-  chat.innerHTML+=`<div class="msg-bubble msg-user">${esc(text)}</div>`;
-  chat.scrollTop=chat.scrollHeight;
-  try{
-    const r=await api('/api/buddies/hype',{method:'POST',body:{buddyPairId:activeBuddy.buddyPairId,message:text}});
-    if(r.akilResponse){
-      chat.innerHTML+=`<div class="msg-bubble msg-ai"><div class="msg-ai-name">${esc(activeBuddy.user.name)}</div>${esc(r.akilResponse)}</div>`;
-    }
-    chat.innerHTML+=`<div class="msg-bubble msg-ai"><div class="msg-ai-name">ParaHype</div>+${r.xpAwarded} XP for spreading the hype!</div>`;
-    chat.scrollTop=chat.scrollHeight;
-    user.xpTotal=(user.xpTotal||0)+r.xpAwarded;
-    daily={...daily,xpEarned:(daily?.xpEarned||0)+r.xpAwarded};
-    renderAll();
-  } catch(e){showToast('Error sending hype');}
-}
-
-function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
-
-// ═══════════════════════════════════════════════════════════
-// INVITE
-// ═══════════════════════════════════════════════════════════
-async function openInviteModal(){
-  document.getElementById('invite-modal').classList.add('open');
-  try{const r=await api('/api/buddies/invite',{method:'POST'});document.getElementById('invite-code').textContent=r.inviteCode;}
-  catch{document.getElementById('invite-code').textContent='Error';}
-}
-function closeInviteModal(){document.getElementById('invite-modal').classList.remove('open');}
-function inviteAction(m){
-  const code=document.getElementById('invite-code').textContent;
-  if(m==='share'&&navigator.share){navigator.share({title:'Join ParaHype!',text:'Be my hype buddy! Code: '+code,url:'https://parahype.app/invite/'+code}).catch(()=>{});return;}
-  copyInviteCode();
-}
-function copyInviteCode(){const code=document.getElementById('invite-code').textContent;if(navigator.clipboard)navigator.clipboard.writeText(code).then(()=>showToast('Code copied! 💜')).catch(()=>showToast(code));else showToast(code);}
-async function acceptInvite(){
-  const code=document.getElementById('accept-code-input').value.trim();if(!code)return;
-  try{await api('/api/buddies/accept',{method:'POST',body:{code}});showToast('Buddy added! 🎉');closeInviteModal();const b=await api('/api/buddies');buddies=b.buddies||[];activeBuddy=buddies[0]||null;if(currentTab==='buddy')renderBuddyScreen();}
-  catch(e){showToast(e.message||'Invalid code');}
-}
-document.getElementById('invite-modal').addEventListener('click',function(e){if(e.target===this)closeInviteModal();});
-
-// ═══════════════════════════════════════════════════════════
-// COACH — API-proxied with daily summary
-// ═══════════════════════════════════════════════════════════
-let coachSummaryDone=false;
-function openCoach(){document.getElementById('coach-panel').classList.add('open');setTimeout(()=>document.getElementById('coach-input').focus(),300);}
+var API='https://parahype-api.betha-a.workers.dev';
+var GID='790361257297-3c3ua1tj1hhnuea7ffc8d59fuovm8sg6.apps.googleusercontent.com';
+var VIBES={akil:{id:'akil',name:'Akil',label:'Hype Beast',emoji:'\u{1F525}',color:'#F59E0B',bg:'rgba(245,158,11,0.08)',sample:'"YOOOO you just crushed that!!"',nudge:'YOU ARE UNSTOPPABLE. Let\'s DOMINATE today!!',timerBtn:'LET\'S GOOO'},trinity:{id:'trinity',name:'Trinity',label:'Zen',emoji:'\u{1F30A}',color:'#0D9488',bg:'rgba(13,148,136,0.08)',sample:'"Take a breath. You\'re right where you need to be."',nudge:'Take a breath. Move slowly and with intention.',timerBtn:'Begin gently'},layla:{id:'layla',name:'Layla',label:'Gentle',emoji:'\u{1F49C}',color:'#C084FC',bg:'rgba(192,132,252,0.08)',sample:'"No rush. I\'m right here whenever you\'re ready."',nudge:'No pressure today. Even one small thing counts.',timerBtn:'Ready when you are'},alissa:{id:'alissa',name:'Alissa',label:'Competitive',emoji:'\u{1F3C6}',color:'#EF4444',bg:'rgba(239,68,68,0.08)',sample:'"That gap closes TODAY."',nudge:'The leaderboard doesn\'t wait. Move.',timerBtn:'Beat yesterday'},riyan:{id:'riyan',name:'Riyan',label:'Coach',emoji:'\u{1F3AF}',color:'#3B82F6',bg:'rgba(59,130,246,0.08)',sample:'"3 habits left. Start with the fastest win."',nudge:'Status: habits pending. Priority: next one. Begin.',timerBtn:'Execute'},lex:{id:'lex',name:'Lex',label:'Bestie',emoji:'\u2728',color:'#EC4899',bg:'rgba(236,72,153,0.08)',sample:'"Bestie real talk \u2014 have you eaten today?"',nudge:'Hey babe, just checking in. How are you actually doing?',timerBtn:'Let\'s do this together'}};
+var VO=['akil','trinity','layla','alissa','riyan','lex'];
+var token=localStorage.getItem('ph_token')||null,user=null,habits=[],daily=null,rewards=[],streak=0,buddies=[],activeBuddy=null,selectedVibe='akil',pendingVibe=null,coachDone=false,micOn=false,timerSecs=25*60,timerOn=false,timerInt=null,timerMode='work',authMode='login',CIRC=163.4;
+var levels=[{n:'Starter',min:0,max:500},{n:'Building',min:500,max:1500},{n:'Focused',min:1500,max:3000},{n:'Unstoppable',min:3000,max:6000},{n:'Legend',min:6000,max:15000}];
+function gL(x){for(var i=levels.length-1;i>=0;i--)if(x>=levels[i].min)return{num:i+1,n:levels[i].n,min:levels[i].min,max:levels[i].max};return{num:1,n:'Starter',min:0,max:500};}
+function V(){return VIBES[selectedVibe]||VIBES.akil;}
+async function api(p,o){var h={'Content-Type':'application/json'};if(token)h['Authorization']='Bearer '+token;var r=await fetch(API+p,{method:(o&&o.method)||'GET',headers:h,body:o&&o.body?JSON.stringify(o.body):undefined});var d=await r.json();if(!r.ok)throw new Error(d.error||'API error');return d;}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function buildVG(){var g=document.getElementById('vibe-grid');if(!g)return;g.innerHTML=VO.map(function(id){var v=VIBES[id];return'<div class="vibe-card" id="vc-'+id+'" onclick="selVibe(\''+id+'\')"><div class="vibe-avatar-preview" style="background:'+v.bg+';border:2px solid '+v.color+'44"><span>'+v.emoji+'</span></div><div class="vibe-name" style="color:'+v.color+'">'+v.name+'</div><div class="vibe-label">'+v.label+'</div><div class="vibe-sample">'+v.sample+'</div></div>';}).join('');}
+function selVibe(id){pendingVibe=id;document.querySelectorAll('.vibe-card').forEach(function(c){c.classList.remove('selected');c.style.borderColor='';c.style.background='';});var card=document.getElementById('vc-'+id);if(card){var v=VIBES[id];card.classList.add('selected');card.style.borderColor=v.color;card.style.background=v.bg;}var btn=document.getElementById('vibe-confirm-btn');btn.classList.add('ready');btn.textContent='Continue with '+VIBES[id].name+' '+VIBES[id].emoji;}
+async function confirmVibe(){if(!pendingVibe)return;selectedVibe=pendingVibe;try{await api('/api/vibe',{method:'POST',body:{vibe:selectedVibe}});}catch(e){}if(user)user.buddyVibe=selectedVibe;document.getElementById('vibe-screen').classList.remove('active');document.getElementById('vibe-screen').style.display='none';document.getElementById('tab-bar').style.display='flex';goTab('home');await loadAll();applyVU();setTimeout(function(){coachSum();},1500);}
+buildVG();
+function applyVU(){var v=V();document.documentElement.style.setProperty('--vibe-color',v.color);document.documentElement.style.setProperty('--vibe-glow',v.color+'4D');var hi=document.getElementById('home-buddy-icon');if(hi){hi.textContent=v.emoji;hi.style.borderColor=v.color;hi.style.background=v.bg;}var hn=document.getElementById('home-buddy-name');if(hn)hn.textContent=v.name;var nd=document.getElementById('daily-nudge');if(nd)nd.textContent=v.nudge;var ca=document.getElementById('coach-avi');if(ca){ca.textContent=v.emoji;ca.style.borderColor=v.color;}var cn=document.getElementById('coach-name');if(cn)cn.textContent=v.name+' '+v.emoji;var cl=document.getElementById('coach-vibe-label');if(cl)cl.textContent=v.label+' mode';var ci=document.getElementById('coach-input');if(ci)ci.placeholder='Talk to '+v.name+'...';var tb=document.getElementById('timer-btn');if(tb&&!timerOn)tb.textContent=v.timerBtn;var vs=document.getElementById('vibe-setting');if(vs)vs.textContent=v.emoji+' '+v.name+' \u00b7 '+v.label;}
+(async function(){if(token){try{var me=await api('/api/auth/me');user=me;enterApp(false);}catch(e){token=null;localStorage.removeItem('ph_token');}}})();
+function switchAuthTab(el,mode){authMode=mode;document.querySelectorAll('.auth-tab').forEach(function(t){t.classList.remove('active');});el.classList.add('active');document.getElementById('login-fields').style.display=mode==='login'?'block':'none';document.getElementById('signup-fields').style.display=mode==='signup'?'block':'none';document.getElementById('auth-btn').textContent=mode==='login'?'Continue':'Create account';document.getElementById('auth-error').textContent='';}
+async function doAuth(){var btn=document.getElementById('auth-btn');var err=document.getElementById('auth-error');err.textContent='';btn.disabled=true;try{var data;if(authMode==='signup'){var name=document.getElementById('signup-name').value.trim();var email=document.getElementById('signup-email').value.trim();var password=document.getElementById('signup-pass').value;if(!email||!password){err.textContent='Email and password required';btn.disabled=false;return;}data=await api('/api/auth/signup',{method:'POST',body:{email:email,password:password,name:name}});}else{var email=document.getElementById('login-email').value.trim();var password=document.getElementById('login-pass').value;if(!email||!password){err.textContent='Email and password required';btn.disabled=false;return;}data=await api('/api/auth/login',{method:'POST',body:{email:email,password:password}});}token=data.token;localStorage.setItem('ph_token',token);user=data.user;enterApp(authMode==='signup');}catch(e){err.textContent=e.message||'Something went wrong';}btn.disabled=false;}
+function googleSignIn(){if(typeof google==='undefined'){toast('Google loading...');return;}google.accounts.oauth2.initTokenClient({client_id:GID,scope:'email profile',callback:async function(tr){if(!tr.access_token)return;try{var res=await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+tr.access_token}});var profile=await res.json();var data=await api('/api/auth/google',{method:'POST',body:{profile:profile}});token=data.token;localStorage.setItem('ph_token',token);user=data.user;enterApp(!user.buddyVibe);}catch(e){toast(e.message||'Google sign-in failed');}}}).requestAccessToken();}
+async function enterApp(isNew){selectedVibe=user.buddyVibe||'akil';applyUI();applyVU();document.getElementById('login-screen').classList.remove('active');document.getElementById('login-screen').style.display='none';if(isNew||!user.buddyVibe){document.getElementById('vibe-screen').style.display='flex';document.getElementById('vibe-screen').classList.add('active');}else{document.getElementById('tab-bar').style.display='flex';goTab('home');await loadAll();setTimeout(function(){coachSum();},1500);}}
+function applyUI(){if(!user)return;var n=user.name||user.displayName||'Friend';var h=new Date().getHours();var tod=h<12?'Good morning!':h<17?'Keep going!':'Almost there!';var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];document.getElementById('home-greeting').textContent='Hey, '+n+' \u2726';document.getElementById('home-sub').textContent=days[new Date().getDay()]+' \u00b7 '+tod;document.getElementById('home-avatar').textContent=user.initials||n.slice(0,2).toUpperCase();document.getElementById('profile-avi').textContent=user.initials||n.slice(0,2).toUpperCase();document.getElementById('profile-name').textContent=user.displayName||n;document.getElementById('profile-sub').textContent='Level '+gL(user.xpTotal||0).num;document.getElementById('disp-name').textContent=user.displayName||n;document.getElementById('disp-email').textContent=user.email||'';}
+async function loadAll(){try{var r=await Promise.all([api('/api/habits'),api('/api/daily'),api('/api/rewards'),api('/api/stats/streak'),api('/api/buddies').catch(function(){return{buddies:[]};})]);habits=r[0].habits||[];daily=r[1].daily||{completedHabits:[],xpEarned:0};rewards=r[2].rewards||[];user.xpTotal=r[2].xpTotal||user.xpTotal||0;streak=r[3].streak||0;buddies=r[4].buddies||[];activeBuddy=buddies[0]||null;renderAll();}catch(e){console.error(e);}}
+var curTab='home';function goTab(tab){['home','habits','rewards','buddy','me'].forEach(function(t){var s=document.getElementById(t+'-screen');s.classList.remove('active');s.style.display='none';var tb=document.getElementById('tab-'+t);if(tb)tb.classList.remove('active');});var target=document.getElementById(tab+'-screen');target.style.display='flex';requestAnimationFrame(function(){target.classList.add('active');});var tb=document.getElementById('tab-'+tab);if(tb)tb.classList.add('active');curTab=tab;if(tab==='buddy')renderBud();if(tab==='rewards')loadRew();}
+function isC(hid){return(daily&&daily.completedHabits||[]).indexOf(hid)!==-1;}
+function renderAll(){renderHH();renderFH();renderRew();updateSt();applyVU();}
+function renderHH(){var el=document.getElementById('home-habit-list');if(!el)return;el.innerHTML=habits.slice(0,4).map(function(h){var d=isC(h.id);return'<div class="habit-item" onclick="togHabit(\''+h.id+'\')"><div class="habit-icon-wrap '+(d?'done':'todo')+'">'+(d?'<svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8l4 4 7-7" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>':'<svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="#A78BFA" stroke-width="1" fill="none"/></svg>')+'</div><div style="flex:1"><div class="habit-name '+(d?'done':'')+'">'+h.name+'</div><div class="habit-xp">'+(d?'+20 XP':h.streak+'d streak')+'</div></div><div class="check-ring '+(d?'done':'')+'">'+(d?'<svg width="11" height="11" viewBox="0 0 11 11"><polyline points="2,5.5 4.5,8 9,3" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>':'')+'</div></div>';}).join('');}
+function renderFH(){var el=document.getElementById('full-habit-list');if(!el)return;el.innerHTML=habits.map(function(h){var d=isC(h.id);return'<div class="habit-full"><div class="check-ring '+(d?'done':'')+'" style="width:28px;height:28px;flex-shrink:0;cursor:pointer" onclick="togHabit(\''+h.id+'\')">'+(d?'<svg width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>':'')+'</div><div style="flex:1;cursor:pointer" onclick="togHabit(\''+h.id+'\')"><div class="habit-name '+(d?'done':'')+'">'+h.name+'</div><div class="streak-dots">'+[6,5,4,3,2,1,0].map(function(i){return'<div class="sdot'+(i<h.streak?' on':'')+(i===0&&!d?' today':'')+'"></div>';}).join('')+'</div></div><div style="font-size:12px;color:var(--muted);margin-right:8px">'+h.streak+'d</div><button class="btn-del" onclick="delHabit(\''+h.id+'\')">\u00d7</button></div>';}).join('');}
+function renderRew(){var el=document.getElementById('reward-grid');if(!el)return;var xp=user?user.xpTotal||0:0;el.innerHTML=rewards.map(function(r){var u=r.unlocked;return'<div class="reward-tile '+(u?'unlocked':'locked')+'"><div class="r-emoji">'+r.emoji+'</div><div class="r-name">'+r.name+'</div><div class="r-pts">'+r.xp_required+' XP</div><div class="r-badge '+(u?'unlocked':'locked')+'">'+(u?'Unlocked':'Locked')+'</div></div>';}).join('');var lv=gL(xp);var pct=Math.min(100,Math.round(((xp-lv.min)/(lv.max-lv.min))*100));document.getElementById('xp-bar').style.width=pct+'%';document.getElementById('xp-level-label').textContent='Level '+lv.num+' \u2014 '+lv.n;document.getElementById('xp-count-label').textContent=xp+' / '+lv.max+' XP';document.getElementById('xp-total-val').textContent=xp.toLocaleString();}
+function updateSt(){var d=daily?daily.completedHabits.length:0;document.getElementById('habits-num').textContent=d+'/'+habits.length;document.getElementById('xp-num').textContent=daily?daily.xpEarned:0;document.getElementById('streak-num').textContent=streak;}
+async function loadRew(){try{var r=await api('/api/rewards');rewards=r.rewards||[];user.xpTotal=r.xpTotal||0;renderRew();}catch(e){}}
+async function togHabit(hid){try{var r=await api('/api/daily/toggle',{method:'POST',body:{habitId:hid}});daily=r.daily;habits=r.habits||habits;user.xpTotal=r.xpTotal;try{streak=(await api('/api/stats/streak')).streak;}catch(e){}renderAll();if(r.action==='completed')toast('+20 XP!');}catch(e){toast('Error: '+e.message);}}
+async function addHabit(){var inp=document.getElementById('new-habit-input');var name=inp.value.trim();if(!name)return;try{await api('/api/habits',{method:'POST',body:{name:name}});inp.value='';habits=(await api('/api/habits')).habits||[];renderAll();toast('Habit added!');}catch(e){toast(e.message);}}
+async function delHabit(hid){try{await api('/api/habits/'+hid,{method:'DELETE'});habits=(await api('/api/habits')).habits||[];renderAll();toast('Removed');}catch(e){toast(e.message);}}
+function toggleTimer(){if(timerOn){clearInterval(timerInt);timerOn=false;document.getElementById('timer-btn').textContent='Resume';document.getElementById('timer-mode').textContent='Paused';}else{timerOn=true;document.getElementById('timer-btn').textContent='Pause';document.getElementById('timer-mode').textContent=timerMode==='work'?'Focus session':'Break';timerInt=setInterval(function(){timerSecs--;updTD();if(timerSecs<=0){clearInterval(timerInt);timerOn=false;if(timerMode==='work'){recFocus();timerMode='break';timerSecs=5*60;}else{timerMode='work';timerSecs=25*60;}document.getElementById('timer-btn').textContent=V().timerBtn;document.getElementById('timer-mode').textContent=timerMode==='work'?'Ready to focus':'Break done!';updTD();}},1000);}}
+function updTD(){var t=timerMode==='work'?25*60:5*60,p=timerSecs/t;var m=Math.floor(timerSecs/60).toString().padStart(2,'0');var s=(timerSecs%60).toString().padStart(2,'0');document.getElementById('timer-display').textContent=m+':'+s;document.getElementById('timer-ring').setAttribute('stroke-dashoffset',(CIRC*(1-p)).toFixed(1));}
+async function recFocus(){try{var r=await api('/api/daily/focus',{method:'POST',body:{minutes:25}});user.xpTotal=r.xpTotal;daily.xpEarned=(daily.xpEarned||0)+50;renderAll();toast('+50 XP! Focus done!');}catch(e){}}
+function renderBud(){var c=document.getElementById('buddy-content');var row=document.getElementById('hype-row');if(!activeBuddy){c.innerHTML='<div class="buddy-empty">No buddies yet!<br>Tap "+ Invite friend" to add one.</div>';row.style.display='none';return;}var b=activeBuddy;var v=V();c.innerHTML='<div class="buddy-card"><div class="buddy-top"><div class="buddy-avi" style="border-color:'+v.color+'">'+v.emoji+'</div><div><div class="buddy-name">'+b.user.name+'</div><div class="buddy-status">\u25cf Active</div></div></div><div class="buddy-stats"><div class="b-stat"><div class="b-val" style="color:#A78BFA">'+b.today.habitsDone+'</div><div class="b-lbl">Done</div></div><div class="b-stat"><div class="b-val">'+b.today.habitsDone+'/'+b.today.habitsTotal+'</div><div class="b-lbl">Habits</div></div><div class="b-stat"><div class="b-val" style="color:#D97706">'+b.today.xpEarned+'</div><div class="b-lbl">XP today</div></div></div></div>';row.style.display='flex';document.getElementById('hype-input').placeholder='Send hype to '+b.user.name+'...';loadBM();}
+async function loadBM(){if(!activeBuddy)return;try{var r=await api('/api/buddies/'+activeBuddy.buddyPairId+'/messages');var chat=document.getElementById('buddy-chat');chat.innerHTML=(r.messages||[]).map(function(m){var isMe=m.sender_id===(user.id||user._id);return isMe?'<div class="msg-bubble msg-user">'+esc(m.message)+'</div>':'<div class="msg-bubble msg-ai"><div class="msg-ai-name">'+esc(activeBuddy.user.name)+'</div>'+esc(m.message)+'</div>';}).join('');chat.scrollTop=chat.scrollHeight;}catch(e){}}
+async function sendHype(){if(!activeBuddy)return;var inp=document.getElementById('hype-input');var text=inp.value.trim();if(!text)return;inp.value='';var chat=document.getElementById('buddy-chat');chat.innerHTML+='<div class="msg-bubble msg-user">'+esc(text)+'</div>';chat.scrollTop=chat.scrollHeight;try{var r=await api('/api/buddies/hype',{method:'POST',body:{buddyPairId:activeBuddy.buddyPairId,message:text}});if(r.akilResponse)chat.innerHTML+='<div class="msg-bubble msg-ai"><div class="msg-ai-name">'+esc(activeBuddy.user.name)+'</div>'+esc(r.akilResponse)+'</div>';chat.innerHTML+='<div class="msg-bubble msg-ai"><div class="msg-ai-name">ParaHype</div>+'+r.xpAwarded+' XP for hype!</div>';chat.scrollTop=chat.scrollHeight;user.xpTotal+=r.xpAwarded;daily.xpEarned+=r.xpAwarded;renderAll();}catch(e){toast('Error sending');}}
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+async function openInvite(){document.getElementById('invite-modal').classList.add('open');try{var r=await api('/api/buddies/invite',{method:'POST'});document.getElementById('invite-code').textContent=r.inviteCode;}catch(e){document.getElementById('invite-code').textContent='Error';}}
+function inviteShare(){var code=document.getElementById('invite-code').textContent;if(navigator.share)navigator.share({title:'Join ParaHype!',text:'Be my hype buddy! Code: '+code,url:'https://parahype.app'}).catch(function(){});else copyCode();}
+function copyCode(){var code=document.getElementById('invite-code').textContent;if(navigator.clipboard)navigator.clipboard.writeText(code).then(function(){toast('Code copied!');}).catch(function(){toast(code);});else toast(code);}
+async function acceptInvite(){var code=document.getElementById('accept-input').value.trim();if(!code)return;try{await api('/api/buddies/accept',{method:'POST',body:{code:code}});toast('Buddy added!');closeModal('invite-modal');buddies=(await api('/api/buddies')).buddies||[];activeBuddy=buddies[0]||null;if(curTab==='buddy')renderBud();}catch(e){toast(e.message);}}
+document.getElementById('invite-modal').addEventListener('click',function(e){if(e.target===this)closeModal('invite-modal');});
+function openCoach(){document.getElementById('coach-panel').classList.add('open');setTimeout(function(){document.getElementById('coach-input').focus();},300);}
 function closeCoach(){document.getElementById('coach-panel').classList.remove('open');}
-
-async function dailyCoachSummary(){
-  if(coachSummaryDone)return;coachSummaryDone=true;
-  const msgs=document.getElementById('coach-msgs');msgs.innerHTML='';
-  try{
-    const s=await api('/api/daily/summary');
-    const d=s.summary;
-    let text='';
-    if(d.habitsDone===0) text=`Hey ${d.name}! Fresh day ahead. You've got ${d.habitsTotal} habits lined up. Your streak is at ${d.streak} days with ${d.xpTotal.toLocaleString()} lifetime XP. Let's go!`;
-    else if(d.habitsDone===d.habitsTotal) text=`You've done ALL ${d.habitsTotal} habits today! ${d.xpToday} XP earned. ${d.streak} day streak. You're unstoppable!`;
-    else text=`Here's your status: ${d.habitsDone}/${d.habitsTotal} done — ${d.doneNames.join(', ')}. Still to go: ${d.todoNames.join(', ')}. ${d.xpToday} XP today, ${d.xpTotal.toLocaleString()} lifetime. Streak: ${d.streak} days.`;
-    addCoachMsg(text);
-    setTimeout(()=>addCoachMsg("Want to add any new habits today? Or just say hi — I'm here whenever you need a boost."),1200);
-    if('speechSynthesis' in window){const u=new SpeechSynthesisUtterance(text.replace(/[^\w\s.,!?'-]/g,''));u.rate=1;u.pitch=1.05;setTimeout(()=>speechSynthesis.speak(u),500);}
-  } catch{addCoachMsg("Hey! I'm your hype buddy. Ask me anything — I can break tasks into steps, remind you to breathe, or just cheer you on. 💜");}
-}
-
-function addCoachMsg(text){
-  const msgs=document.getElementById('coach-msgs');
-  const d=document.createElement('div');d.className='coach-msg';
-  d.innerHTML='<div class="coach-msg-name">'+M(16)+' ParaHype AI</div>'+text;
-  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
-}
-
-async function sendCoach(){
-  const inp=document.getElementById('coach-input');const text=inp.value.trim();if(!text)return;inp.value='';
-  const msgs=document.getElementById('coach-msgs');
-  const ud=document.createElement('div');ud.className='coach-user';ud.textContent=text;msgs.appendChild(ud);
-  const td=document.createElement('div');td.className='coach-typing';td.id='typing-ind';td.innerHTML='<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
-  msgs.appendChild(td);msgs.scrollTop=msgs.scrollHeight;
-  try{
-    const r=await api('/api/coach/chat',{method:'POST',body:{message:text}});
-    const ti=document.getElementById('typing-ind');if(ti)ti.remove();
-    addCoachMsg(r.reply);
-    if('speechSynthesis' in window){const u=new SpeechSynthesisUtterance(r.reply.replace(/[^\w\s.,!?'-]/g,''));u.rate=1.05;u.pitch=1.1;speechSynthesis.speak(u);}
-  } catch{
-    const ti=document.getElementById('typing-ind');if(ti)ti.remove();
-    addCoachMsg("Having trouble connecting, but I'm still here! Try again. 💜");
-  }
-}
-
-function toggleMic(){
-  const btn=document.getElementById('coach-mic');
-  if(micListening){micListening=false;btn.classList.remove('listening');return;}
-  if('webkitSpeechRecognition' in window||'SpeechRecognition' in window){
-    micListening=true;btn.classList.add('listening');
-    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;const rec=new SR();
-    rec.onresult=e=>{document.getElementById('coach-input').value=e.results[0][0].transcript;micListening=false;btn.classList.remove('listening');setTimeout(sendCoach,300);};
-    rec.onerror=rec.onend=()=>{micListening=false;btn.classList.remove('listening');};
-    rec.start();
-  } else showToast('Voice not supported in this browser');
-}
-
-// ═══════════════════════════════════════════════════════════
-// TOAST + LOGOUT
-// ═══════════════════════════════════════════════════════════
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
-
-function logout(){
-  token=null;user=null;localStorage.removeItem('ph_token');coachSummaryDone=false;
-  document.getElementById('tab-bar').style.display='none';
-  ['home','habits','rewards','buddy','me'].forEach(t=>{document.getElementById(t+'-screen').classList.remove('active');document.getElementById(t+'-screen').style.display='none';});
-  document.getElementById('login-screen').classList.add('active');document.getElementById('login-screen').style.display='flex';
-  closeCoach();
-}
+async function coachSum(){if(coachDone)return;coachDone=true;var msgs=document.getElementById('coach-msgs');msgs.innerHTML='';var v=V();try{var s=await api('/api/daily/summary');var d=s.summary;var text='';if(d.habitsDone===0)text='Hey '+d.name+'! Fresh day. '+d.habitsTotal+' habits. Streak: '+d.streak+'d. '+d.xpTotal.toLocaleString()+' lifetime XP.';else if(d.habitsDone===d.habitsTotal)text='ALL '+d.habitsTotal+' done! '+d.xpToday+' XP. '+d.streak+'d streak!';else text=d.habitsDone+'/'+d.habitsTotal+' done: '+d.doneNames.join(', ')+'. Left: '+d.todoNames.join(', ')+'. '+d.xpToday+' XP today.';addCM(text);setTimeout(function(){addCM('Want to add any new habits? Or just say hi!');},1200);if('speechSynthesis' in window){var u=new SpeechSynthesisUtterance(text.replace(/[^\w\s.,!?'-]/g,''));u.rate=1;u.pitch=1.05;setTimeout(function(){speechSynthesis.speak(u);},500);}}catch(e){addCM('Hey! I am your buddy. Ask me anything!');}}
+function addCM(text){var v=V();var msgs=document.getElementById('coach-msgs');var d=document.createElement('div');d.className='coach-msg';d.innerHTML='<div class="coach-msg-name" style="color:'+v.color+'">'+v.emoji+' '+v.name+'</div>'+text;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;}
+async function sendCoach(){var inp=document.getElementById('coach-input');var text=inp.value.trim();if(!text)return;inp.value='';var msgs=document.getElementById('coach-msgs');var ud=document.createElement('div');ud.className='coach-user';ud.textContent=text;msgs.appendChild(ud);var td=document.createElement('div');td.className='coach-typing';td.id='ti';td.innerHTML='<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';msgs.appendChild(td);msgs.scrollTop=msgs.scrollHeight;try{var r=await api('/api/coach/chat',{method:'POST',body:{message:text}});var ti=document.getElementById('ti');if(ti)ti.remove();addCM(r.reply);if('speechSynthesis' in window){var u=new SpeechSynthesisUtterance(r.reply.replace(/[^\w\s.,!?'-]/g,''));u.rate=1.05;u.pitch=1.1;speechSynthesis.speak(u);}}catch(e){var ti=document.getElementById('ti');if(ti)ti.remove();addCM('Trouble connecting. Try again!');}}
+function toggleMic(){var btn=document.getElementById('coach-mic');if(micOn){micOn=false;btn.classList.remove('listening');return;}if('webkitSpeechRecognition' in window||'SpeechRecognition' in window){micOn=true;btn.classList.add('listening');var SR=window.SpeechRecognition||window.webkitSpeechRecognition;var rec=new SR();rec.onresult=function(e){document.getElementById('coach-input').value=e.results[0][0].transcript;micOn=false;btn.classList.remove('listening');setTimeout(sendCoach,300);};rec.onerror=rec.onend=function(){micOn=false;btn.classList.remove('listening');};rec.start();}else{toast('Voice not supported');}}
+function logout(){token=null;user=null;localStorage.removeItem('ph_token');coachDone=false;document.getElementById('tab-bar').style.display='none';['home','habits','rewards','buddy','me','vibe'].forEach(function(t){var s=document.getElementById(t+'-screen');if(s){s.classList.remove('active');s.style.display='none';}});document.getElementById('login-screen').classList.add('active');document.getElementById('login-screen').style.display='flex';closeCoach();}
 </script>
 </body>
 </html>
