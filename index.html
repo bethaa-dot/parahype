@@ -8,7 +8,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="ParaHype"/>
 <title>ParaHype — Your Parallel Hype Buddy</title>
-<link rel="manifest" href="#"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="apple-touch-icon.png"/>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&family=Space+Grotesk:wght@500;600;700&display=swap');
@@ -284,9 +285,68 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .vibe-mini-emoji{font-size:22px;margin-bottom:5px}
 .vibe-mini-name{font-size:11px;font-weight:700;font-family:var(--font-head);margin-bottom:2px}
 .vibe-mini-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em}
+
+/* ── Splash screen ── */
+#splash-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.4s}
+#splash-screen.hide{opacity:0;pointer-events:none}
+.splash-logo{width:88px;height:88px;background:var(--accent);border-radius:24px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;animation:splash-pop 0.6s ease-out}
+@keyframes splash-pop{0%{transform:scale(0.7);opacity:0}100%{transform:scale(1);opacity:1}}
+.splash-name{font-family:var(--font-head);font-size:24px;font-weight:700;color:var(--text);animation:splash-fade 0.8s ease-out 0.2s both}
+.splash-tag{font-size:12px;color:var(--muted);margin-top:4px;animation:splash-fade 0.8s ease-out 0.4s both}
+@keyframes splash-fade{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}
+
+/* ── PWA install banner ── */
+#pwa-install{display:none;position:fixed;bottom:80px;left:16px;right:16px;max-width:400px;margin:0 auto;background:var(--surface);border:0.5px solid var(--border);border-radius:18px;padding:14px 16px;z-index:300;animation:slide-up 0.3s ease-out}
+#pwa-install.show{display:flex;align-items:center;gap:12px}
+@keyframes slide-up{0%{transform:translateY(20px);opacity:0}100%{transform:translateY(0);opacity:1}}
+.pwa-icon{width:40px;height:40px;border-radius:12px;background:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pwa-text{flex:1}
+.pwa-title{font-size:13px;font-weight:600;font-family:var(--font-head)}
+.pwa-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.btn-pwa-install{padding:8px 16px;background:var(--accent);border:none;border-radius:10px;font-size:12px;font-weight:600;color:#fff;cursor:pointer;font-family:var(--font-head);flex-shrink:0}
+.btn-pwa-dismiss{background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:4px;flex-shrink:0}
+
+/* ── Voice picker modal ── */
+.voice-list{max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.voice-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all 0.15s}
+.voice-option:active{transform:scale(0.98)}
+.voice-option.selected{border-color:var(--accent);background:rgba(124,58,237,0.08)}
+.voice-opt-name{font-size:13px;font-weight:500}
+.voice-opt-lang{font-size:10px;color:var(--muted)}
+.btn-voice-test{padding:4px 10px;background:rgba(124,58,237,0.12);border:0.5px solid var(--border);border-radius:8px;font-size:10px;color:var(--accent2);cursor:pointer;font-family:var(--font-body)}
 </style>
 </head>
 <body>
+<!-- SPLASH SCREEN -->
+<div id="splash-screen">
+  <div class="splash-logo">
+    <svg width="48" height="48" viewBox="0 0 40 40" fill="none">
+      <circle cx="20" cy="20" r="16" fill="rgba(255,255,255,0.12)"/>
+      <path d="M13 20l5 5 9-10" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="30" cy="11" r="5" fill="#A78BFA"/>
+      <circle cx="30" cy="11" r="3" fill="#7C3AED"/>
+    </svg>
+  </div>
+  <div class="splash-name">ParaHype</div>
+  <div class="splash-tag">your parallel hype buddy</div>
+</div>
+
+<!-- PWA INSTALL BANNER -->
+<div id="pwa-install">
+  <div class="pwa-icon">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <path d="M11 2v12M7 10l4 4 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M3 15v3a2 2 0 002 2h12a2 2 0 002-2v-3" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="pwa-text">
+    <div class="pwa-title">Add ParaHype to home screen</div>
+    <div class="pwa-sub">Quick access, works offline</div>
+  </div>
+  <button class="btn-pwa-install" onclick="installPWA()">Install</button>
+  <button class="btn-pwa-dismiss" onclick="dismissPWA()">&times;</button>
+</div>
+
 <div id="app">
 
   <!-- LOGIN -->
@@ -390,6 +450,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <input class="task-input" id="new-task-input" placeholder="What needs doing?" onkeydown="if(event.key==='Enter')addManualTask()"/>
         <input class="task-date-input" id="new-task-date" type="date"/>
         <button class="btn-add-task" onclick="addManualTask()">Add</button>
+      </div>
+      <div id="add-task-options" style="display:none;padding:0 16px 8px;">
+        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);cursor:pointer">
+          <input type="checkbox" id="new-task-daily" style="accent-color:var(--accent);width:14px;height:14px"/> Repeat daily
+        </label>
       </div>
       <div id="home-task-list"></div>
     </div>
@@ -518,6 +583,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <div class="settings-group">
           <div class="settings-item"><span class="settings-label">Focus duration</span><span class="settings-val">25 min</span></div>
           <div class="settings-item"><span class="settings-label">Break duration</span><span class="settings-val">5 min</span></div>
+          <div class="settings-item" onclick="openVoicePicker()"><span class="settings-label">Buddy voice</span><span class="settings-val" id="voice-setting-display">Default</span></div>
           <div class="settings-item"><span class="settings-label">AI coaching</span><span class="settings-val">Enabled</span></div>
           <div class="settings-item"><span class="settings-label">Buddy hype alerts</span><span class="settings-val">On</span></div>
         </div>
@@ -627,6 +693,18 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
       <div class="vibe-mini-grid" id="vibe-mini-grid"></div>
       <button class="btn-subscribe" id="vibe-change-confirm" onclick="saveVibeChange()">Update vibe</button>
       <button class="btn-cancel-modal" onclick="document.getElementById('vibe-change-sheet').classList.remove('open')">Cancel</button>
+    </div>
+  </div>
+
+  <!-- VOICE PICKER -->
+  <div class="modal-overlay" id="voice-picker-modal" onclick="if(event.target===this)this.classList.remove('open')">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Choose buddy voice</div>
+      <div class="modal-sub">Pick a voice for your buddy's speech. Tap "Test" to preview.</div>
+      <div class="voice-list" id="voice-list"></div>
+      <button class="btn-subscribe" onclick="saveVoiceChoice()">Save voice</button>
+      <button class="btn-cancel-modal" onclick="document.getElementById('voice-picker-modal').classList.remove('open')">Cancel</button>
     </div>
   </div>
 
@@ -1382,6 +1460,16 @@ function renderHomeTasks() {
 
   const activeTasks = tasks.filter(t => t.status === 'active');
 
+  // Sort: daily tasks first, then overdue, then today, then by due date
+  activeTasks.sort((a,b) => {
+    if(a.recurrence && !b.recurrence) return -1;
+    if(!a.recurrence && b.recurrence) return 1;
+    const aClass = getDueClass(a.dueDate);
+    const bClass = getDueClass(b.dueDate);
+    const order = {overdue:0, today:1, upcoming:2, future:3};
+    return (order[aClass]||3) - (order[bClass]||3);
+  });
+
   if(activeTasks.length === 0 && !addTaskVisible) {
     if(sectionRow) sectionRow.style.display = 'flex';
     el.innerHTML = '';
@@ -1397,6 +1485,7 @@ function renderHomeTasks() {
     const steps = t.steps || [];
     const done = t.stepsDone || 0;
     const total = t.stepsTotal || steps.length;
+    const isDaily = !!t.recurrence;
 
     let stepsHTML = '';
     if(expanded && steps.length > 0) {
@@ -1411,15 +1500,19 @@ function renderHomeTasks() {
       </div>`;
     }
 
+    const badges = [];
+    if(isDaily) badges.push(`<span class="task-due today" style="background:rgba(124,58,237,0.12);color:var(--accent2)">🔁 Daily</span>`);
+    if(dueLabel && !isDaily) badges.push(`<span class="task-due ${dueClass}">${dueLabel}</span>`);
+
     return `<div class="task-card ${t.status==='completed'?'completed':''}" onclick="toggleTaskExpand('${t.id}')">
       <div class="task-top">
         <span class="task-title ${t.status==='completed'?'done':''}">${t.title}</span>
-        ${dueLabel?`<span class="task-due ${dueClass}">${dueLabel}</span>`:''}
+        <div style="display:flex;gap:4px;flex-shrink:0">${badges.join('')}</div>
       </div>
       ${total > 0 ? `<div class="task-progress">
         ${Array.from({length:total}).map((_,i) => `<div class="task-prog-seg ${i<done?'done':''}"></div>`).join('')}
       </div>` : ''}
-      <div class="task-meta">${total>0?`${done} of ${total} steps`:'No steps'} · +${t.xpReward||50} XP</div>
+      <div class="task-meta">${total>0?`${done} of ${total} steps`:'No steps'} · +${t.xpReward||50} XP${isDaily?' · resets daily':''}</div>
       ${stepsHTML}
     </div>`;
   }).join('');
@@ -1433,27 +1526,33 @@ function toggleTaskExpand(taskId) {
 function toggleAddTask() {
   addTaskVisible = !addTaskVisible;
   const row = document.getElementById('add-task-row');
+  const opts = document.getElementById('add-task-options');
   if(row) row.style.display = addTaskVisible ? 'flex' : 'none';
+  if(opts) opts.style.display = addTaskVisible ? 'block' : 'none';
   if(addTaskVisible) document.getElementById('new-task-input')?.focus();
 }
 
 async function addManualTask() {
   const inp = document.getElementById('new-task-input');
   const dateInp = document.getElementById('new-task-date');
+  const dailyCheck = document.getElementById('new-task-daily');
   const title = inp?.value.trim();
   if(!title) return;
   const dueDate = dateInp?.value || null;
+  const recurrence = dailyCheck?.checked ? 'daily' : null;
   inp.value = '';
   if(dateInp) dateInp.value = '';
+  if(dailyCheck) dailyCheck.checked = false;
 
   try {
     const data = await api('/api/tasks', {
       method:'POST',
-      body:JSON.stringify({ title, dueDate, source:'manual' })
+      body:JSON.stringify({ title, dueDate, source:'manual', recurrence })
     });
     if(data.task) tasks.unshift(data.task);
     addTaskVisible = false;
     document.getElementById('add-task-row').style.display = 'none';
+    document.getElementById('add-task-options').style.display = 'none';
     renderHomeTasks();
   } catch(e) { console.warn('Add task error:', e); }
 }
@@ -1632,15 +1731,112 @@ function confirmSubscribe(){
 // ═══════════════════════════════════════
 // VOICE (TTS)
 // ═══════════════════════════════════════
+// ═══════════════════════════════════════
+// VOICE (TTS with voice picker)
+// ═══════════════════════════════════════
+let selectedVoiceName = localStorage.getItem('ph_voice') || null;
+let pendingVoiceName = null;
+
+function getAvailableVoices() {
+  if(!window.speechSynthesis) return [];
+  return window.speechSynthesis.getVoices().filter(v => v.lang.startsWith('en'));
+}
+
+function getBestVoice() {
+  const voices = getAvailableVoices();
+  if(!voices.length) return null;
+  // If user picked one, use it
+  if(selectedVoiceName) {
+    const picked = voices.find(v => v.name === selectedVoiceName);
+    if(picked) return picked;
+  }
+  // Otherwise rank by quality
+  const ranked = [
+    'Samantha', 'Zarvox', 'Karen', 'Daniel', 'Moira', 'Tessa',
+    'Google US English', 'Google UK English Female', 'Google UK English Male',
+    'Microsoft Zira', 'Microsoft David', 'Microsoft Jenny',
+    'Nicky', 'Alex', 'Fiona', 'Veena'
+  ];
+  for(const name of ranked) {
+    const match = voices.find(v => v.name.includes(name));
+    if(match) return match;
+  }
+  return voices.find(v => v.lang === 'en-US') || voices[0];
+}
+
 function speak(text){
   if(!window.speechSynthesis||voiceMuted) return;
   window.speechSynthesis.cancel();
   const utt=new SpeechSynthesisUtterance(text);
-  const voices=window.speechSynthesis.getVoices();
-  const preferred=voices.find(v=>v.name.includes('Samantha')||v.name.includes('Google US English')||v.name.includes('Karen')||v.name.includes('Moira'))||voices.find(v=>v.lang==='en-US')||voices[0];
-  if(preferred) utt.voice=preferred;
+  const voice = getBestVoice();
+  if(voice) utt.voice=voice;
   utt.rate=0.95;utt.pitch=1.05;utt.volume=1;
   window.speechSynthesis.speak(utt);
+}
+
+function openVoicePicker() {
+  const voices = getAvailableVoices();
+  const list = document.getElementById('voice-list');
+  if(!list) return;
+  pendingVoiceName = selectedVoiceName;
+
+  const currentBest = getBestVoice();
+  list.innerHTML = voices.map(v => {
+    const isSelected = selectedVoiceName ? v.name === selectedVoiceName : v.name === currentBest?.name;
+    return `<div class="voice-option ${isSelected?'selected':''}" onclick="selectVoiceOption(this,'${v.name.replace(/'/g,"\\'")}')">
+      <div>
+        <div class="voice-opt-name">${v.name}</div>
+        <div class="voice-opt-lang">${v.lang}${v.localService?' · offline':''}</div>
+      </div>
+      <button class="btn-voice-test" onclick="event.stopPropagation();testVoice('${v.name.replace(/'/g,"\\'")}')">Test</button>
+    </div>`;
+  }).join('');
+
+  if(voices.length === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">No voices available on this device</div>';
+  }
+
+  document.getElementById('voice-picker-modal').classList.add('open');
+}
+
+function selectVoiceOption(el, name) {
+  document.querySelectorAll('.voice-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  pendingVoiceName = name;
+}
+
+function testVoice(name) {
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const voices = window.speechSynthesis.getVoices();
+  const voice = voices.find(v => v.name === name);
+  const utt = new SpeechSynthesisUtterance("Hey! I'm your hype buddy. Let's go!");
+  if(voice) utt.voice = voice;
+  utt.rate = 0.95; utt.pitch = 1.05;
+  window.speechSynthesis.speak(utt);
+}
+
+function saveVoiceChoice() {
+  selectedVoiceName = pendingVoiceName;
+  if(selectedVoiceName) {
+    localStorage.setItem('ph_voice', selectedVoiceName);
+  } else {
+    localStorage.removeItem('ph_voice');
+  }
+  const display = document.getElementById('voice-setting-display');
+  if(display) display.textContent = selectedVoiceName ? selectedVoiceName.split(' ').slice(0,2).join(' ') : 'Default';
+  document.getElementById('voice-picker-modal').classList.remove('open');
+}
+
+function updateVoiceDisplay() {
+  const display = document.getElementById('voice-setting-display');
+  if(!display) return;
+  if(selectedVoiceName) {
+    display.textContent = selectedVoiceName.split(' ').slice(0,2).join(' ');
+  } else {
+    const best = getBestVoice();
+    display.textContent = best ? best.name.split(' ').slice(0,2).join(' ') : 'Default';
+  }
 }
 
 function toggleMute(){
@@ -1662,18 +1858,29 @@ function toggleCoach(){
   document.getElementById('coach-panel').classList.toggle('open',coachOpen);
   if(coachOpen) {
     document.getElementById('coach-input').focus();
-    // Auto-brief on first open if there are tasks or habits remaining
+    // Auto-brief on first open each session
     const activeTasks = tasks.filter(t=>t.status==='active');
     const remainingHabits = habits.length - completedHabitIds.length;
+    const overdueTasks = activeTasks.filter(t => t.dueDate && t.dueDate < new Date().toISOString().slice(0,10));
+    const dailyTasks = activeTasks.filter(t => t.recurrence);
+    const incompleteDailySteps = dailyTasks.reduce((n,t) => n + ((t.stepsTotal||0) - (t.stepsDone||0)), 0);
+
     if(!coachHasBriefed && (activeTasks.length > 0 || remainingHabits > 0)) {
       coachHasBriefed = true;
-      // Send a briefing request silently
       const msgs=document.getElementById('coach-msgs');
       const typingDiv=document.createElement('div');typingDiv.className='coach-msg';typingDiv.id='coach-typing';
       typingDiv.innerHTML=`<span style="color:var(--muted);font-style:italic">${getBuddyName().split(' ')[0]} is checking your status...</span>`;
       msgs.appendChild(typingDiv);msgs.scrollTop=msgs.scrollHeight;
       setCoachThinking(true);
-      api('/api/coach/chat', { method:'POST', body:JSON.stringify({message:'Give me a quick status update on my tasks and habits for today. What should I focus on next?'}) })
+
+      // Build a context-aware briefing request
+      let briefingPrompt = 'Give me my daily briefing. ';
+      if(overdueTasks.length > 0) briefingPrompt += `I have ${overdueTasks.length} overdue task(s) — flag those urgently. `;
+      if(dailyTasks.length > 0) briefingPrompt += `I have ${dailyTasks.length} daily task(s) with ${incompleteDailySteps} steps remaining. `;
+      if(remainingHabits > 0) briefingPrompt += `${remainingHabits} habits still to do. `;
+      briefingPrompt += 'What should I focus on right now?';
+
+      api('/api/coach/chat', { method:'POST', body:JSON.stringify({message:briefingPrompt}) })
         .then(data => {
           setCoachThinking(false);
           const typing=document.getElementById('coach-typing');if(typing) typing.remove();
@@ -1806,6 +2013,60 @@ function toggleMic(){
 document.getElementById('home-screen').addEventListener('click',e=>{
   if(e.target.closest('.hype-icon-wrap')||e.target.closest('.hype-msg')) toggleCoach();
 });
+
+// ═══════════════════════════════════════
+// SPLASH SCREEN
+// ═══════════════════════════════════════
+setTimeout(()=>{
+  const splash = document.getElementById('splash-screen');
+  if(splash) { splash.classList.add('hide'); setTimeout(()=>splash.remove(), 500); }
+}, 1500);
+
+// ═══════════════════════════════════════
+// SERVICE WORKER & PWA INSTALL
+// ═══════════════════════════════════════
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+
+let deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  // Show install banner if not previously dismissed
+  if(!localStorage.getItem('ph_pwa_dismissed')) {
+    setTimeout(()=>{
+      const banner = document.getElementById('pwa-install');
+      if(banner) banner.classList.add('show');
+    }, 5000); // Show after 5 seconds
+  }
+});
+
+function installPWA() {
+  if(!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  deferredInstallPrompt.userChoice.then(result => {
+    deferredInstallPrompt = null;
+    document.getElementById('pwa-install')?.classList.remove('show');
+  });
+}
+
+function dismissPWA() {
+  document.getElementById('pwa-install')?.classList.remove('show');
+  localStorage.setItem('ph_pwa_dismissed', 'true');
+}
+
+// Detect if running as installed PWA — hide install banner
+if(window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+  const banner = document.getElementById('pwa-install');
+  if(banner) banner.style.display = 'none';
+}
+
+// Update voice display once voices load
+if(window.speechSynthesis) {
+  window.speechSynthesis.onvoiceschanged = () => updateVoiceDisplay();
+  setTimeout(updateVoiceDisplay, 500);
+}
 </script>
 </body>
 </html>
