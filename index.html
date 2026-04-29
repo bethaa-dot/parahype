@@ -227,6 +227,41 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .vibe-setting-val{display:flex;align-items:center;gap:6px;font-size:13px}
 .btn-logout{width:calc(100% - 32px);margin:0 16px;padding:14px;background:rgba(239,68,68,0.1);border:0.5px solid rgba(239,68,68,0.3);border-radius:14px;font-size:14px;font-weight:600;color:var(--red);cursor:pointer;font-family:var(--font-head)}
 
+/* ── Tasks ── */
+.task-card{background:var(--surface);border-radius:14px;border:0.5px solid var(--border);padding:12px 14px;margin:0 16px 8px;cursor:pointer;transition:all 0.15s}
+.task-card:active{transform:scale(0.98)}
+.task-card.completed{opacity:0.5}
+.task-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.task-title{font-size:13px;font-weight:500;flex:1;margin-right:8px}
+.task-title.done{text-decoration:line-through;color:var(--muted)}
+.task-due{font-size:9px;padding:2px 8px;border-radius:6px;white-space:nowrap;font-weight:500}
+.task-due.overdue{color:var(--red);background:rgba(239,68,68,0.1)}
+.task-due.today{color:var(--green);background:rgba(16,185,129,0.1)}
+.task-due.upcoming{color:var(--amber);background:rgba(217,119,6,0.1)}
+.task-due.future{color:var(--muted);background:rgba(124,58,237,0.08)}
+.task-progress{display:flex;gap:3px;margin-bottom:5px}
+.task-prog-seg{height:4px;flex:1;border-radius:2px;background:rgba(124,58,237,0.12)}
+.task-prog-seg.done{background:var(--green)}
+.task-meta{font-size:10px;color:var(--muted)}
+.task-steps-expand{padding:8px 0 0;border-top:0.5px solid rgba(124,58,237,0.08);margin-top:8px}
+.task-step-item{display:flex;align-items:center;gap:8px;padding:5px 0}
+.task-step-check{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all 0.15s}
+.task-step-check.done{background:var(--green);border-color:var(--green)}
+.task-step-name{font-size:12px;flex:1}
+.task-step-name.done{text-decoration:line-through;color:var(--muted)}
+.task-step-time{font-size:10px;color:var(--muted)}
+.add-task-row{display:flex;gap:8px;padding:0 16px 8px;align-items:center}
+.task-input{flex:1;background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:9px 12px;font-size:13px;color:var(--text);font-family:var(--font-body);outline:none}
+.task-input:focus{border-color:var(--accent)}
+.task-date-input{width:110px;background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:9px 8px;font-size:11px;color:var(--text);font-family:var(--font-body);outline:none;color-scheme:dark}
+.task-date-input:focus{border-color:var(--accent)}
+.btn-add-task{padding:9px 14px;background:var(--accent);border:none;border-radius:12px;font-size:12px;font-weight:600;color:#fff;cursor:pointer;font-family:var(--font-head);white-space:nowrap}
+.coach-task-card{background:rgba(124,58,237,0.08);border-radius:12px;border:0.5px solid rgba(124,58,237,0.2);padding:10px 12px;max-width:90%;margin-bottom:6px}
+.coach-task-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.coach-task-due{font-size:9px;color:var(--amber);margin-bottom:6px}
+.xp-pop{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--accent);color:#fff;font-family:var(--font-head);font-size:18px;font-weight:700;padding:10px 24px;border-radius:16px;z-index:999;animation:xpPop 1.2s ease-out forwards;pointer-events:none}
+@keyframes xpPop{0%{opacity:1;transform:translate(-50%,-50%) scale(0.8)}30%{transform:translate(-50%,-50%) scale(1.1)}100%{opacity:0;transform:translate(-50%,-70%) scale(1)}}
+
 /* ── Modals ── */
 .modal-overlay{display:none;position:absolute;inset:0;background:rgba(10,7,20,0.85);z-index:200;align-items:flex-end;justify-content:center}
 .modal-overlay.open{display:flex}
@@ -347,6 +382,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <span class="section-link" onclick="goTab('habits')">See all</span>
       </div>
       <div id="home-habit-list"></div>
+      <div class="section-row" id="tasks-section-row" style="display:none">
+        <span class="section-title">📋 Tasks</span>
+        <span class="section-link" onclick="toggleAddTask()">+ Add task</span>
+      </div>
+      <div class="add-task-row" id="add-task-row" style="display:none">
+        <input class="task-input" id="new-task-input" placeholder="What needs doing?" onkeydown="if(event.key==='Enter')addManualTask()"/>
+        <input class="task-date-input" id="new-task-date" type="date"/>
+        <button class="btn-add-task" onclick="addManualTask()">Add</button>
+      </div>
+      <div id="home-task-list"></div>
     </div>
   </div>
 
@@ -694,6 +739,9 @@ let dailyXP = 0;
 let xpTotal = 0;
 let streak = 0;
 let rewards = [];
+let tasks = [];           // [{id, title, dueDate, status, steps, stepsTotal, stepsDone, ...}]
+let expandedTaskId = null; // which task card is expanded on home
+let addTaskVisible = false;
 
 // UI state
 let coachOpen = false;
@@ -1126,11 +1174,12 @@ async function enterApp(user, picture=null) {
 async function loadAllData() {
   try {
     // Parallel fetch: habits, daily log, rewards, streak
-    const [habitsRes, dailyRes, rewardsRes, streakRes] = await Promise.all([
+    const [habitsRes, dailyRes, rewardsRes, streakRes, tasksRes] = await Promise.all([
       api('/api/habits').catch(()=>({habits:[]})),
       api('/api/daily').catch(()=>({daily:{xpEarned:0,completedHabits:[]}})),
       api('/api/rewards').catch(()=>({rewards:[],xpTotal:0})),
       api('/api/stats/streak').catch(()=>({streak:0})),
+      api('/api/tasks').catch(()=>({tasks:[]})),
     ]);
 
     habits = habitsRes.habits || [];
@@ -1139,6 +1188,7 @@ async function loadAllData() {
     if(rewardsRes.xpTotal !== undefined) xpTotal = rewardsRes.xpTotal;
     rewards = rewardsRes.rewards || [];
     streak = streakRes.streak || 0;
+    tasks = tasksRes.tasks || [];
 
     renderAll();
   } catch(e) {
@@ -1182,7 +1232,7 @@ function logout(){
 // ═══════════════════════════════════════
 // RENDER
 // ═══════════════════════════════════════
-function renderAll(){ renderHomeHabits(); renderFullHabits(); renderRewards(); updateStats(); }
+function renderAll(){ renderHomeHabits(); renderFullHabits(); renderRewards(); renderHomeTasks(); updateStats(); }
 
 function renderHomeHabits(){
   const el=document.getElementById('home-habit-list');if(!el) return;
@@ -1293,6 +1343,150 @@ async function addHabit(){
   } catch(e) {
     console.warn('Add habit error:', e);
   }
+}
+
+// ═══════════════════════════════════════
+// TASKS — Home rendering
+// ═══════════════════════════════════════
+function getDueClass(dueDate) {
+  if(!dueDate) return 'future';
+  const today = new Date().toISOString().slice(0,10);
+  if(dueDate < today) return 'overdue';
+  if(dueDate === today) return 'today';
+  const d = new Date(dueDate);
+  const now = new Date();
+  const diff = Math.ceil((d - now) / (1000*60*60*24));
+  if(diff <= 3) return 'upcoming';
+  return 'future';
+}
+
+function getDueLabel(dueDate) {
+  if(!dueDate) return '';
+  const today = new Date().toISOString().slice(0,10);
+  if(dueDate < today) return 'Overdue';
+  if(dueDate === today) return 'Today';
+  const d = new Date(dueDate + 'T00:00:00');
+  const now = new Date();
+  const diff = Math.ceil((d - now) / (1000*60*60*24));
+  if(diff === 1) return 'Tomorrow';
+  if(diff <= 7) {
+    return d.toLocaleDateString('en-US',{weekday:'short'});
+  }
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+}
+
+function renderHomeTasks() {
+  const sectionRow = document.getElementById('tasks-section-row');
+  const el = document.getElementById('home-task-list');
+  if(!el) return;
+
+  const activeTasks = tasks.filter(t => t.status === 'active');
+
+  if(activeTasks.length === 0 && !addTaskVisible) {
+    if(sectionRow) sectionRow.style.display = 'flex';
+    el.innerHTML = '';
+    return;
+  }
+
+  if(sectionRow) sectionRow.style.display = 'flex';
+
+  el.innerHTML = activeTasks.map(t => {
+    const expanded = expandedTaskId === t.id;
+    const dueClass = getDueClass(t.dueDate);
+    const dueLabel = getDueLabel(t.dueDate);
+    const steps = t.steps || [];
+    const done = t.stepsDone || 0;
+    const total = t.stepsTotal || steps.length;
+
+    let stepsHTML = '';
+    if(expanded && steps.length > 0) {
+      stepsHTML = `<div class="task-steps-expand">
+        ${steps.map(s => `<div class="task-step-item">
+          <div class="task-step-check ${s.completed?'done':''}" onclick="event.stopPropagation();toggleTaskStep('${t.id}','${s.id}')">
+            ${s.completed?`<svg width="9" height="9" viewBox="0 0 9 9"><polyline points="1.5,4.5 3.5,6.5 7.5,2.5" fill="none" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>`:''}
+          </div>
+          <span class="task-step-name ${s.completed?'done':''}">${s.title}</span>
+          ${s.time_estimate||s.timeEstimate?`<span class="task-step-time">${s.time_estimate||s.timeEstimate}</span>`:''}
+        </div>`).join('')}
+      </div>`;
+    }
+
+    return `<div class="task-card ${t.status==='completed'?'completed':''}" onclick="toggleTaskExpand('${t.id}')">
+      <div class="task-top">
+        <span class="task-title ${t.status==='completed'?'done':''}">${t.title}</span>
+        ${dueLabel?`<span class="task-due ${dueClass}">${dueLabel}</span>`:''}
+      </div>
+      ${total > 0 ? `<div class="task-progress">
+        ${Array.from({length:total}).map((_,i) => `<div class="task-prog-seg ${i<done?'done':''}"></div>`).join('')}
+      </div>` : ''}
+      <div class="task-meta">${total>0?`${done} of ${total} steps`:'No steps'} · +${t.xpReward||50} XP</div>
+      ${stepsHTML}
+    </div>`;
+  }).join('');
+}
+
+function toggleTaskExpand(taskId) {
+  expandedTaskId = expandedTaskId === taskId ? null : taskId;
+  renderHomeTasks();
+}
+
+function toggleAddTask() {
+  addTaskVisible = !addTaskVisible;
+  const row = document.getElementById('add-task-row');
+  if(row) row.style.display = addTaskVisible ? 'flex' : 'none';
+  if(addTaskVisible) document.getElementById('new-task-input')?.focus();
+}
+
+async function addManualTask() {
+  const inp = document.getElementById('new-task-input');
+  const dateInp = document.getElementById('new-task-date');
+  const title = inp?.value.trim();
+  if(!title) return;
+  const dueDate = dateInp?.value || null;
+  inp.value = '';
+  if(dateInp) dateInp.value = '';
+
+  try {
+    const data = await api('/api/tasks', {
+      method:'POST',
+      body:JSON.stringify({ title, dueDate, source:'manual' })
+    });
+    if(data.task) tasks.unshift(data.task);
+    addTaskVisible = false;
+    document.getElementById('add-task-row').style.display = 'none';
+    renderHomeTasks();
+  } catch(e) { console.warn('Add task error:', e); }
+}
+
+async function toggleTaskStep(taskId, stepId) {
+  try {
+    const data = await api(`/api/tasks/${taskId}/steps/${stepId}/toggle`, { method:'POST' });
+    // Update local task data
+    const task = tasks.find(t => t.id === taskId);
+    if(task) {
+      task.steps = data.steps || task.steps;
+      task.stepsTotal = data.stepsTotal ?? task.stepsTotal;
+      task.stepsDone = data.stepsDone ?? task.stepsDone;
+      task.status = data.task?.status || task.status;
+    }
+    if(data.xpTotal !== undefined) xpTotal = data.xpTotal;
+    if(data.xpAwarded > 0) showXPPop(`+${data.xpAwarded} XP`);
+    if(data.allDone) {
+      // Task auto-completed
+      dailyXP += data.xpAwarded || 0;
+    }
+    renderHomeTasks();
+    updateStats();
+    renderRewards();
+  } catch(e) { console.warn('Toggle step error:', e); }
+}
+
+function showXPPop(text) {
+  const pop = document.createElement('div');
+  pop.className = 'xp-pop';
+  pop.textContent = text;
+  document.body.appendChild(pop);
+  setTimeout(() => pop.remove(), 1300);
 }
 
 // ═══════════════════════════════════════
@@ -1462,10 +1656,39 @@ function toggleMute(){
 // ═══════════════════════════════════════
 // AI COACH (uses Worker's /api/coach/chat endpoint)
 // ═══════════════════════════════════════
+let coachHasBriefed = false;
 function toggleCoach(){
   coachOpen=!coachOpen;
   document.getElementById('coach-panel').classList.toggle('open',coachOpen);
-  if(coachOpen) document.getElementById('coach-input').focus();
+  if(coachOpen) {
+    document.getElementById('coach-input').focus();
+    // Auto-brief on first open if there are tasks or habits remaining
+    const activeTasks = tasks.filter(t=>t.status==='active');
+    const remainingHabits = habits.length - completedHabitIds.length;
+    if(!coachHasBriefed && (activeTasks.length > 0 || remainingHabits > 0)) {
+      coachHasBriefed = true;
+      // Send a briefing request silently
+      const msgs=document.getElementById('coach-msgs');
+      const typingDiv=document.createElement('div');typingDiv.className='coach-msg';typingDiv.id='coach-typing';
+      typingDiv.innerHTML=`<span style="color:var(--muted);font-style:italic">${getBuddyName().split(' ')[0]} is checking your status...</span>`;
+      msgs.appendChild(typingDiv);msgs.scrollTop=msgs.scrollHeight;
+      setCoachThinking(true);
+      api('/api/coach/chat', { method:'POST', body:JSON.stringify({message:'Give me a quick status update on my tasks and habits for today. What should I focus on next?'}) })
+        .then(data => {
+          setCoachThinking(false);
+          const typing=document.getElementById('coach-typing');if(typing) typing.remove();
+          const reply = data.reply || "Let's check in on your progress!";
+          const aiDiv=document.createElement('div');aiDiv.className='coach-msg';
+          aiDiv.innerHTML=reply.replace(/\n/g,'<br>');
+          msgs.appendChild(aiDiv);msgs.scrollTop=msgs.scrollHeight;
+          speak(reply);
+        })
+        .catch(() => {
+          setCoachThinking(false);
+          const typing=document.getElementById('coach-typing');if(typing) typing.remove();
+        });
+    }
+  }
 }
 
 function closeCoach(){coachOpen=false;document.getElementById('coach-panel').classList.remove('open');}
@@ -1496,7 +1719,35 @@ async function sendCoach(){
     const typing=document.getElementById('coach-typing');if(typing) typing.remove();
     const aiDiv=document.createElement('div');aiDiv.className='coach-msg';
     aiDiv.innerHTML=reply.replace(/\n/g,'<br>');
-    msgs.appendChild(aiDiv);msgs.scrollTop=msgs.scrollHeight;
+    msgs.appendChild(aiDiv);
+
+    // If the coach created a task, show it as a card in the chat
+    if(data.createdTask) {
+      const t = data.createdTask;
+      tasks.unshift(t);
+      const taskCard = document.createElement('div');
+      taskCard.className = 'coach-task-card';
+      const steps = t.steps || [];
+      taskCard.innerHTML = `
+        <div class="coach-task-title">📋 ${t.title}
+          ${t.dueDate?`<span class="task-due ${getDueClass(t.dueDate)}" style="font-size:9px">${getDueLabel(t.dueDate)}</span>`:''}
+        </div>
+        ${steps.map(s => `<div class="task-step-item">
+          <div class="task-step-check" onclick="toggleTaskStepFromCoach('${t.id}','${s.id}',this)">
+          </div>
+          <span class="task-step-name">${s.title}</span>
+          ${s.time_estimate||s.timeEstimate?`<span class="task-step-time">${s.time_estimate||s.timeEstimate}</span>`:''}
+        </div>`).join('')}
+        <div style="margin-top:6px;display:flex;gap:3px">
+          ${steps.map((_,i) => `<div class="task-prog-seg" style="height:3px;flex:1;border-radius:2px;background:rgba(124,58,237,0.12)"></div>`).join('')}
+        </div>
+        <div style="font-size:9px;color:var(--muted);margin-top:4px">0/${steps.length} steps · +${t.xpReward||50} XP</div>
+      `;
+      msgs.appendChild(taskCard);
+      renderHomeTasks();
+    }
+
+    msgs.scrollTop=msgs.scrollHeight;
     speak(reply);
   } catch(e) {
     setCoachThinking(false);
@@ -1507,6 +1758,32 @@ async function sendCoach(){
     msgs.appendChild(aiDiv);msgs.scrollTop=msgs.scrollHeight;
     speak(fallback);
   }
+}
+
+async function toggleTaskStepFromCoach(taskId, stepId, el) {
+  try {
+    const data = await api(`/api/tasks/${taskId}/steps/${stepId}/toggle`, { method:'POST' });
+    const task = tasks.find(t => t.id === taskId);
+    if(task) {
+      task.steps = data.steps || task.steps;
+      task.stepsTotal = data.stepsTotal ?? task.stepsTotal;
+      task.stepsDone = data.stepsDone ?? task.stepsDone;
+      task.status = data.task?.status || task.status;
+    }
+    if(data.xpTotal !== undefined) xpTotal = data.xpTotal;
+    if(data.xpAwarded > 0) showXPPop(`+${data.xpAwarded} XP`);
+    // Update the check UI in coach
+    if(data.step?.completed) {
+      el.classList.add('done');
+      el.innerHTML = `<svg width="9" height="9" viewBox="0 0 9 9"><polyline points="1.5,4.5 3.5,6.5 7.5,2.5" fill="none" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>`;
+      el.nextElementSibling?.classList.add('done');
+    } else {
+      el.classList.remove('done');
+      el.innerHTML = '';
+      el.nextElementSibling?.classList.remove('done');
+    }
+    renderHomeTasks(); updateStats(); renderRewards();
+  } catch(e) { console.warn('Coach step toggle error:', e); }
 }
 
 function toggleMic(){
