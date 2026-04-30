@@ -26,6 +26,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .screen{display:none;flex:1;flex-direction:column;overflow:hidden}
 .screen.active{display:flex}
 .status-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 20px 6px;font-size:12px;color:var(--muted);flex-shrink:0}
+.status-icons{display:flex;align-items:center;gap:5px}
 
 /* ── Login ── */
 #login-screen{background:var(--bg);justify-content:center;align-items:center;padding:2rem 1.5rem;gap:0}
@@ -41,6 +42,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
 .field input{width:100%;background:var(--bg);border:0.5px solid var(--border);border-radius:12px;padding:11px 14px;font-size:14px;color:var(--text);font-family:var(--font-body);outline:none}
 .field input:focus{border-color:var(--accent)}
+.field-pass{position:relative}
+.field-pass input{padding-right:42px}
+.btn-toggle-pass{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;display:flex;align-items:center}
 .btn-primary{width:100%;padding:14px;background:var(--accent);border:none;border-radius:14px;font-size:15px;font-weight:600;color:#fff;cursor:pointer;font-family:var(--font-head);letter-spacing:0.02em;margin-top:4px}
 .google-divider{display:flex;align-items:center;gap:10px;margin:12px 0 4px;color:var(--muted);font-size:12px}
 .google-divider::before,.google-divider::after{content:'';flex:1;height:0.5px;background:var(--border)}
@@ -100,6 +104,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .hype-icon-wrap{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;border:2px solid var(--border)}
 .hype-sender{font-size:10px;color:var(--accent2);font-weight:600;margin-bottom:4px}
 .hype-body{font-size:13px;color:var(--text);line-height:1.5}
+.btn-talk-coach{display:flex;align-items:center;gap:6px;margin-top:8px;padding:7px 14px;background:var(--accent);border:none;border-radius:20px;font-size:12px;font-weight:600;color:#fff;cursor:pointer;font-family:var(--font-head);width:fit-content;transition:all 0.15s}
+.btn-talk-coach:active{transform:scale(0.96)}
+.btn-talk-coach.pulse{animation:coach-pulse 2s ease-in-out 3}
+@keyframes coach-pulse{0%,100%{box-shadow:0 0 0 0 rgba(124,58,237,0.4)}50%{box-shadow:0 0 0 8px rgba(124,58,237,0)}}
 .stats-row{display:flex;gap:10px;padding:10px 16px}
 .stat-card{flex:1;background:var(--surface);border-radius:14px;border:0.5px solid var(--border);padding:12px;text-align:center}
 .stat-num{font-family:var(--font-head);font-size:22px;font-weight:700}
@@ -251,6 +259,19 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .task-step-name{font-size:12px;flex:1}
 .task-step-name.done{text-decoration:line-through;color:var(--muted)}
 .task-step-time{font-size:10px;color:var(--muted)}
+.task-actions{display:flex;gap:6px;padding-top:8px;border-top:0.5px solid rgba(124,58,237,0.08);margin-top:6px}
+.task-action-btn{flex:1;padding:7px;border-radius:10px;border:0.5px solid var(--border);background:var(--bg);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font-body);display:flex;align-items:center;justify-content:center;gap:4px;transition:all 0.15s}
+.task-action-btn:active{transform:scale(0.96)}
+.task-action-btn.complete{color:var(--green);border-color:rgba(16,185,129,0.3)}
+.task-action-btn.complete:hover{background:rgba(16,185,129,0.08)}
+.task-action-btn.edit{color:var(--accent2);border-color:rgba(167,139,250,0.3)}
+.task-action-btn.edit:hover{background:rgba(124,58,237,0.08)}
+.task-action-btn.delete{color:var(--red);border-color:rgba(239,68,68,0.3)}
+.task-action-btn.delete:hover{background:rgba(239,68,68,0.08)}
+.task-edit-fields{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
+.task-edit-field label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}
+.task-edit-field input,.task-edit-field select{width:100%;background:var(--bg);border:0.5px solid var(--border);border-radius:12px;padding:10px 12px;font-size:14px;color:var(--text);font-family:var(--font-body);outline:none;color-scheme:dark}
+.task-edit-field input:focus,.task-edit-field select:focus{border-color:var(--accent)}
 .add-task-row{display:flex;gap:8px;padding:0 16px 8px;align-items:center}
 .task-input{flex:1;background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:9px 12px;font-size:13px;color:var(--text);font-family:var(--font-body);outline:none}
 .task-input:focus{border-color:var(--accent)}
@@ -361,7 +382,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         </svg>
       </div>
       <div class="app-name">ParaHype</div>
-      <div class="tagline">your parallel hype buddy for ADHD</div>
+      <div class="tagline">your parallel hype buddy for neurodivergent brains</div>
     </div>
     <div class="auth-box">
       <div class="auth-tabs">
@@ -370,12 +391,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
       </div>
       <div id="login-fields">
         <div class="field"><label>Email</label><input type="email" placeholder="you@email.com" id="login-email" onkeydown="if(event.key==='Enter')doAuth()"/></div>
-        <div class="field"><label>Password</label><input type="password" placeholder="••••••••" id="login-pass" onkeydown="if(event.key==='Enter')doAuth()"/></div>
+        <div class="field"><label>Password</label><div class="field-pass"><input type="password" placeholder="••••••••" id="login-pass" onkeydown="if(event.key==='Enter')doAuth()"/><button type="button" class="btn-toggle-pass" onclick="togglePassVis('login-pass',this)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M1.5 9s3-5.5 7.5-5.5S16.5 9 16.5 9s-3 5.5-7.5 5.5S1.5 9 1.5 9z" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.2"/></svg></button></div></div>
       </div>
       <div id="signup-fields" style="display:none">
         <div class="field"><label>Your name</label><input type="text" placeholder="First name" id="signup-name" onkeydown="if(event.key==='Enter')doAuth()"/></div>
         <div class="field"><label>Email</label><input type="email" placeholder="you@email.com" id="signup-email" onkeydown="if(event.key==='Enter')doAuth()"/></div>
-        <div class="field"><label>Password</label><input type="password" placeholder="Create password" id="signup-pass" onkeydown="if(event.key==='Enter')doAuth()"/></div>
+        <div class="field"><label>Password</label><div class="field-pass"><input type="password" placeholder="Create password" id="signup-pass" onkeydown="if(event.key==='Enter')doAuth()"/><button type="button" class="btn-toggle-pass" onclick="togglePassVis('signup-pass',this)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M1.5 9s3-5.5 7.5-5.5S16.5 9 16.5 9s-3 5.5-7.5 5.5S1.5 9 1.5 9z" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.2"/></svg></button></div></div>
       </div>
       <div class="auth-error" id="auth-error"></div>
       <button class="btn-primary" onclick="doAuth()" id="auth-btn">Continue</button>
@@ -385,7 +406,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         Continue with Google
       </button>
     </div>
-    <div class="terms">By continuing you agree to our<br>Terms of Service &amp; Privacy Policy</div>
+    <div class="terms">By continuing you agree to our<br><a href="privacy.html" style="color:var(--accent2)">Privacy Policy</a> · <a href="accessibility.html" style="color:var(--accent2)">Accessibility</a></div>
   </div>
 
   <!-- VIBE ONBOARDING -->
@@ -402,7 +423,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
   <!-- HOME -->
   <div id="home-screen" class="screen">
-    <div class="status-bar"><span id="home-time">9:41 AM</span><span style="letter-spacing:2px">●●●</span></div>
+    <div class="status-bar"><span class="clock-sync">9:41 AM</span><span class="status-icons"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 10.5l2.5-3 2.5 3 2.5-3 2.5 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="1" y="8" width="2" height="4" rx="0.5"/><rect x="4.5" y="6" width="2" height="6" rx="0.5"/><rect x="8" y="4" width="2" height="8" rx="0.5"/><rect x="11.5" y="2" width="2" height="10" rx="0.5" opacity="0.3"/></svg><svg width="18" height="14" viewBox="0 0 18 14" fill="currentColor"><rect x="1" y="3" width="13" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1"/><rect x="14.5" y="5" width="1.5" height="4" rx="0.5"/><rect x="3" y="5" width="7" height="4" rx="0.8" fill="var(--green)"/></svg></span></div>
     <div class="scroll-area">
       <div class="home-header">
         <div>
@@ -411,12 +432,20 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         </div>
         <div class="avatar" onclick="goTab('me')" id="home-avatar">?</div>
       </div>
-      <div class="hype-msg">
+      <div class="hype-msg" style="cursor:default">
         <div class="hype-icon-wrap" id="home-buddy-icon">🤖</div>
         <div>
           <div class="hype-sender" id="home-buddy-name">ParaHype AI</div>
           <div class="hype-body" id="daily-nudge">Loading your hype...</div>
+          <button class="btn-talk-coach pulse" id="btn-talk-coach" onclick="toggleCoach()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2h10a1 1 0 011 1v6a1 1 0 01-1 1H5l-3 2.5V3a1 1 0 011-1z" stroke="white" stroke-width="1.2" stroke-linejoin="round"/></svg>
+            <span id="btn-talk-label">Talk to your buddy</span>
+          </button>
         </div>
+      </div>
+      <div style="margin:4px 16px 6px;padding:10px 14px;border-radius:14px;background:rgba(124,58,237,0.05);border-left:3px solid var(--accent2)">
+        <div style="font-size:10px;color:var(--accent2);font-weight:600;margin-bottom:3px;font-family:var(--font-head)" id="quote-label">✦ Word of the day</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.5;font-style:italic" id="daily-quote">Loading...</div>
       </div>
       <div class="stats-row">
         <div class="stat-card"><div class="stat-num" style="color:#A78BFA" id="streak-num">0</div><div class="stat-lbl">Streak</div></div>
@@ -462,7 +491,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
   <!-- HABITS -->
   <div id="habits-screen" class="screen">
-    <div class="status-bar"><span id="habits-time">9:41 AM</span><span style="letter-spacing:2px">●●●</span></div>
+    <div class="status-bar"><span class="clock-sync">9:41 AM</span><span class="status-icons"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 10.5l2.5-3 2.5 3 2.5-3 2.5 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="1" y="8" width="2" height="4" rx="0.5"/><rect x="4.5" y="6" width="2" height="6" rx="0.5"/><rect x="8" y="4" width="2" height="8" rx="0.5"/><rect x="11.5" y="2" width="2" height="10" rx="0.5" opacity="0.3"/></svg><svg width="18" height="14" viewBox="0 0 18 14" fill="currentColor"><rect x="1" y="3" width="13" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1"/><rect x="14.5" y="5" width="1.5" height="4" rx="0.5"/><rect x="3" y="5" width="7" height="4" rx="0.8" fill="var(--green)"/></svg></span></div>
     <div class="habits-header">Habits</div>
     <div class="add-habit-row">
       <input class="habit-input" id="new-habit-input" placeholder="Add a new habit..." onkeydown="if(event.key==='Enter')addHabit()"/>
@@ -473,7 +502,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
   <!-- REWARDS -->
   <div id="rewards-screen" class="screen">
-    <div class="status-bar"><span>9:41 AM</span><span style="letter-spacing:2px">●●●</span></div>
+    <div class="status-bar"><span class="clock-sync">9:41 AM</span><span class="status-icons"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 10.5l2.5-3 2.5 3 2.5-3 2.5 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="1" y="8" width="2" height="4" rx="0.5"/><rect x="4.5" y="6" width="2" height="6" rx="0.5"/><rect x="8" y="4" width="2" height="8" rx="0.5"/><rect x="11.5" y="2" width="2" height="10" rx="0.5" opacity="0.3"/></svg><svg width="18" height="14" viewBox="0 0 18 14" fill="currentColor"><rect x="1" y="3" width="13" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1"/><rect x="14.5" y="5" width="1.5" height="4" rx="0.5"/><rect x="3" y="5" width="7" height="4" rx="0.8" fill="var(--green)"/></svg></span></div>
     <div class="scroll-area">
       <div class="rewards-header">Rewards</div>
       <div class="xp-card">
@@ -490,7 +519,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
   <!-- BUDDY -->
   <div id="buddy-screen" class="screen">
-    <div class="status-bar"><span>9:41 AM</span><span style="letter-spacing:2px">●●●</span></div>
+    <div class="status-bar"><span class="clock-sync">9:41 AM</span><span class="status-icons"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 10.5l2.5-3 2.5 3 2.5-3 2.5 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="1" y="8" width="2" height="4" rx="0.5"/><rect x="4.5" y="6" width="2" height="6" rx="0.5"/><rect x="8" y="4" width="2" height="8" rx="0.5"/><rect x="11.5" y="2" width="2" height="10" rx="0.5" opacity="0.3"/></svg><svg width="18" height="14" viewBox="0 0 18 14" fill="currentColor"><rect x="1" y="3" width="13" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1"/><rect x="14.5" y="5" width="1.5" height="4" rx="0.5"/><rect x="3" y="5" width="7" height="4" rx="0.8" fill="var(--green)"/></svg></span></div>
     <div class="buddy-header-area">
       <span class="buddy-header-title">Buddy hype</span>
       <button class="btn-invite" onclick="inviteFriend()">+ Invite friend</button>
@@ -551,7 +580,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
   <!-- ME -->
   <div id="me-screen" class="screen">
-    <div class="status-bar"><span>9:41 AM</span><span style="letter-spacing:2px">●●●</span></div>
+    <div class="status-bar"><span class="clock-sync">9:41 AM</span><span class="status-icons"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 10.5l2.5-3 2.5 3 2.5-3 2.5 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="1" y="8" width="2" height="4" rx="0.5"/><rect x="4.5" y="6" width="2" height="6" rx="0.5"/><rect x="8" y="4" width="2" height="8" rx="0.5"/><rect x="11.5" y="2" width="2" height="10" rx="0.5" opacity="0.3"/></svg><svg width="18" height="14" viewBox="0 0 18 14" fill="currentColor"><rect x="1" y="3" width="13" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1"/><rect x="14.5" y="5" width="1.5" height="4" rx="0.5"/><rect x="3" y="5" width="7" height="4" rx="0.8" fill="var(--green)"/></svg></span></div>
     <div class="back-to-landing">
       <button onclick="goToLanding()">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L3 7l6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -587,6 +616,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
           <div class="settings-item"><span class="settings-label">AI coaching</span><span class="settings-val">Enabled</span></div>
           <div class="settings-item"><span class="settings-label">Buddy hype alerts</span><span class="settings-val">On</span></div>
         </div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);padding:0 4px 8px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em">Legal</div>
+      <div class="settings-group">
+        <a href="privacy.html" class="settings-item" style="text-decoration:none;color:var(--text)"><span class="settings-label">Privacy Policy</span><span class="settings-val"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 10l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></a>
+        <a href="accessibility.html" class="settings-item" style="text-decoration:none;color:var(--text)"><span class="settings-label">Accessibility</span><span class="settings-val"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 10l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></a>
       </div>
       <button class="btn-logout" onclick="logout()">Log out</button>
       <div style="height:20px"></div>
@@ -679,7 +713,25 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <div class="perk-row"><div class="perk-dot"></div><span>Priority hype notifications</span></div>
         <div class="perk-row"><div class="perk-dot"></div><span>Early access to new features</span></div>
       </div>
-      <button class="btn-subscribe" onclick="confirmSubscribe()">Subscribe — $9.99 / month</button>
+      <div id="sub-tiers" style="display:flex;gap:8px;margin-bottom:16px">
+        <div class="sub-tier" id="sub-weekly" onclick="selectSubTier('weekly')" style="flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;transition:all 0.15s">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">Weekly</div>
+          <div style="font-family:var(--font-head);font-size:18px;font-weight:700">$2.99</div>
+          <div style="font-size:10px;color:var(--muted)">/week</div>
+        </div>
+        <div class="sub-tier selected" id="sub-monthly" onclick="selectSubTier('monthly')" style="flex:1;background:rgba(124,58,237,0.08);border:1.5px solid var(--accent);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;position:relative;transition:all 0.15s">
+          <div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:9px;font-weight:600;padding:2px 8px;border-radius:6px;white-space:nowrap">Best value</div>
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">Monthly</div>
+          <div style="font-family:var(--font-head);font-size:18px;font-weight:700">$9.99</div>
+          <div style="font-size:10px;color:var(--muted)">/month</div>
+        </div>
+        <div class="sub-tier" id="sub-yearly" onclick="selectSubTier('yearly')" style="flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;transition:all 0.15s">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">Yearly</div>
+          <div style="font-family:var(--font-head);font-size:18px;font-weight:700">$79.99</div>
+          <div style="font-size:10px;color:var(--muted)">/year · save 33%</div>
+        </div>
+      </div>
+      <button class="btn-subscribe" id="sub-btn" onclick="confirmSubscribe()">Subscribe — $9.99 / month</button>
       <button class="btn-cancel-modal" onclick="closeSubscribeModal()">Maybe later</button>
     </div>
   </div>
@@ -693,6 +745,48 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
       <div class="vibe-mini-grid" id="vibe-mini-grid"></div>
       <button class="btn-subscribe" id="vibe-change-confirm" onclick="saveVibeChange()">Update vibe</button>
       <button class="btn-cancel-modal" onclick="document.getElementById('vibe-change-sheet').classList.remove('open')">Cancel</button>
+    </div>
+  </div>
+
+  <!-- TASK EDIT MODAL -->
+  <div class="modal-overlay" id="task-edit-modal" onclick="if(event.target===this)this.classList.remove('open')">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Edit task</div>
+      <div class="modal-sub" id="task-edit-sub">Update your task details.</div>
+      <div class="task-edit-fields">
+        <div class="task-edit-field">
+          <label>Task name</label>
+          <input type="text" id="task-edit-title" placeholder="Task name..."/>
+        </div>
+        <div class="task-edit-field">
+          <label>Due date</label>
+          <input type="date" id="task-edit-date"/>
+        </div>
+        <div class="task-edit-field">
+          <label>Repeat</label>
+          <select id="task-edit-recurrence">
+            <option value="">One-time</option>
+            <option value="daily">Daily</option>
+            <option value="weekdays">Weekdays</option>
+            <option value="weekly">Weekly</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-subscribe" onclick="saveTaskEdit()">Save changes</button>
+      <button class="btn-cancel-modal" onclick="document.getElementById('task-edit-modal').classList.remove('open')">Cancel</button>
+    </div>
+  </div>
+
+  <!-- TASK DELETE CONFIRM -->
+  <div class="modal-overlay" id="task-delete-modal" onclick="if(event.target===this)this.classList.remove('open')">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div style="font-size:28px;margin-bottom:10px">🗑️</div>
+      <div class="modal-title">Delete task?</div>
+      <div class="modal-sub" id="task-delete-name">This will remove the task and all its steps.</div>
+      <button class="btn-subscribe" style="background:var(--red)" onclick="confirmDeleteTask()">Delete task</button>
+      <button class="btn-cancel-modal" onclick="document.getElementById('task-delete-modal').classList.remove('open')">Keep it</button>
     </div>
   </div>
 
@@ -748,7 +842,7 @@ const VIBES = {
     nudge:'Take a breath. You have everything you need for today. Let\'s move slowly and with intention.'
   },
   layla: {
-    id:'layla', name:'Layla', label:'Gentle', emoji:'💜',
+    id:'layla', name:'Gabe', label:'Gentle', emoji:'💜',
     color:'#C084FC', glow:'rgba(192,132,252,0.3)', bg:'rgba(192,132,252,0.08)',
     tagColor:'#C084FC', tagBg:'rgba(192,132,252,0.1)',
     sample:'"No rush at all. I\'m right here whenever you\'re ready. You\'re safe."',
@@ -910,6 +1004,9 @@ function updateAllVibeUI() {
   const coachInput = document.getElementById('coach-input');
   if(coachInput) coachInput.placeholder = `Talk to ${name.split(' ')[0]}...`;
 
+  const talkLabel = document.getElementById('btn-talk-label');
+  if(talkLabel) talkLabel.textContent = `Talk to ${name.split(' ')[0]}`;
+
   const timerBtn = document.getElementById('timer-btn');
   if(timerBtn && !timerRunning) timerBtn.textContent = v.timerBtn;
 
@@ -938,7 +1035,7 @@ function updateAllVibeUI() {
 function updateClock(){
   const now=new Date();
   const t=now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
-  ['home-time','habits-time'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t;});
+  document.querySelectorAll('.clock-sync').forEach(el=>el.textContent=t);
   const day=now.toLocaleDateString('en-US',{weekday:'long'});
   const date=now.toLocaleDateString('en-US',{month:'numeric',day:'numeric',year:'numeric'});
   const sub=document.getElementById('home-sub');
@@ -946,6 +1043,54 @@ function updateClock(){
 }
 updateClock();
 setInterval(updateClock,10000);
+
+// ═══════════════════════════════════════
+// DAILY QUOTE / WORD OF THE DAY
+// ═══════════════════════════════════════
+const DAILY_QUOTES = [
+  {word:'Momentum',quote:"You don't need motivation to start. You need to start to find motivation."},
+  {word:'Progress',quote:"Done is better than perfect. Every tiny step counts."},
+  {word:'Resilience',quote:"It's not about never falling. It's about getting up one more time than you fall."},
+  {word:'Focus',quote:"You don't have to see the whole staircase. Just take the first step."},
+  {word:'Patience',quote:"Your brain works differently, not wrong. Give yourself the grace you'd give a friend."},
+  {word:'Courage',quote:"Starting is the hardest part. Everything after that is just momentum."},
+  {word:'Rest',quote:"Rest is not the opposite of productivity. It's the foundation of it."},
+  {word:'Growth',quote:"The fact that you're here, trying, says more about you than any streak ever could."},
+  {word:'Kindness',quote:"Talk to yourself like someone you love. Your brain is doing its best."},
+  {word:'Spark',quote:"Your chaos is not a flaw. It's energy waiting to be aimed."},
+  {word:'Breathe',quote:"When everything feels urgent, nothing is. Pause. Pick one thing. Begin."},
+  {word:'Enough',quote:"You did enough today. You are enough today. Full stop."},
+  {word:'Begin',quote:"The perfect moment to start is the one you stop waiting for."},
+  {word:'Steady',quote:"Consistency isn't doing it perfectly. It's showing up imperfectly, again and again."},
+  {word:'Trust',quote:"Trust the process. Trust the tiny steps. Trust yourself more than the doubt."},
+  {word:'Ease',quote:"If it feels too hard, make it smaller. Then smaller again. Then just do that."},
+  {word:'Now',quote:"Not tomorrow. Not later. Just this one small thing, right now."},
+  {word:'Grace',quote:"Missing a day doesn't erase your progress. It just means you're human."},
+  {word:'Power',quote:"You've survived every hard day so far. That's a 100% success rate."},
+  {word:'Joy',quote:"Celebrate what you did, not what you didn't. The wins matter more than the gaps."},
+  {word:'Flow',quote:"Your brain doesn't lack attention. It just needs the right spark to lock in."},
+  {word:'Anchor',quote:"One habit. One step. One breath. That's your anchor for today."},
+  {word:'Rise',quote:"Every expert was once a beginner who didn't quit."},
+  {word:'Calm',quote:"You don't have to have it all figured out. Just figure out the next step."},
+  {word:'Bloom',quote:"Growth happens in the messy middle, not just at the finish line."},
+  {word:'Grit',quote:"It's not talent. It's showing up on the days you really don't want to."},
+  {word:'Light',quote:"You bring something to this world that no one else can. Don't dim that."},
+  {word:'Move',quote:"Action cures anxiety. Even the tiniest action."},
+  {word:'Peace',quote:"You don't owe the world your productivity. You owe yourself peace."},
+  {word:'Wild',quote:"Your different brain is your superpower. The world needs how you think."},
+  {word:'Shine',quote:"You're not behind. You're on your own timeline, and it's valid."},
+];
+
+function setDailyQuote() {
+  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
+  const idx = dayOfYear % DAILY_QUOTES.length;
+  const q = DAILY_QUOTES[idx];
+  const label = document.getElementById('quote-label');
+  const quote = document.getElementById('daily-quote');
+  if(label) label.textContent = `✦ ${q.word}`;
+  if(quote) quote.textContent = q.quote;
+}
+setDailyQuote();
 
 // ═══════════════════════════════════════
 // VIBE ONBOARDING
@@ -1488,15 +1633,31 @@ function renderHomeTasks() {
     const isDaily = !!t.recurrence;
 
     let stepsHTML = '';
-    if(expanded && steps.length > 0) {
-      stepsHTML = `<div class="task-steps-expand">
-        ${steps.map(s => `<div class="task-step-item">
+    if(expanded) {
+      const stepsListHTML = steps.length > 0 ? steps.map(s => `<div class="task-step-item">
           <div class="task-step-check ${s.completed?'done':''}" onclick="event.stopPropagation();toggleTaskStep('${t.id}','${s.id}')">
             ${s.completed?`<svg width="9" height="9" viewBox="0 0 9 9"><polyline points="1.5,4.5 3.5,6.5 7.5,2.5" fill="none" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>`:''}
           </div>
           <span class="task-step-name ${s.completed?'done':''}">${s.title}</span>
           ${s.time_estimate||s.timeEstimate?`<span class="task-step-time">${s.time_estimate||s.timeEstimate}</span>`:''}
-        </div>`).join('')}
+        </div>`).join('') : '';
+
+      stepsHTML = `<div class="task-steps-expand">
+        ${stepsListHTML}
+        <div class="task-actions">
+          <button class="task-action-btn complete" onclick="event.stopPropagation();completeTask('${t.id}')">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Done
+          </button>
+          <button class="task-action-btn edit" onclick="event.stopPropagation();openTaskEdit('${t.id}')">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8.5 1.5l2 2-6 6H2.5v-2l6-6z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Edit
+          </button>
+          <button class="task-action-btn delete" onclick="event.stopPropagation();openTaskDelete('${t.id}')">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 3.5h6M4.5 3.5V2.5h3v1M4.5 5v4M7.5 5v4M3.5 3.5l.5 7h4l.5-7" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Delete
+          </button>
+        </div>
       </div>`;
     }
 
@@ -1578,6 +1739,89 @@ async function toggleTaskStep(taskId, stepId) {
     updateStats();
     renderRewards();
   } catch(e) { console.warn('Toggle step error:', e); }
+}
+
+// ═══════════════════════════════════════
+// TASK EDIT / COMPLETE / DELETE
+// ═══════════════════════════════════════
+let editingTaskId = null;
+let deletingTaskId = null;
+
+function openTaskEdit(taskId) {
+  const task = tasks.find(t => t.id === taskId);
+  if(!task) return;
+  editingTaskId = taskId;
+  document.getElementById('task-edit-title').value = task.title;
+  document.getElementById('task-edit-date').value = task.dueDate || '';
+  document.getElementById('task-edit-recurrence').value = task.recurrence || '';
+  document.getElementById('task-edit-sub').textContent = `Editing: ${task.title}`;
+  document.getElementById('task-edit-modal').classList.add('open');
+}
+
+async function saveTaskEdit() {
+  if(!editingTaskId) return;
+  const title = document.getElementById('task-edit-title').value.trim();
+  const dueDate = document.getElementById('task-edit-date').value || null;
+  const recurrence = document.getElementById('task-edit-recurrence').value || null;
+  if(!title) return;
+
+  try {
+    const data = await api(`/api/tasks/${editingTaskId}`, {
+      method:'PUT',
+      body:JSON.stringify({ title, dueDate, recurrence })
+    });
+    // Update local task
+    const task = tasks.find(t => t.id === editingTaskId);
+    if(task) {
+      task.title = title;
+      task.dueDate = dueDate;
+      task.recurrence = recurrence;
+    }
+    if(data.xpTotal !== undefined) xpTotal = data.xpTotal;
+    document.getElementById('task-edit-modal').classList.remove('open');
+    editingTaskId = null;
+    renderHomeTasks();
+    updateStats();
+  } catch(e) { console.warn('Edit task error:', e); }
+}
+
+async function completeTask(taskId) {
+  try {
+    const data = await api(`/api/tasks/${taskId}`, {
+      method:'PUT',
+      body:JSON.stringify({ status:'completed' })
+    });
+    const task = tasks.find(t => t.id === taskId);
+    if(task) task.status = 'completed';
+    if(data.xpTotal !== undefined) xpTotal = data.xpTotal;
+    const xpEarned = task?.xpReward || 50;
+    showXPPop(`+${xpEarned} XP`);
+    dailyXP += xpEarned;
+    expandedTaskId = null;
+    renderHomeTasks();
+    updateStats();
+    renderRewards();
+  } catch(e) { console.warn('Complete task error:', e); }
+}
+
+function openTaskDelete(taskId) {
+  const task = tasks.find(t => t.id === taskId);
+  if(!task) return;
+  deletingTaskId = taskId;
+  document.getElementById('task-delete-name').textContent = `"${task.title}" will be removed along with all its steps. This can't be undone.`;
+  document.getElementById('task-delete-modal').classList.add('open');
+}
+
+async function confirmDeleteTask() {
+  if(!deletingTaskId) return;
+  try {
+    await api(`/api/tasks/${deletingTaskId}`, { method:'DELETE' });
+    tasks = tasks.filter(t => t.id !== deletingTaskId);
+    document.getElementById('task-delete-modal').classList.remove('open');
+    deletingTaskId = null;
+    expandedTaskId = null;
+    renderHomeTasks();
+  } catch(e) { console.warn('Delete task error:', e); }
 }
 
 function showXPPop(text) {
@@ -1700,9 +1944,17 @@ function cancelRename(){
 function inviteFriend(){
   const inviterName=currentUser?currentUser.name:'Your friend';
   const appUrl='https://parahype.app';
-  const message=`${inviterName} invited you to join ParaHype — the ADHD hype buddy app! Come be my buddy and let's keep each other on track 💜\n\n${appUrl}`;
+  const message=`${inviterName} invited you to join ParaHype — the hype buddy app for neurodivergent brains! Come be my buddy and let's keep each other on track 💜\n\n${appUrl}`;
   const subject=`${inviterName} wants you on ParaHype!`;
-  if(navigator.share){navigator.share({title:'Join me on ParaHype!',text:message,url:appUrl});return;}
+  if(navigator.share){
+    navigator.share({title:'Join me on ParaHype!',text:message,url:appUrl}).catch(()=>{
+      // Fallback if share fails
+      document.getElementById('invite-email-link').href=`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+      document.getElementById('invite-sms-link').href=`sms:?&body=${encodeURIComponent(message)}`;
+      document.getElementById('invite-modal').classList.add('open');
+    });
+    return;
+  }
   document.getElementById('invite-email-link').href=`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
   document.getElementById('invite-sms-link').href=`sms:?&body=${encodeURIComponent(message)}`;
   document.getElementById('invite-modal').classList.add('open');
@@ -1711,9 +1963,37 @@ function inviteFriend(){
 // ═══════════════════════════════════════
 // SUBSCRIBE
 // ═══════════════════════════════════════
-function openSubscribeModal(){document.getElementById('subscribe-modal').classList.add('open');}
+let selectedSubTier = 'monthly';
+const SUB_PRICES = { weekly:'$2.99 / week', monthly:'$9.99 / month', yearly:'$79.99 / year' };
+
+function openSubscribeModal(){
+  selectedSubTier = 'monthly';
+  updateSubTierUI();
+  document.getElementById('subscribe-modal').classList.add('open');
+}
 function closeSubscribeModal(){document.getElementById('subscribe-modal').classList.remove('open');}
 function handleModalOverlayClick(e){if(e.target===document.getElementById('subscribe-modal'))closeSubscribeModal();}
+
+function selectSubTier(tier) {
+  selectedSubTier = tier;
+  updateSubTierUI();
+}
+
+function updateSubTierUI() {
+  ['weekly','monthly','yearly'].forEach(t => {
+    const el = document.getElementById('sub-'+t);
+    if(!el) return;
+    if(t === selectedSubTier) {
+      el.style.borderColor = 'var(--accent)';
+      el.style.background = 'rgba(124,58,237,0.08)';
+    } else {
+      el.style.borderColor = 'var(--border)';
+      el.style.background = 'var(--bg)';
+    }
+  });
+  const btn = document.getElementById('sub-btn');
+  if(btn) btn.textContent = `Subscribe — ${SUB_PRICES[selectedSubTier]}`;
+}
 
 function confirmSubscribe(){
   isSubscribed=true;localStorage.setItem('ph_subscribed','true');
@@ -1729,8 +2009,18 @@ function confirmSubscribe(){
 }
 
 // ═══════════════════════════════════════
-// VOICE (TTS)
+// PASSWORD TOGGLE
 // ═══════════════════════════════════════
+function togglePassVis(inputId, btn) {
+  const inp = document.getElementById(inputId);
+  if(!inp) return;
+  const showing = inp.type === 'text';
+  inp.type = showing ? 'password' : 'text';
+  btn.innerHTML = showing
+    ? `<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M1.5 9s3-5.5 7.5-5.5S16.5 9 16.5 9s-3 5.5-7.5 5.5S1.5 9 1.5 9z" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.2"/></svg>`
+    : `<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M1.5 9s3-5.5 7.5-5.5S16.5 9 16.5 9s-3 5.5-7.5 5.5S1.5 9 1.5 9z" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.2"/><line x1="2" y1="2" x2="16" y2="16" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>`;
+}
+
 // ═══════════════════════════════════════
 // VOICE (TTS with voice picker)
 // ═══════════════════════════════════════
@@ -2011,7 +2301,7 @@ function toggleMic(){
 // EVENTS
 // ═══════════════════════════════════════
 document.getElementById('home-screen').addEventListener('click',e=>{
-  if(e.target.closest('.hype-icon-wrap')||e.target.closest('.hype-msg')) toggleCoach();
+  if(e.target.closest('.hype-icon-wrap')) toggleCoach();
 });
 
 // ═══════════════════════════════════════
