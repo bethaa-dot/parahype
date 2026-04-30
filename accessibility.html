@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="theme-color" content="#0F0A1E"/>
+<title>Accessibility — ParaHype</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=Space+Grotesk:wght@500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0F0A1E;--surface:#1A1030;--accent:#7C3AED;--accent2:#A78BFA;--text:#F5F0FF;--muted:#8B7BAA;--border:rgba(124,58,237,0.2);--green:#10B981}
+html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.7}
+.container{max-width:680px;margin:0 auto;padding:40px 24px 60px}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--accent2);text-decoration:none;font-size:13px;margin-bottom:28px}
+.back-link:hover{text-decoration:underline}
+h1{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;margin-bottom:6px}
+.last-updated{font-size:12px;color:var(--muted);margin-bottom:32px}
+h2{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;margin-top:32px;margin-bottom:12px;color:var(--accent2)}
+h3{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;margin-top:20px;margin-bottom:8px}
+p{font-size:14px;color:var(--text);margin-bottom:14px;line-height:1.7}
+ul{margin:0 0 14px 20px;font-size:14px;color:var(--text);line-height:1.7}
+li{margin-bottom:6px}
+a{color:var(--accent2)}
+.highlight{background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:16px 18px;margin:16px 0}
+.highlight p{margin-bottom:0}
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.feature-card{background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:14px 16px}
+.feature-icon{font-size:20px;margin-bottom:6px}
+.feature-title{font-size:13px;font-weight:600;font-family:'Space Grotesk',sans-serif;margin-bottom:4px}
+.feature-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.check-list{list-style:none;margin-left:0;padding-left:0}
+.check-list li{padding-left:24px;position:relative;margin-bottom:8px}
+.check-list li::before{content:'✓';position:absolute;left:0;color:var(--green);font-weight:700}
+.wip-list li::before{content:'◯';color:var(--accent2)}
+.divider{height:0.5px;background:var(--border);margin:32px 0}
+@media(max-width:480px){.feature-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+<a href="javascript:void(0)" onclick="history.back()" class="back-link">
+<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L3 7l6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+Back to ParaHype
+</a>
+
+<h1>Accessibility</h1>
+<div class="last-updated">Last updated: April 29, 2026</div>
+
+<div class="highlight">
+<p><strong>Our commitment:</strong> ParaHype is built for neurodivergent brains. Our goal is to be neuroinclusive. Accessibility isn't an afterthought — it's core to why this app exists. We believe productivity tools should adapt to how you think, not the other way around.</p>
+</div>
+
+<h2>Built for different brains</h2>
+<p>ParaHype is designed from the ground up for people with ADHD, Autism, AuDHD, OCD, and other neurodivergent conditions. Every design decision considers cognitive accessibility alongside physical and sensory accessibility.</p>
+
+<div class="feature-grid">
+<div class="feature-card">
+<div class="feature-icon">🧠</div>
+<div class="feature-title">Cognitive load</div>
+<div class="feature-desc">Tasks are broken into tiny steps. No overwhelming walls of text. One thing at a time.</div>
+</div>
+<div class="feature-card">
+<div class="feature-icon">🎯</div>
+<div class="feature-title">Clear focus</div>
+<div class="feature-desc">Focus timer with visual ring. Pomodoro-sized chunks. Gentle transitions.</div>
+</div>
+<div class="feature-card">
+<div class="feature-icon">💜</div>
+<div class="feature-title">No shame</div>
+<div class="feature-desc">No guilt-tripping for missed days. Positive reinforcement only. XP never goes negative.</div>
+</div>
+<div class="feature-card">
+<div class="feature-icon">🔊</div>
+<div class="feature-title">Voice support</div>
+<div class="feature-desc">Text-to-speech buddy voice. Speech-to-text input. Customizable voice selection.</div>
+</div>
+</div>
+
+<h2>What we currently support</h2>
+
+<h3>Visual accessibility</h3>
+<ul class="check-list">
+<li>High contrast color scheme (light text on dark background, WCAG AA compliant)</li>
+<li>Minimum text size of 10px across the app, with most body text at 13-14px</li>
+<li>Color is never the only way to convey information — icons, text labels, and patterns supplement color</li>
+<li>Progress bars use distinct fill patterns alongside color changes</li>
+<li>Touch targets sized at minimum 44x44px for all interactive elements</li>
+<li>No rapidly flashing content or auto-playing animations that can't be stopped</li>
+</ul>
+
+<h3>Motor accessibility</h3>
+<ul class="check-list">
+<li>All core features accessible via tap/click — no swipe-only gestures required</li>
+<li>Large touch targets on buttons and interactive elements</li>
+<li>No time-limited interactions (except the optional focus timer, which is user-controlled)</li>
+<li>Voice input for coach chat via speech-to-text</li>
+</ul>
+
+<h3>Cognitive accessibility</h3>
+<ul class="check-list">
+<li>Simple, consistent navigation with a fixed tab bar</li>
+<li>Tasks broken into small, manageable steps with time estimates</li>
+<li>Visual progress indicators (progress bars, streak dots, XP counters)</li>
+<li>Six buddy vibes to match different energy and communication needs</li>
+<li>Daily recurring tasks that reset automatically — no need to remember to re-add them</li>
+<li>Positive language throughout — no punitive messaging for incomplete tasks</li>
+<li>Daily quote and word of the day for grounding and inspiration</li>
+</ul>
+
+<h3>Auditory accessibility</h3>
+<ul class="check-list">
+<li>Text-to-speech with customizable voice selection</li>
+<li>Mute button to disable all voice output</li>
+<li>All audio content has text equivalents — nothing is audio-only</li>
+<li>No background audio or music</li>
+</ul>
+
+<h2>What we're working on</h2>
+<ul class="check-list wip-list">
+<li>Full screen reader (VoiceOver / TalkBack) optimization with ARIA labels</li>
+<li>Keyboard navigation support for desktop users</li>
+<li>Reduced motion mode for users sensitive to animation</li>
+<li>High contrast mode toggle for users who need stronger contrast</li>
+<li>Font size adjustment within the app</li>
+<li>Multi-language support</li>
+<li>Dyslexia-friendly font option (OpenDyslexic)</li>
+</ul>
+
+<h2>Standards we follow</h2>
+<p>We aim to meet WCAG 2.1 Level AA guidelines. As a small team, we're making progress toward full compliance and prioritize the most impactful accessibility improvements first.</p>
+
+<h2>Need help or have feedback?</h2>
+<p>Accessibility is an ongoing process. If you encounter a barrier using ParaHype or have suggestions for how we can do better, we genuinely want to hear from you.</p>
+<p>Contact us at: <a href="mailto:access@parahype.app">access@parahype.app</a></p>
+<p>We respond to accessibility concerns within 48 hours and prioritize fixes that remove barriers to using core features.</p>
+
+<div class="divider"></div>
+<p style="font-size:12px;color:var(--muted);text-align:center">ParaHype — your parallel hype buddy for neurodivergent brains</p>
+</div>
+</body>
+</html>
