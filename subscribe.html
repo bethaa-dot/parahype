@@ -312,69 +312,25 @@ body{min-height:100%;background:var(--bg);color:var(--text);font-family:var(--fo
 
   <div class="stripe-container">
 
-    <!--
-    ╔══════════════════════════════════════════════════════════════╗
-    ║  🔧 STRIPE SETUP INSTRUCTIONS                              ║
-    ║                                                              ║
-    ║  Replace the placeholder below with your Stripe Buy Buttons. ║
-    ║                                                              ║
-    ║  1. Go to https://dashboard.stripe.com/payment-links         ║
-    ║  2. Create 2 Payment Links:                                  ║
-    ║     a) "ParaHype Pro Monthly" — $9.99/month (recurring)      ║
-    ║        → Enable 7-day free trial in subscription settings    ║
-    ║     b) "ParaHype Pro Yearly" — $101.89/year (recurring)      ║
-    ║  3. For each link, click "Buy button" tab                    ║
-    ║  4. Copy the <stripe-buy-button> code                        ║
-    ║  5. Paste both below, replacing the placeholder div          ║
-    ║                                                              ║
-    ║  Example of what the code looks like:                        ║
-    ║                                                              ║
-    ║  <stripe-buy-button                                          ║
-    ║    buy-button-id="buy_btn_XXXXXXXXXXXX"                      ║
-    ║    publishable-key="pk_live_XXXXXXXXXXXX"                    ║
-    ║  ></stripe-buy-button>                                       ║
-    ║                                                              ║
-    ╚══════════════════════════════════════════════════════════════╝
-    -->
-
-    <!-- ⬇️ REPLACE THIS PLACEHOLDER WITH YOUR STRIPE BUY BUTTONS ⬇️ -->
-    <div class="stripe-placeholder" id="stripe-placeholder">
-      <div class="stripe-placeholder-title">🔗 Connect Stripe to go live</div>
-      <div class="stripe-placeholder-steps">
-        <strong>Quick setup (5 min):</strong><br><br>
-        1. Log in to <code>dashboard.stripe.com</code><br>
-        2. Go to <strong>Payment Links</strong> → click <strong>+ New</strong><br>
-        3. Create link #1: <strong>ParaHype Pro Monthly — $9.99/mo</strong><br>
-        &nbsp;&nbsp;&nbsp;→ Enable <strong>7-day free trial</strong> in subscription settings<br>
-        4. Create link #2: <strong>ParaHype Pro Yearly — $101.89/year</strong><br>
-        5. Click the <strong>Buy button</strong> tab on each link<br>
-        6. Paste both embed codes in <code>subscribe.html</code> replacing this box<br><br>
-        <span style="color:var(--accent2)">The buy button script is already loaded — just paste your <code>&lt;stripe-buy-button&gt;</code> codes.</span>
-      </div>
-    </div>
-    <!-- ⬆️ REPLACE THIS PLACEHOLDER WITH YOUR STRIPE BUY BUTTONS ⬆️ -->
-
-    <!--
-    UNCOMMENT AND FILL IN YOUR ACTUAL STRIPE BUTTONS:
-
-    <div style="display:flex;flex-direction:column;gap:16px;align-items:center">
-      <div>
-        <div style="font-size:13px;font-weight:600;color:#A78BFA;margin-bottom:8px">Monthly — 7 days free, then $9.99/mo</div>
+    <div style="display:flex;flex-direction:column;gap:20px;align-items:center">
+      <div style="text-align:center;width:100%">
+        <div style="font-size:14px;font-weight:700;color:#A78BFA;margin-bottom:4px;font-family:var(--font)">Pro Monthly</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:14px">7-day free trial · then $9.99/mo</div>
         <stripe-buy-button
-          buy-button-id="buy_btn_XXXXXXXXXXXX"
-          publishable-key="pk_live_XXXXXXXXXXXX"
+          buy-button-id="buy_btn_1TTuR6CdQ5XIZU4oAZpTySv0"
+          publishable-key="pk_live_51TJiNKCdQ5XIZU4o3FD7VrqX2ATH2FNzdfZgMdyDHAcUYezfjEcmweGW7XEDs1CBvARSV3ohZogDgitH8NBv1G8k006GRF2nsB"
         ></stripe-buy-button>
       </div>
       <div style="height:1px;width:80%;background:rgba(124,58,237,0.15)"></div>
-      <div>
-        <div style="font-size:13px;font-weight:600;color:#10B981;margin-bottom:8px">Yearly — $101.89/year (save 15%)</div>
+      <div style="text-align:center;width:100%">
+        <div style="font-size:14px;font-weight:700;color:#10B981;margin-bottom:4px;font-family:var(--font)">Pro Yearly <span style="font-size:11px;background:rgba(16,185,129,0.12);color:#10B981;padding:2px 8px;border-radius:8px;margin-left:6px;font-weight:600">SAVE 15%</span></div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:14px">$8.49/mo · billed $101.89/year</div>
         <stripe-buy-button
-          buy-button-id="buy_btn_YYYYYYYYYYYY"
-          publishable-key="pk_live_XXXXXXXXXXXX"
+          buy-button-id="buy_btn_1TTuQ2CdQ5XIZU4opNTuhulB"
+          publishable-key="pk_live_51TJiNKCdQ5XIZU4o3FD7VrqX2ATH2FNzdfZgMdyDHAcUYezfjEcmweGW7XEDs1CBvARSV3ohZogDgitH8NBv1G8k006GRF2nsB"
         ></stripe-buy-button>
       </div>
     </div>
-    -->
 
   </div>
 
