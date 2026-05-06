@@ -1321,7 +1321,7 @@ function clearAuthError() {
 
 function isValidEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()); }
 const FREE_MEMBERS = [
-  // 'friend@example.com',
+  // 'alicia.betha@gmail.com',
 ];
 function isFreeMember(email) {
   if (!email) return false;
@@ -2040,7 +2040,7 @@ function inviteFriend(){
 // SUBSCRIBE
 // ═══════════════════════════════════════
 let selectedSubTier = 'monthly';
-const SUB_PRICES = { weekly:'$2.99 / week', monthly:'$9.99 / month', yearly:'$79.99 / year' };
+const SUB_PRICES = { weekly:'$2.99 / week', monthly:'$9.99 / month', yearly:'$99.99 / year' };
 function goToSubscribe(){
   closeSubscribeModal();
   window.location.href='subscribe.html';
