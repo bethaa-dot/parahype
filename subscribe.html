@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="theme-color" content="#0A0714"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="description" content="Unlock ParaHype Pro — rename your buddy, unlimited AI coaching, custom rewards, and more. $9.99/month."/>
+<link rel="canonical" href="https://parahype.app/subscribe"/>
+<meta property="og:title" content="ParaHype Pro — Unlock Your Full Hype"/>
+<meta property="og:description" content="Rename your buddy, unlimited AI coaching, custom XP rewards. $9.99/month."/>
+<meta property="og:url" content="https://parahype.app/subscribe"/>
+<meta property="og:type" content="website"/>
+<title>ParaHype Pro — Subscribe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script async src="https://js.stripe.com/v3/buy-button.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --accent:#7C3AED;--accent2:#A78BFA;--accent-deep:#5B21B6;
+  --teal:#0D9488;--amber:#D97706;--green:#10B981;--red:#EF4444;
+  --bg:#0A0714;--surface:#130E24;--card:#1A1333;
+  --border:rgba(124,58,237,0.15);--border-bright:rgba(167,139,250,0.25);
+  --text:#F0EAFF;--text-secondary:#C4B5FD;--muted:#7C6FA0;
+  --font:'Outfit',-apple-system,sans-serif;--mono:'JetBrains Mono',monospace;
+}
+html{height:100%;scroll-behavior:smooth}
+body{min-height:100%;background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── Animations ── */
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes pulse-glow{0%,100%{box-shadow:0 0 30px rgba(124,58,237,0.25)}50%{box-shadow:0 0 60px rgba(124,58,237,0.5)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes checkIn{0%{transform:scale(0)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
+
+.fade-up{opacity:0;transform:translateY(28px);transition:opacity 0.7s ease,transform 0.7s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+.fd1{transition-delay:0.1s}.fd2{transition-delay:0.2s}.fd3{transition-delay:0.3s}.fd4{transition-delay:0.4s}
+
+/* ── Nav ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:rgba(10,7,20,0.85);backdrop-filter:blur(16px);border-bottom:0.5px solid var(--border)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+.nav-logo-mark{width:32px;height:32px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.nav-brand{font-size:16px;font-weight:800;letter-spacing:-0.01em}
+.nav-back{font-size:13px;color:var(--accent2);text-decoration:none;font-weight:500;display:flex;align-items:center;gap:6px;transition:color 0.15s}
+.nav-back:hover{color:#E0CBFF}
+
+/* ── Hero ── */
+.sub-hero{position:relative;padding:120px 24px 60px;text-align:center;overflow:hidden}
+.sub-hero::before{content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:160vw;height:160vw;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,0.12) 0%,rgba(124,58,237,0.03) 35%,transparent 65%)}
+
+/* Floating orbs */
+.orb{position:absolute;border-radius:50%;filter:blur(0.5px)}
+.orb-1{width:7px;height:7px;background:#A78BFA;top:18%;left:10%;animation:float 7s ease-in-out infinite;opacity:0.5}
+.orb-2{width:5px;height:5px;background:#0D9488;top:25%;right:15%;animation:float 9s ease-in-out infinite 1.5s;opacity:0.4}
+.orb-3{width:6px;height:6px;background:#D97706;bottom:15%;left:8%;animation:float 8s ease-in-out infinite 2s;opacity:0.4}
+.orb-4{width:4px;height:4px;background:#EC4899;bottom:20%;right:10%;animation:float 6s ease-in-out infinite 0.5s;opacity:0.5}
+
+.sub-content{position:relative;z-index:1;max-width:560px;margin:0 auto}
+.sub-eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(167,139,250,0.06));border:0.5px solid var(--border-bright);border-radius:20px;font-size:12px;color:var(--text-secondary);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:20px;animation:fadeUp 0.6s ease both}
+.sub-title{font-size:clamp(2.2rem,7vw,3.6rem);font-weight:900;letter-spacing:-0.04em;line-height:1.05;margin-bottom:12px;animation:fadeUp 0.7s ease 0.1s both}
+.sub-title .grad{background:linear-gradient(135deg,#A78BFA 0%,#E0CBFF 50%,#A78BFA 100%);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 4s linear infinite}
+.sub-tagline{font-size:clamp(1rem,2.5vw,1.15rem);color:var(--muted);font-weight:300;line-height:1.6;margin-bottom:36px;animation:fadeUp 0.7s ease 0.2s both}
+
+/* ── Pricing cards ── */
+.pricing-section{padding:0 24px 80px;max-width:880px;margin:0 auto}
+.pricing-grid{display:grid;grid-template-columns:1fr;gap:20px}
+@media(min-width:640px){.pricing-grid{grid-template-columns:1fr 1fr 1fr}}
+
+.price-card{background:var(--surface);border-radius:24px;border:1px solid var(--border);padding:32px 24px;position:relative;overflow:hidden;transition:transform 0.2s,border-color 0.2s,box-shadow 0.2s}
+.price-card:hover{transform:translateY(-3px)}
+.price-card.featured{border-color:rgba(167,139,250,0.4);box-shadow:0 8px 48px rgba(124,58,237,0.15)}
+.price-card.featured::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#7C3AED,#A78BFA,#C084FC)}
+.price-card.best-value{border-color:rgba(16,185,129,0.3)}
+.price-card.best-value::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#10B981,#34D399,#6EE7B7)}
+.price-badge{position:absolute;top:16px;right:16px;padding:4px 12px;background:linear-gradient(135deg,#7C3AED,#5B21B6);border-radius:20px;font-size:10px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:0.08em}
+.price-badge.save-badge{background:linear-gradient(135deg,#10B981,#059669)}
+.price-name{font-size:18px;font-weight:800;margin-bottom:6px;letter-spacing:-0.01em}
+.price-desc{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5}
+.price-amount{display:flex;align-items:baseline;gap:4px;margin-bottom:4px}
+.price-dollar{font-size:38px;font-weight:900;letter-spacing:-0.03em;line-height:1}
+.price-period{font-size:14px;color:var(--muted);font-weight:400}
+.price-annual{font-size:12px;color:var(--accent2);margin-bottom:24px;font-weight:500}
+.price-strike{font-size:16px;color:var(--muted);text-decoration:line-through;font-weight:400;opacity:0.6}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.price-features li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text-secondary);line-height:1.5}
+.price-features li svg{width:18px;height:18px;flex-shrink:0;margin-top:1px}
+.check-icon{color:var(--green)}
+.star-icon{color:var(--amber)}
+.price-features li.muted-feat{color:var(--muted)}
+.price-features li.muted-feat svg{color:var(--muted);opacity:0.5}
+
+.btn-price{display:block;width:100%;padding:16px;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);letter-spacing:0.01em;text-align:center;transition:transform 0.15s,box-shadow 0.15s;text-decoration:none}
+.btn-price:active{transform:scale(0.97)}
+.btn-free{background:rgba(124,58,237,0.1);border:1px solid var(--border-bright);color:var(--text-secondary)}
+.btn-free:hover{background:rgba(124,58,237,0.15);border-color:var(--accent2)}
+.btn-pro{background:linear-gradient(135deg,#7C3AED,#6D28D9);color:#fff;box-shadow:0 8px 32px rgba(124,58,237,0.35),inset 0 1px 0 rgba(255,255,255,0.1)}
+.btn-pro:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(124,58,237,0.5)}
+.btn-yearly{background:linear-gradient(135deg,#10B981,#059669);color:#fff;box-shadow:0 8px 32px rgba(16,185,129,0.3),inset 0 1px 0 rgba(255,255,255,0.1)}
+.btn-yearly:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(16,185,129,0.45)}
+
+/* ── Stripe buy button container ── */
+.stripe-section{padding:0 24px 60px;max-width:560px;margin:0 auto;text-align:center}
+.stripe-section-title{font-size:14px;font-weight:600;color:var(--accent2);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em}
+.stripe-section-sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5}
+.stripe-container{background:var(--surface);border-radius:20px;border:1px solid var(--border);padding:32px 24px;margin-bottom:16px}
+.stripe-container stripe-buy-button{display:block;margin:0 auto}
+.stripe-secure{display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;color:var(--muted);margin-top:16px}
+.stripe-secure svg{width:14px;height:14px;color:var(--green)}
+.stripe-note{font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6}
+
+/* ── Placeholder for Stripe (before user configures) ── */
+.stripe-placeholder{padding:24px;background:rgba(124,58,237,0.06);border:1.5px dashed var(--border-bright);border-radius:16px;text-align:center}
+.stripe-placeholder-title{font-size:15px;font-weight:700;margin-bottom:8px;color:var(--text-secondary)}
+.stripe-placeholder-steps{font-size:13px;color:var(--muted);line-height:1.8;text-align:left;max-width:380px;margin:0 auto}
+.stripe-placeholder-steps code{background:rgba(124,58,237,0.12);padding:2px 7px;border-radius:6px;font-size:12px;font-family:var(--mono);color:var(--accent2)}
+
+/* ── Comparison table ── */
+.compare{padding:40px 24px 80px;max-width:700px;margin:0 auto}
+.compare-title{font-size:22px;font-weight:900;text-align:center;letter-spacing:-0.02em;margin-bottom:8px}
+.compare-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:32px}
+.compare-table{width:100%;border-collapse:collapse;font-size:14px}
+.compare-table thead th{padding:12px 16px;text-align:left;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;font-weight:600;border-bottom:1px solid var(--border)}
+.compare-table thead th:not(:first-child){text-align:center}
+.compare-table tbody td{padding:14px 16px;border-bottom:0.5px solid rgba(124,58,237,0.08)}
+.compare-table tbody td:not(:first-child){text-align:center}
+.compare-table tbody tr:hover{background:rgba(124,58,237,0.03)}
+.tbl-check{color:var(--green)}
+.tbl-x{color:var(--muted);opacity:0.4}
+.tbl-limit{font-size:12px;color:var(--amber);font-weight:500}
+.tbl-unlimited{font-size:12px;color:var(--green);font-weight:600}
+.pro-col{color:var(--accent2);font-weight:700}
+
+/* ── FAQ ── */
+.faq{padding:0 24px 80px;max-width:640px;margin:0 auto}
+.faq-title{font-size:22px;font-weight:900;text-align:center;letter-spacing:-0.02em;margin-bottom:32px}
+.faq-item{background:var(--surface);border-radius:16px;border:0.5px solid var(--border);margin-bottom:12px;overflow:hidden;cursor:pointer;transition:border-color 0.2s}
+.faq-item:hover{border-color:var(--border-bright)}
+.faq-q{padding:18px 20px;display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:600}
+.faq-q svg{width:16px;height:16px;color:var(--muted);transition:transform 0.2s;flex-shrink:0}
+.faq-item.open .faq-q svg{transform:rotate(180deg)}
+.faq-a{padding:0 20px 18px;font-size:13px;color:var(--muted);line-height:1.6;display:none}
+.faq-item.open .faq-a{display:block}
+
+/* ── Guarantee ── */
+.guarantee{padding:0 24px 80px;max-width:500px;margin:0 auto;text-align:center}
+.guarantee-card{background:var(--surface);border-radius:20px;border:1px solid rgba(16,185,129,0.2);padding:32px 24px}
+.guarantee-icon{font-size:36px;margin-bottom:12px}
+.guarantee-title{font-size:18px;font-weight:800;margin-bottom:8px}
+.guarantee-text{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* ── Footer ── */
+.footer{padding:2rem 1.5rem;text-align:center;border-top:0.5px solid var(--border)}
+.footer-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px}
+.footer-logo-mark{width:28px;height:28px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.footer-brand{font-size:15px;font-weight:800;letter-spacing:-0.01em}
+.footer-copy{font-size:11px;color:var(--muted);font-weight:400;margin-bottom:10px}
+.footer-links{display:flex;gap:16px;justify-content:center}
+.footer-links a{font-size:12px;color:var(--muted);text-decoration:none;font-weight:500;transition:color 0.15s}
+.footer-links a:hover{color:var(--accent2)}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="nav">
+  <a href="landing.html" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M5 8l3 3 5-6" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <span class="nav-brand">ParaHype</span>
+  </a>
+  <a href="index.html" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L3 7l6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Back to app
+  </a>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="sub-hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+  <div class="sub-content">
+    <div class="sub-eyebrow">⚡ ParaHype Pro</div>
+    <h1 class="sub-title">Unlock your <span class="grad">full hype</span></h1>
+    <p class="sub-tagline">Try everything free for 7 days. Then unlock unlimited AI coaching, buddy renaming, custom rewards, and more — from just $8.49/month.</p>
+  </div>
+</section>
+
+<!-- ── PRICING CARDS ── -->
+<section class="pricing-section">
+  <div class="pricing-grid">
+
+    <!-- 7-day free trial -->
+    <div class="price-card fade-up">
+      <div class="price-name">Free Trial</div>
+      <div class="price-desc">Try everything free for 7 days</div>
+      <div class="price-amount">
+        <span class="price-dollar">$0</span>
+        <span class="price-period">/ 7 days</span>
+      </div>
+      <div class="price-annual" style="color:var(--green)">Then $9.99/mo · Cancel anytime</div>
+      <ul class="price-features">
+        <li>
+          <svg viewBox="0 0 18 18" class="check-icon"><path d="M3 9l4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Full Pro access for 7 days
+        </li>
+        <li>
+          <svg viewBox="0 0 18 18" class="check-icon"><path d="M3 9l4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          All 6 buddy vibes
+        </li>
+        <li>
+          <svg viewBox="0 0 18 18" class="check-icon"><path d="M3 9l4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Unlimited AI coaching
+        </li>
+        <li>
+          <svg viewBox="0 0 18 18" class="check-icon"><path d="M3 9l4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Habit tracking & streaks
+        </li>
+        <li>
+          <svg viewBox="0 0 18 18" class="check-icon"><path d="M3 9l4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          No credit card upfront
+        </li>
+      </ul>
+      <button class="btn-price btn-free" onclick="scrollToCheckout()">Start Free Trial</button>
+    </div>
+
+    <!-- Pro Monthly -->
+    <div class="price-card featured fade-up fd1">
+      <div class="price-badge">Most Popular</div>
+      <div class="price-name">Pro Monthly</div>
+      <div class="price-desc">The full ParaHype experience, unlocked</div>
+      <div class="price-amount">
+        <span class="price-dollar">$9<span style="font-size:26px">.99</span></span>
+        <span class="price-period">/ month</span>
+      </div>
+      <div class="price-annual">Billed monthly · Cancel anytime</div>
+      <ul class="price-features">
+        <li>
+          <svg viewBox="0 0 18 18" class="star-icon"><path d="M9 2l2 3 3.5.5-2.5 2.5.6 3.5L9 10l-3.6 1.5.6-3.5L3.5 5.5 7 5z" fill="currentColor"/></svg>
+          <strong>Unlimited</strong> AI coach messages
+        </li>
+        <li>
+          <svg viewBox="0 0 18 18" class="star-icon"><path d="M9 2l2 3 3.5.5-2.5 2.5.6 3.5L9 10l-3.6 1.5.6-3.5L3.5 5.5 7 5z" fill="currentColor"/></svg>
+          <strong>Rename</strong> your buddy anything
+        </li>
+        <li>
+          <svg viewBox="0 0 18 18" class="star-icon"><path d="M9 2l2 3 3.5.5-2.5 2.5.6 3.5L9 10l-3.6 1.5.6-3.5L3.5 5.5 7 5z" fill="currentColor"/></svg>
+          Custom XP reward categories
+        </li>
+        <li>
+          <svg viewBox="0 0 18 18" class="star-icon"><path d="M9 2l2 3 3.5.5-2.5 2.5.6 3.5L9 10l-3.6 1.5.6-3.5L3.5 5.5 7 5z" fill="currentColor"/></svg>
+          Priority hype notifications
+        </li>
+        <li>
+          <svg viewBox="0 0 18 18" class="star-icon"><path d="M9 2l2 3 3.5.5-2.5 2.5.6 3.5L9 10l-3.6 1.5.6-3.5L3.5 5.5 7 5z" fill="currentColor"/></svg>
+          Early access to new features
+        </li>
+      </ul>
+      <button class="btn-price btn-pro" onclick="scrollToCheckout()">Subscribe Monthly →</button>
+    </div>
+
+    <!-- Pro Yearly -->
+    <div class="price-card best-value fade-up fd2">
+      <div class="price-badge save-badge">Save 15%</div>
+      <div class="price-name">Pro Yearly</div>
+      <div class="price-desc">Best value — commit to your growth</div>
+      <div class="price-amount">
+        <span class="price-dollar">$8<span style="font-size:26px">.49</span></span>
+        <span class="price-period">/ month</span>
+      </div>
+      <div class="price-annual"><span class="price-strike">$119.88</span>&nbsp; $101.89/year · Billed annually</div>
+      <ul class="price-features">
+        <li>
+          <svg viewBox="0 0 18 18" class="check-icon"><path d="M3 9l4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Everything in Pro Monthly
+        </li>
+        <li>
+          <svg viewBox="0 0 18 18" class="star-icon"><path d="M9 2l2 3 3.5.5-2.5 2.5.6 3.5L9 10l-3.6 1.5.6-3.5L3.5 5.5 7 5z" fill="currentColor"/></svg>
+          <strong>Save $17.99</strong> per year
+        </li>
+        <li>
+          <svg viewBox="0 0 18 18" class="star-icon"><path d="M9 2l2 3 3.5.5-2.5 2.5.6 3.5L9 10l-3.6 1.5.6-3.5L3.5 5.5 7 5z" fill="currentColor"/></svg>
+          Lock in your price forever
+        </li>
+        <li>
+          <svg viewBox="0 0 18 18" class="star-icon"><path d="M9 2l2 3 3.5.5-2.5 2.5.6 3.5L9 10l-3.6 1.5.6-3.5L3.5 5.5 7 5z" fill="currentColor"/></svg>
+          Bonus: exclusive yearly-only badges
+        </li>
+        <li>
+          <svg viewBox="0 0 18 18" class="star-icon"><path d="M9 2l2 3 3.5.5-2.5 2.5.6 3.5L9 10l-3.6 1.5.6-3.5L3.5 5.5 7 5z" fill="currentColor"/></svg>
+          Priority support
+        </li>
+      </ul>
+      <button class="btn-price btn-yearly" onclick="scrollToCheckout()">Subscribe Yearly →</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── STRIPE CHECKOUT SECTION ── -->
+<section class="stripe-section fade-up" id="checkout">
+  <div class="stripe-section-title">Secure Checkout</div>
+  <div class="stripe-section-sub">Powered by Stripe. 7-day free trial. Cancel anytime.</div>
+
+  <div class="stripe-container">
+
+    <!--
+    ╔══════════════════════════════════════════════════════════════╗
+    ║  🔧 STRIPE SETUP INSTRUCTIONS                              ║
+    ║                                                              ║
+    ║  Replace the placeholder below with your Stripe Buy Buttons. ║
+    ║                                                              ║
+    ║  1. Go to https://dashboard.stripe.com/payment-links         ║
+    ║  2. Create 2 Payment Links:                                  ║
+    ║     a) "ParaHype Pro Monthly" — $9.99/month (recurring)      ║
+    ║        → Enable 7-day free trial in subscription settings    ║
+    ║     b) "ParaHype Pro Yearly" — $101.89/year (recurring)      ║
+    ║  3. For each link, click "Buy button" tab                    ║
+    ║  4. Copy the <stripe-buy-button> code                        ║
+    ║  5. Paste both below, replacing the placeholder div          ║
+    ║                                                              ║
+    ║  Example of what the code looks like:                        ║
+    ║                                                              ║
+    ║  <stripe-buy-button                                          ║
+    ║    buy-button-id="buy_btn_XXXXXXXXXXXX"                      ║
+    ║    publishable-key="pk_live_XXXXXXXXXXXX"                    ║
+    ║  ></stripe-buy-button>                                       ║
+    ║                                                              ║
+    ╚══════════════════════════════════════════════════════════════╝
+    -->
+
+    <!-- ⬇️ REPLACE THIS PLACEHOLDER WITH YOUR STRIPE BUY BUTTONS ⬇️ -->
+    <div class="stripe-placeholder" id="stripe-placeholder">
+      <div class="stripe-placeholder-title">🔗 Connect Stripe to go live</div>
+      <div class="stripe-placeholder-steps">
+        <strong>Quick setup (5 min):</strong><br><br>
+        1. Log in to <code>dashboard.stripe.com</code><br>
+        2. Go to <strong>Payment Links</strong> → click <strong>+ New</strong><br>
+        3. Create link #1: <strong>ParaHype Pro Monthly — $9.99/mo</strong><br>
+        &nbsp;&nbsp;&nbsp;→ Enable <strong>7-day free trial</strong> in subscription settings<br>
+        4. Create link #2: <strong>ParaHype Pro Yearly — $101.89/year</strong><br>
+        5. Click the <strong>Buy button</strong> tab on each link<br>
+        6. Paste both embed codes in <code>subscribe.html</code> replacing this box<br><br>
+        <span style="color:var(--accent2)">The buy button script is already loaded — just paste your <code>&lt;stripe-buy-button&gt;</code> codes.</span>
+      </div>
+    </div>
+    <!-- ⬆️ REPLACE THIS PLACEHOLDER WITH YOUR STRIPE BUY BUTTONS ⬆️ -->
+
+    <!--
+    UNCOMMENT AND FILL IN YOUR ACTUAL STRIPE BUTTONS:
+
+    <div style="display:flex;flex-direction:column;gap:16px;align-items:center">
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#A78BFA;margin-bottom:8px">Monthly — 7 days free, then $9.99/mo</div>
+        <stripe-buy-button
+          buy-button-id="buy_btn_XXXXXXXXXXXX"
+          publishable-key="pk_live_XXXXXXXXXXXX"
+        ></stripe-buy-button>
+      </div>
+      <div style="height:1px;width:80%;background:rgba(124,58,237,0.15)"></div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#10B981;margin-bottom:8px">Yearly — $101.89/year (save 15%)</div>
+        <stripe-buy-button
+          buy-button-id="buy_btn_YYYYYYYYYYYY"
+          publishable-key="pk_live_XXXXXXXXXXXX"
+        ></stripe-buy-button>
+      </div>
+    </div>
+    -->
+
+  </div>
+
+  <div class="stripe-secure">
+    <svg viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 7V5a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+    Secured by Stripe · 256-bit encryption
+  </div>
+  <div class="stripe-note">Cancel anytime from your Stripe billing portal. No contracts, no surprises.</div>
+</section>
+
+<!-- ── COMPARISON TABLE ── -->
+<section class="compare fade-up">
+  <div class="compare-title">Plan Comparison</div>
+  <div class="compare-sub">Everything at a glance</div>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Trial</th>
+        <th class="pro-col">Monthly</th>
+        <th style="color:var(--green);font-weight:700">Yearly</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Price</td>
+        <td><span style="font-size:12px;color:var(--green);font-weight:600">7 days free</span></td>
+        <td><span style="font-size:12px;font-weight:600">$9.99/mo</span></td>
+        <td><span style="font-size:12px;color:var(--green);font-weight:600">$8.49/mo</span></td>
+      </tr>
+      <tr>
+        <td>Buddy vibes</td>
+        <td><span class="tbl-check">6</span></td>
+        <td><span class="tbl-check">6</span></td>
+        <td><span class="tbl-check">6</span></td>
+      </tr>
+      <tr>
+        <td>Habit tracking</td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-check"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-check"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-check"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+      </tr>
+      <tr>
+        <td>Focus timer</td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-check"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-check"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-check"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+      </tr>
+      <tr>
+        <td>AI coach messages</td>
+        <td><span class="tbl-unlimited">Unlimited</span></td>
+        <td><span class="tbl-unlimited">Unlimited</span></td>
+        <td><span class="tbl-unlimited">Unlimited</span></td>
+      </tr>
+      <tr>
+        <td>Rename buddy</td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-check"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-check"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-check"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+      </tr>
+      <tr>
+        <td>Custom rewards</td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-check"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-check"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-check"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+      </tr>
+      <tr>
+        <td>Priority notifications</td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-check"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-check"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-check"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+      </tr>
+      <tr>
+        <td>Exclusive badges</td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-x"><line x1="5" y1="5" x2="11" y2="11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="11" y1="5" x2="5" y2="11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-x"><line x1="5" y1="5" x2="11" y2="11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="11" y1="5" x2="5" y2="11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-check"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+      </tr>
+      <tr>
+        <td>Priority support</td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-x"><line x1="5" y1="5" x2="11" y2="11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="11" y1="5" x2="5" y2="11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-x"><line x1="5" y1="5" x2="11" y2="11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="11" y1="5" x2="5" y2="11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+        <td><svg width="16" height="16" viewBox="0 0 16 16" class="tbl-check"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ── FAQ ── -->
+<section class="faq fade-up">
+  <div class="faq-title">Questions? We got you.</div>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">
+      Can I cancel anytime?
+      <svg viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="faq-a">Yes! You can cancel your Pro subscription anytime from your Stripe billing portal. No questions asked, no hidden fees. Your Pro features will stay active until the end of your current billing period.</div>
+  </div>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">
+      How does the 7-day free trial work?
+      <svg viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="faq-a">You get full Pro access for 7 days — unlimited AI coaching, buddy renaming, custom rewards, everything. After 7 days, you'll be moved to the $9.99/month plan unless you cancel. You can cancel anytime during the trial and you won't be charged a thing.</div>
+  </div>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">
+      What payment methods do you accept?
+      <svg viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="faq-a">We use Stripe, which supports all major credit and debit cards (Visa, Mastercard, American Express), Apple Pay, Google Pay, and many local payment methods depending on your region.</div>
+  </div>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">
+      What's the difference between monthly and yearly?
+      <svg viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="faq-a">Both plans include the exact same Pro features. The yearly plan saves you 15% — you pay $101.89 upfront (that's $8.49/month instead of $9.99). You also get exclusive yearly badges and priority support as a thank-you for committing to your growth.</div>
+  </div>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">
+      Do I lose my data if I cancel Pro?
+      <svg viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="faq-a">No — all your habits, streaks, XP, and history stay intact. If you've renamed your buddy, it'll revert to the default vibe name, but everything else stays exactly as it was.</div>
+  </div>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">
+      Can I switch between monthly and yearly?
+      <svg viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="faq-a">Yes! You can upgrade from monthly to yearly anytime through your Stripe billing portal — you'll get prorated credit for the remaining time on your monthly plan. To switch from yearly to monthly, just cancel your yearly plan and resubscribe monthly at the end of your billing period.</div>
+  </div>
+</section>
+
+<!-- ── GUARANTEE ── -->
+<section class="guarantee fade-up">
+  <div class="guarantee-card">
+    <div class="guarantee-icon">🛡️</div>
+    <div class="guarantee-title">7-day money-back guarantee</div>
+    <div class="guarantee-text">Not vibing with Pro? No stress. Email us within 7 days of subscribing for a full refund — no questions asked, no hard feelings. We want you to feel good about every dollar.</div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="footer-logo">
+    <div class="footer-logo-mark">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M5 8l3 3 5-6" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <span class="footer-brand">ParaHype</span>
+  </div>
+  <div class="footer-copy">© 2025 Loadingdrbetha Group LLC. All rights reserved.</div>
+  <div class="footer-links">
+    <a href="landing.html">Home</a>
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+// Smooth scroll to checkout
+function scrollToCheckout() {
+  document.getElementById('checkout').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// Scroll animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Auto-open first FAQ for engagement
+setTimeout(() => {
+  const first = document.querySelector('.faq-item');
+  if (first) first.classList.add('open');
+}, 1500);
+</script>
+</body>
+</html>

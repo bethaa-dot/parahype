@@ -8,8 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="ParaHype"/>
 <title>ParaHype — Your Parallel Hype Buddy</title>
-<link rel="manifest" href="manifest.json"/>
-<link rel="apple-touch-icon" href="apple-touch-icon.png"/>
+<link rel="manifest" href="#"/>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&family=Space+Grotesk:wght@500;600;700&display=swap');
@@ -19,6 +18,7 @@
   --green:#10B981;--red:#EF4444;--bg:#0F0A1E;--surface:#1A1030;
   --card:#221540;--border:rgba(124,58,237,0.2);--text:#F5F0FF;
   --muted:#8B7BAA;--font-body:'DM Sans',sans-serif;--font-head:'Space Grotesk',sans-serif;
+  /* Vibe accent — overridden by JS */
   --vibe-color:#7C3AED;--vibe-glow:rgba(124,58,237,0.3);
 }
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font-body);overflow:hidden}
@@ -26,13 +26,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .screen{display:none;flex:1;flex-direction:column;overflow:hidden}
 .screen.active{display:flex}
 .status-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 20px 6px;font-size:12px;color:var(--muted);flex-shrink:0}
-.status-icons{display:flex;align-items:center;gap:5px}
 
 /* ── Login ── */
-#login-screen{background:var(--bg);justify-content:flex-start;align-items:center;padding:0 1.5rem;gap:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
-#login-screen .logo-wrap{padding-top:max(20px,env(safe-area-inset-top,20px));margin-bottom:28px;flex-shrink:0}
-#login-screen .auth-box{flex-shrink:0}
-#login-screen .terms{flex-shrink:0;padding-bottom:max(20px,env(safe-area-inset-bottom,20px))}
+#login-screen{background:var(--bg);justify-content:center;align-items:center;padding:2rem 1.5rem;gap:0}
 .logo-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:28px}
 .logo-mark{width:72px;height:72px;background:var(--accent);border-radius:22px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
 .app-name{font-family:var(--font-head);font-size:28px;font-weight:700}
@@ -45,9 +41,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
 .field input{width:100%;background:var(--bg);border:0.5px solid var(--border);border-radius:12px;padding:11px 14px;font-size:14px;color:var(--text);font-family:var(--font-body);outline:none}
 .field input:focus{border-color:var(--accent)}
-.field-pass{position:relative;display:flex;align-items:center}
-.field-pass input{padding-right:42px;flex:1}
-.btn-toggle-pass{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--accent2);cursor:pointer;padding:6px;display:flex;align-items:center;z-index:2}
 .btn-primary{width:100%;padding:14px;background:var(--accent);border:none;border-radius:14px;font-size:15px;font-weight:600;color:#fff;cursor:pointer;font-family:var(--font-head);letter-spacing:0.02em;margin-top:4px}
 .google-divider{display:flex;align-items:center;gap:10px;margin:12px 0 4px;color:var(--muted);font-size:12px}
 .google-divider::before,.google-divider::after{content:'';flex:1;height:0.5px;background:var(--border)}
@@ -58,6 +51,27 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .auth-error{display:none;background:rgba(239,68,68,0.08);border:0.5px solid rgba(239,68,68,0.3);border-radius:10px;padding:10px 13px;font-size:12px;color:#F87171;margin-top:10px;line-height:1.5}
 .auth-error.visible{display:block}
 .field input.invalid{border-color:rgba(239,68,68,0.5)}
+.field-pw{position:relative}
+.field-pw input{padding-right:44px}
+.pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;transition:color 0.15s}
+.pw-toggle:hover{color:var(--accent2)}
+.forgot-link{display:block;font-size:12px;color:var(--accent2);text-align:right;margin-top:-8px;margin-bottom:10px;cursor:pointer;font-weight:500;transition:color 0.15s}
+.forgot-link:hover{color:#E0CBFF}
+.field select{width:100%;background:var(--bg);border:0.5px solid var(--border);border-radius:12px;padding:11px 14px;font-size:14px;color:var(--text);font-family:var(--font-body);outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 5l3 3 3-3' stroke='%238B7BAA' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;cursor:pointer}
+.field select:focus{border-color:var(--accent)}
+.field select option{background:var(--surface);color:var(--text)}
+.dob-row{display:flex;gap:8px}
+.dob-row select{flex:1}
+.reset-modal{display:none;position:absolute;inset:0;background:rgba(10,7,20,0.9);z-index:300;align-items:center;justify-content:center;padding:1.5rem}
+.reset-modal.open{display:flex}
+.reset-box{background:var(--surface);border-radius:22px;border:0.5px solid var(--border);padding:24px 20px;width:100%;max-width:380px}
+.reset-box .modal-title{font-family:var(--font-head);font-size:18px;font-weight:700;margin-bottom:6px}
+.reset-box .modal-sub{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.5}
+.reset-success{display:none;text-align:center;padding:12px 0}
+.reset-success svg{margin-bottom:8px}
+.reset-success p{font-size:13px;color:var(--green);font-weight:500;line-height:1.5}
+.btn-back-login{width:100%;padding:12px;background:none;border:0.5px solid var(--border);border-radius:12px;font-size:13px;color:var(--muted);cursor:pointer;font-family:var(--font-body);margin-top:10px;transition:border-color 0.15s}
+.btn-back-login:hover{border-color:var(--accent2);color:var(--accent2)}
 
 /* ── Loading overlay ── */
 #loading-overlay{display:none;position:absolute;inset:0;background:rgba(15,10,30,0.85);z-index:500;align-items:center;justify-content:center;flex-direction:column;gap:14px}
@@ -107,10 +121,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .hype-icon-wrap{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;border:2px solid var(--border)}
 .hype-sender{font-size:10px;color:var(--accent2);font-weight:600;margin-bottom:4px}
 .hype-body{font-size:13px;color:var(--text);line-height:1.5}
-.btn-talk-coach{display:flex;align-items:center;gap:6px;margin-top:8px;padding:7px 14px;background:var(--accent);border:none;border-radius:20px;font-size:12px;font-weight:600;color:#fff;cursor:pointer;font-family:var(--font-head);width:fit-content;transition:all 0.15s}
-.btn-talk-coach:active{transform:scale(0.96)}
-.btn-talk-coach.pulse{animation:coach-pulse 2s ease-in-out 3}
-@keyframes coach-pulse{0%,100%{box-shadow:0 0 0 0 rgba(124,58,237,0.4)}50%{box-shadow:0 0 0 8px rgba(124,58,237,0)}}
 .stats-row{display:flex;gap:10px;padding:10px 16px}
 .stat-card{flex:1;background:var(--surface);border-radius:14px;border:0.5px solid var(--border);padding:12px;text-align:center}
 .stat-num{font-family:var(--font-head);font-size:22px;font-weight:700}
@@ -239,54 +249,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .vibe-setting-val{display:flex;align-items:center;gap:6px;font-size:13px}
 .btn-logout{width:calc(100% - 32px);margin:0 16px;padding:14px;background:rgba(239,68,68,0.1);border:0.5px solid rgba(239,68,68,0.3);border-radius:14px;font-size:14px;font-weight:600;color:var(--red);cursor:pointer;font-family:var(--font-head)}
 
-/* ── Tasks ── */
-.task-card{background:var(--surface);border-radius:14px;border:0.5px solid var(--border);padding:12px 14px;margin:0 16px 8px;cursor:pointer;transition:all 0.15s}
-.task-card:active{transform:scale(0.98)}
-.task-card.completed{opacity:0.5}
-.task-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
-.task-title{font-size:13px;font-weight:500;flex:1;margin-right:8px}
-.task-title.done{text-decoration:line-through;color:var(--muted)}
-.task-due{font-size:9px;padding:2px 8px;border-radius:6px;white-space:nowrap;font-weight:500}
-.task-due.overdue{color:var(--red);background:rgba(239,68,68,0.1)}
-.task-due.today{color:var(--green);background:rgba(16,185,129,0.1)}
-.task-due.upcoming{color:var(--amber);background:rgba(217,119,6,0.1)}
-.task-due.future{color:var(--muted);background:rgba(124,58,237,0.08)}
-.task-progress{display:flex;gap:3px;margin-bottom:5px}
-.task-prog-seg{height:4px;flex:1;border-radius:2px;background:rgba(124,58,237,0.12)}
-.task-prog-seg.done{background:var(--green)}
-.task-meta{font-size:10px;color:var(--muted)}
-.task-steps-expand{padding:8px 0 0;border-top:0.5px solid rgba(124,58,237,0.08);margin-top:8px}
-.task-step-item{display:flex;align-items:center;gap:8px;padding:5px 0}
-.task-step-check{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all 0.15s}
-.task-step-check.done{background:var(--green);border-color:var(--green)}
-.task-step-name{font-size:12px;flex:1}
-.task-step-name.done{text-decoration:line-through;color:var(--muted)}
-.task-step-time{font-size:10px;color:var(--muted)}
-.task-actions{display:flex;gap:6px;padding-top:8px;border-top:0.5px solid rgba(124,58,237,0.08);margin-top:6px}
-.task-action-btn{flex:1;padding:7px;border-radius:10px;border:0.5px solid var(--border);background:var(--bg);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font-body);display:flex;align-items:center;justify-content:center;gap:4px;transition:all 0.15s}
-.task-action-btn:active{transform:scale(0.96)}
-.task-action-btn.complete{color:var(--green);border-color:rgba(16,185,129,0.3)}
-.task-action-btn.complete:hover{background:rgba(16,185,129,0.08)}
-.task-action-btn.edit{color:var(--accent2);border-color:rgba(167,139,250,0.3)}
-.task-action-btn.edit:hover{background:rgba(124,58,237,0.08)}
-.task-action-btn.delete{color:var(--red);border-color:rgba(239,68,68,0.3)}
-.task-action-btn.delete:hover{background:rgba(239,68,68,0.08)}
-.task-edit-fields{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
-.task-edit-field label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}
-.task-edit-field input,.task-edit-field select{width:100%;background:var(--bg);border:0.5px solid var(--border);border-radius:12px;padding:10px 12px;font-size:14px;color:var(--text);font-family:var(--font-body);outline:none;color-scheme:dark}
-.task-edit-field input:focus,.task-edit-field select:focus{border-color:var(--accent)}
-.add-task-row{display:flex;gap:8px;padding:0 16px 8px;align-items:center}
-.task-input{flex:1;background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:9px 12px;font-size:13px;color:var(--text);font-family:var(--font-body);outline:none}
-.task-input:focus{border-color:var(--accent)}
-.task-date-input{width:110px;background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:9px 8px;font-size:11px;color:var(--text);font-family:var(--font-body);outline:none;color-scheme:dark}
-.task-date-input:focus{border-color:var(--accent)}
-.btn-add-task{padding:9px 14px;background:var(--accent);border:none;border-radius:12px;font-size:12px;font-weight:600;color:#fff;cursor:pointer;font-family:var(--font-head);white-space:nowrap}
-.coach-task-card{background:rgba(124,58,237,0.08);border-radius:12px;border:0.5px solid rgba(124,58,237,0.2);padding:10px 12px;max-width:90%;margin-bottom:6px}
-.coach-task-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px;display:flex;align-items:center;gap:6px}
-.coach-task-due{font-size:9px;color:var(--amber);margin-bottom:6px}
-.xp-pop{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--accent);color:#fff;font-family:var(--font-head);font-size:18px;font-weight:700;padding:10px 24px;border-radius:16px;z-index:999;animation:xpPop 1.2s ease-out forwards;pointer-events:none}
-@keyframes xpPop{0%{opacity:1;transform:translate(-50%,-50%) scale(0.8)}30%{transform:translate(-50%,-50%) scale(1.1)}100%{opacity:0;transform:translate(-50%,-70%) scale(1)}}
-
 /* ── Modals ── */
 .modal-overlay{display:none;position:absolute;inset:0;background:rgba(10,7,20,0.85);z-index:200;align-items:flex-end;justify-content:center}
 .modal-overlay.open{display:flex}
@@ -309,68 +271,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .vibe-mini-emoji{font-size:22px;margin-bottom:5px}
 .vibe-mini-name{font-size:11px;font-weight:700;font-family:var(--font-head);margin-bottom:2px}
 .vibe-mini-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em}
-
-/* ── Splash screen ── */
-#splash-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.4s}
-#splash-screen.hide{opacity:0;pointer-events:none}
-.splash-logo{width:88px;height:88px;background:var(--accent);border-radius:24px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;animation:splash-pop 0.6s ease-out}
-@keyframes splash-pop{0%{transform:scale(0.7);opacity:0}100%{transform:scale(1);opacity:1}}
-.splash-name{font-family:var(--font-head);font-size:24px;font-weight:700;color:var(--text);animation:splash-fade 0.8s ease-out 0.2s both}
-.splash-tag{font-size:12px;color:var(--muted);margin-top:4px;animation:splash-fade 0.8s ease-out 0.4s both}
-@keyframes splash-fade{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}
-
-/* ── PWA install banner ── */
-#pwa-install{display:none;position:fixed;bottom:80px;left:16px;right:16px;max-width:400px;margin:0 auto;background:var(--surface);border:0.5px solid var(--border);border-radius:18px;padding:14px 16px;z-index:300;animation:slide-up 0.3s ease-out}
-#pwa-install.show{display:flex;align-items:center;gap:12px}
-@keyframes slide-up{0%{transform:translateY(20px);opacity:0}100%{transform:translateY(0);opacity:1}}
-.pwa-icon{width:40px;height:40px;border-radius:12px;background:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.pwa-text{flex:1}
-.pwa-title{font-size:13px;font-weight:600;font-family:var(--font-head)}
-.pwa-sub{font-size:11px;color:var(--muted);margin-top:2px}
-.btn-pwa-install{padding:8px 16px;background:var(--accent);border:none;border-radius:10px;font-size:12px;font-weight:600;color:#fff;cursor:pointer;font-family:var(--font-head);flex-shrink:0}
-.btn-pwa-dismiss{background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:4px;flex-shrink:0}
-
-/* ── Voice picker modal ── */
-.voice-list{max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
-.voice-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all 0.15s}
-.voice-option:active{transform:scale(0.98)}
-.voice-option.selected{border-color:var(--accent);background:rgba(124,58,237,0.08)}
-.voice-opt-name{font-size:13px;font-weight:500}
-.voice-opt-lang{font-size:10px;color:var(--muted)}
-.btn-voice-test{padding:4px 10px;background:rgba(124,58,237,0.12);border:0.5px solid var(--border);border-radius:8px;font-size:10px;color:var(--accent2);cursor:pointer;font-family:var(--font-body)}
 </style>
 </head>
 <body>
-<!-- SPLASH SCREEN -->
-<div id="splash-screen">
-  <div class="splash-logo">
-    <svg width="48" height="48" viewBox="0 0 40 40" fill="none">
-      <circle cx="20" cy="20" r="16" fill="rgba(255,255,255,0.12)"/>
-      <path d="M13 20l5 5 9-10" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="30" cy="11" r="5" fill="#A78BFA"/>
-      <circle cx="30" cy="11" r="3" fill="#7C3AED"/>
-    </svg>
-  </div>
-  <div class="splash-name">ParaHype</div>
-  <div class="splash-tag">your parallel hype buddy</div>
-</div>
-
-<!-- PWA INSTALL BANNER -->
-<div id="pwa-install">
-  <div class="pwa-icon">
-    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-      <path d="M11 2v12M7 10l4 4 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M3 15v3a2 2 0 002 2h12a2 2 0 002-2v-3" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-    </svg>
-  </div>
-  <div class="pwa-text">
-    <div class="pwa-title">Add ParaHype to home screen</div>
-    <div class="pwa-sub">Quick access, works offline</div>
-  </div>
-  <button class="btn-pwa-install" onclick="installPWA()">Install</button>
-  <button class="btn-pwa-dismiss" onclick="dismissPWA()">&times;</button>
-</div>
-
 <div id="app">
 
   <!-- LOGIN -->
@@ -385,7 +288,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         </svg>
       </div>
       <div class="app-name">ParaHype</div>
-      <div class="tagline">your parallel hype buddy for neurodivergent brains</div>
+      <div class="tagline">your parallel hype buddy for ADHD</div>
     </div>
     <div class="auth-box">
       <div class="auth-tabs">
@@ -394,20 +297,43 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
       </div>
       <div id="login-fields">
         <div class="field"><label>Email</label><input type="email" placeholder="you@email.com" id="login-email" onkeydown="if(event.key==='Enter')doAuth()"/></div>
-        <div class="field"><label>Password</label><div class="field-pass"><input type="password" placeholder="••••••••" id="login-pass" onkeydown="if(event.key==='Enter')doAuth()"/><button type="button" class="btn-toggle-pass" onclick="togglePassVis('login-pass',this)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M1.5 9s3-5.5 7.5-5.5S16.5 9 16.5 9s-3 5.5-7.5 5.5S1.5 9 1.5 9z" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.2"/></svg></button></div></div>
-        <div style="text-align:right;margin-top:-8px;margin-bottom:8px"><button onclick="showResetPassword()" style="background:none;border:none;color:var(--accent2);font-size:12px;cursor:pointer;font-family:var(--font-body);padding:0">Forgot password?</button></div>
-      </div>
-      <div id="reset-fields" style="display:none">
-        <div class="field"><label>Email</label><input type="email" placeholder="you@email.com" id="reset-email" onkeydown="if(event.key==='Enter')sendPasswordReset()"/></div>
-        <div class="field"><label>New password</label><div class="field-pass"><input type="password" placeholder="New password (min 6 chars)" id="reset-pass" onkeydown="if(event.key==='Enter')sendPasswordReset()"/><button type="button" class="btn-toggle-pass" onclick="togglePassVis('reset-pass',this)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M1.5 9s3-5.5 7.5-5.5S16.5 9 16.5 9s-3 5.5-7.5 5.5S1.5 9 1.5 9z" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.2"/></svg></button></div></div>
-        <div class="field"><label>Confirm new password</label><div class="field-pass"><input type="password" placeholder="Confirm password" id="reset-pass-confirm" onkeydown="if(event.key==='Enter')sendPasswordReset()"/><button type="button" class="btn-toggle-pass" onclick="togglePassVis('reset-pass-confirm',this)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M1.5 9s3-5.5 7.5-5.5S16.5 9 16.5 9s-3 5.5-7.5 5.5S1.5 9 1.5 9z" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.2"/></svg></button></div></div>
+        <div class="field">
+          <label>Password</label>
+          <div class="field-pw">
+            <input type="password" placeholder="••••••••" id="login-pass" onkeydown="if(event.key==='Enter')doAuth()"/>
+            <button type="button" class="pw-toggle" onclick="togglePw('login-pass',this)" aria-label="Show password">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" class="eye-icon"><path d="M1.5 9s3-5.5 7.5-5.5S16.5 9 16.5 9s-3 5.5-7.5 5.5S1.5 9 1.5 9z" stroke="currentColor" stroke-width="1.3"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.3"/></svg>
+            </button>
+          </div>
+        </div>
+        <span class="forgot-link" onclick="openResetModal()">Forgot password?</span>
       </div>
       <div id="signup-fields" style="display:none">
         <div class="field"><label>Your name</label><input type="text" placeholder="First name" id="signup-name" onkeydown="if(event.key==='Enter')doAuth()"/></div>
-        <div class="field"><label>Date of birth</label><input type="date" id="signup-dob" style="color-scheme:dark" onchange="checkSignupAge()"/></div>
-        <div id="signup-age-msg" style="display:none;font-size:11px;padding:0 4px 8px;line-height:1.5"></div>
         <div class="field"><label>Email</label><input type="email" placeholder="you@email.com" id="signup-email" onkeydown="if(event.key==='Enter')doAuth()"/></div>
-        <div class="field"><label>Password</label><div class="field-pass"><input type="password" placeholder="Create password" id="signup-pass" onkeydown="if(event.key==='Enter')doAuth()"/><button type="button" class="btn-toggle-pass" onclick="togglePassVis('signup-pass',this)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M1.5 9s3-5.5 7.5-5.5S16.5 9 16.5 9s-3 5.5-7.5 5.5S1.5 9 1.5 9z" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.2"/></svg></button></div></div>
+        <div class="field">
+          <label>Password</label>
+          <div class="field-pw">
+            <input type="password" placeholder="Create password" id="signup-pass" onkeydown="if(event.key==='Enter')doAuth()"/>
+            <button type="button" class="pw-toggle" onclick="togglePw('signup-pass',this)" aria-label="Show password">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" class="eye-icon"><path d="M1.5 9s3-5.5 7.5-5.5S16.5 9 16.5 9s-3 5.5-7.5 5.5S1.5 9 1.5 9z" stroke="currentColor" stroke-width="1.3"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Date of birth</label>
+          <div class="dob-row">
+            <select id="signup-dob-month">
+              <option value="" disabled selected>Month</option>
+              <option value="1">January</option><option value="2">February</option><option value="3">March</option>
+              <option value="4">April</option><option value="5">May</option><option value="6">June</option>
+              <option value="7">July</option><option value="8">August</option><option value="9">September</option>
+              <option value="10">October</option><option value="11">November</option><option value="12">December</option>
+            </select>
+            <select id="signup-dob-day"><option value="" disabled selected>Day</option></select>
+            <select id="signup-dob-year"><option value="" disabled selected>Year</option></select>
+          </div>
+        </div>
       </div>
       <div class="auth-error" id="auth-error"></div>
       <button class="btn-primary" onclick="doAuth()" id="auth-btn">Continue</button>
@@ -417,7 +343,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         Continue with Google
       </button>
     </div>
-    <div class="terms">By continuing you agree to our<br><a href="privacy.html" style="color:var(--accent2)">Privacy Policy</a> · <a href="accessibility.html" style="color:var(--accent2)">Accessibility</a></div>
+    <div class="terms">By continuing you agree to our<br>Terms of Service &amp; Privacy Policy</div>
   </div>
 
   <!-- VIBE ONBOARDING -->
@@ -434,7 +360,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
   <!-- HOME -->
   <div id="home-screen" class="screen">
-    <div class="status-bar"><span class="clock-sync">9:41 AM</span><span class="status-icons"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 10.5l2.5-3 2.5 3 2.5-3 2.5 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="1" y="8" width="2" height="4" rx="0.5"/><rect x="4.5" y="6" width="2" height="6" rx="0.5"/><rect x="8" y="4" width="2" height="8" rx="0.5"/><rect x="11.5" y="2" width="2" height="10" rx="0.5" opacity="0.3"/></svg><svg width="18" height="14" viewBox="0 0 18 14" fill="currentColor"><rect x="1" y="3" width="13" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1"/><rect x="14.5" y="5" width="1.5" height="4" rx="0.5"/><rect x="3" y="5" width="7" height="4" rx="0.8" fill="var(--green)"/></svg></span></div>
+    <div class="status-bar"><span id="home-time">9:41 AM</span><span style="letter-spacing:2px">●●●</span></div>
     <div class="scroll-area">
       <div class="home-header">
         <div>
@@ -443,25 +369,17 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         </div>
         <div class="avatar" onclick="goTab('me')" id="home-avatar">?</div>
       </div>
-      <div class="hype-msg" style="cursor:default">
+      <div class="hype-msg">
         <div class="hype-icon-wrap" id="home-buddy-icon">🤖</div>
         <div>
           <div class="hype-sender" id="home-buddy-name">ParaHype AI</div>
-          <div class="hype-body" id="daily-nudge">Loading your hype...</div>
-          <button class="btn-talk-coach pulse" id="btn-talk-coach" onclick="toggleCoach()">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2h10a1 1 0 011 1v6a1 1 0 01-1 1H5l-3 2.5V3a1 1 0 011-1z" stroke="white" stroke-width="1.2" stroke-linejoin="round"/></svg>
-            <span id="btn-talk-label">Talk to your buddy</span>
-          </button>
+          <div class="hype-body" id="daily-nudge">You're on a 12-day streak — that's incredible! Let's keep the momentum going today.</div>
         </div>
       </div>
-      <div style="margin:4px 16px 6px;padding:10px 14px;border-radius:14px;background:rgba(124,58,237,0.05);border-left:3px solid var(--accent2)">
-        <div style="font-size:10px;color:var(--accent2);font-weight:600;margin-bottom:3px;font-family:var(--font-head)" id="quote-label">✦ Word of the day</div>
-        <div style="font-size:12px;color:var(--text);line-height:1.5;font-style:italic" id="daily-quote">Loading...</div>
-      </div>
       <div class="stats-row">
-        <div class="stat-card"><div class="stat-num" style="color:#A78BFA" id="streak-num">0</div><div class="stat-lbl">Streak</div></div>
-        <div class="stat-card"><div class="stat-num" id="habits-num">0/0</div><div class="stat-lbl">Habits</div></div>
-        <div class="stat-card"><div class="stat-num" style="color:#D97706" id="xp-num">0</div><div class="stat-lbl">XP Today</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:#A78BFA" id="streak-num">12</div><div class="stat-lbl">Streak</div></div>
+        <div class="stat-card"><div class="stat-num" id="habits-num">3/6</div><div class="stat-lbl">Habits</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:#D97706" id="xp-num">340</div><div class="stat-lbl">XP Today</div></div>
       </div>
       <div class="focus-card">
         <div>
@@ -482,27 +400,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <span class="section-link" onclick="goTab('habits')">See all</span>
       </div>
       <div id="home-habit-list"></div>
-      <div class="section-row" id="tasks-section-row" style="display:none">
-        <span class="section-title">📋 Tasks</span>
-        <span class="section-link" onclick="toggleAddTask()">+ Add task</span>
-      </div>
-      <div class="add-task-row" id="add-task-row" style="display:none">
-        <input class="task-input" id="new-task-input" placeholder="What needs doing?" onkeydown="if(event.key==='Enter')addManualTask()"/>
-        <input class="task-date-input" id="new-task-date" type="date"/>
-        <button class="btn-add-task" onclick="addManualTask()">Add</button>
-      </div>
-      <div id="add-task-options" style="display:none;padding:0 16px 8px;">
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);cursor:pointer">
-          <input type="checkbox" id="new-task-daily" style="accent-color:var(--accent);width:14px;height:14px"/> Repeat daily
-        </label>
-      </div>
-      <div id="home-task-list"></div>
     </div>
   </div>
 
   <!-- HABITS -->
   <div id="habits-screen" class="screen">
-    <div class="status-bar"><span class="clock-sync">9:41 AM</span><span class="status-icons"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 10.5l2.5-3 2.5 3 2.5-3 2.5 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="1" y="8" width="2" height="4" rx="0.5"/><rect x="4.5" y="6" width="2" height="6" rx="0.5"/><rect x="8" y="4" width="2" height="8" rx="0.5"/><rect x="11.5" y="2" width="2" height="10" rx="0.5" opacity="0.3"/></svg><svg width="18" height="14" viewBox="0 0 18 14" fill="currentColor"><rect x="1" y="3" width="13" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1"/><rect x="14.5" y="5" width="1.5" height="4" rx="0.5"/><rect x="3" y="5" width="7" height="4" rx="0.8" fill="var(--green)"/></svg></span></div>
+    <div class="status-bar"><span id="habits-time">9:41 AM</span><span style="letter-spacing:2px">●●●</span></div>
     <div class="habits-header">Habits</div>
     <div class="add-habit-row">
       <input class="habit-input" id="new-habit-input" placeholder="Add a new habit..." onkeydown="if(event.key==='Enter')addHabit()"/>
@@ -513,15 +416,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
   <!-- REWARDS -->
   <div id="rewards-screen" class="screen">
-    <div class="status-bar"><span class="clock-sync">9:41 AM</span><span class="status-icons"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 10.5l2.5-3 2.5 3 2.5-3 2.5 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="1" y="8" width="2" height="4" rx="0.5"/><rect x="4.5" y="6" width="2" height="6" rx="0.5"/><rect x="8" y="4" width="2" height="8" rx="0.5"/><rect x="11.5" y="2" width="2" height="10" rx="0.5" opacity="0.3"/></svg><svg width="18" height="14" viewBox="0 0 18 14" fill="currentColor"><rect x="1" y="3" width="13" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1"/><rect x="14.5" y="5" width="1.5" height="4" rx="0.5"/><rect x="3" y="5" width="7" height="4" rx="0.8" fill="var(--green)"/></svg></span></div>
+    <div class="status-bar"><span>9:41 AM</span><span style="letter-spacing:2px">●●●</span></div>
     <div class="scroll-area">
       <div class="rewards-header">Rewards</div>
       <div class="xp-card">
         <div class="xp-top">
-          <span class="xp-level" id="xp-level-label">Level 1 — Starter</span>
-          <span class="xp-count" id="xp-count-label">0 / 500 XP</span>
+          <span class="xp-level" id="xp-level-label">Level 4 — Focused</span>
+          <span class="xp-count" id="xp-count-label">340 / 1000 XP</span>
         </div>
-        <div class="xp-bar-bg"><div class="xp-bar-fill" id="xp-bar" style="width:0%"></div></div>
+        <div class="xp-bar-bg"><div class="xp-bar-fill" id="xp-bar" style="width:34%"></div></div>
       </div>
       <div class="section-row"><span class="section-title">Your rewards</span></div>
       <div class="reward-grid" id="reward-grid"></div>
@@ -530,7 +433,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
   <!-- BUDDY -->
   <div id="buddy-screen" class="screen">
-    <div class="status-bar"><span class="clock-sync">9:41 AM</span><span class="status-icons"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 10.5l2.5-3 2.5 3 2.5-3 2.5 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="1" y="8" width="2" height="4" rx="0.5"/><rect x="4.5" y="6" width="2" height="6" rx="0.5"/><rect x="8" y="4" width="2" height="8" rx="0.5"/><rect x="11.5" y="2" width="2" height="10" rx="0.5" opacity="0.3"/></svg><svg width="18" height="14" viewBox="0 0 18 14" fill="currentColor"><rect x="1" y="3" width="13" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1"/><rect x="14.5" y="5" width="1.5" height="4" rx="0.5"/><rect x="3" y="5" width="7" height="4" rx="0.8" fill="var(--green)"/></svg></span></div>
+    <div class="status-bar"><span>9:41 AM</span><span style="letter-spacing:2px">●●●</span></div>
     <div class="buddy-header-area">
       <span class="buddy-header-title">Buddy hype</span>
       <button class="btn-invite" onclick="inviteFriend()">+ Invite friend</button>
@@ -566,9 +469,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
           </div>
         </div>
         <div class="buddy-stats">
-          <div class="b-stat"><div class="b-val" style="color:#A78BFA" id="buddy-streak-val">0</div><div class="b-lbl">Streak</div></div>
-          <div class="b-stat"><div class="b-val" id="buddy-habits-val">0/0</div><div class="b-lbl">Habits</div></div>
-          <div class="b-stat"><div class="b-val" style="color:#D97706" id="buddy-xp-val">0</div><div class="b-lbl">XP today</div></div>
+          <div class="b-stat"><div class="b-val" style="color:#A78BFA">9</div><div class="b-lbl">Streak</div></div>
+          <div class="b-stat"><div class="b-val">5/6</div><div class="b-lbl">Habits</div></div>
+          <div class="b-stat"><div class="b-val" style="color:#D97706">520</div><div class="b-lbl">XP today</div></div>
         </div>
       </div>
       <div class="chat-area" id="buddy-chat">
@@ -591,7 +494,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
   <!-- ME -->
   <div id="me-screen" class="screen">
-    <div class="status-bar"><span class="clock-sync">9:41 AM</span><span class="status-icons"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 10.5l2.5-3 2.5 3 2.5-3 2.5 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="1" y="8" width="2" height="4" rx="0.5"/><rect x="4.5" y="6" width="2" height="6" rx="0.5"/><rect x="8" y="4" width="2" height="8" rx="0.5"/><rect x="11.5" y="2" width="2" height="10" rx="0.5" opacity="0.3"/></svg><svg width="18" height="14" viewBox="0 0 18 14" fill="currentColor"><rect x="1" y="3" width="13" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1"/><rect x="14.5" y="5" width="1.5" height="4" rx="0.5"/><rect x="3" y="5" width="7" height="4" rx="0.8" fill="var(--green)"/></svg></span></div>
+    <div class="status-bar"><span>9:41 AM</span><span style="letter-spacing:2px">●●●</span></div>
     <div class="back-to-landing">
       <button onclick="goToLanding()">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L3 7l6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -602,14 +505,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
       <div class="profile-hero">
         <div class="profile-avi" id="profile-avi">?</div>
         <div class="profile-name" id="profile-name">Loading...</div>
-        <div class="profile-sub" id="profile-sub">Member since — · Level 1</div>
+        <div class="profile-sub">Member since April 2025 · Level 4</div>
       </div>
       <div class="settings-section">
         <div style="font-size:12px;color:var(--muted);padding:0 4px 8px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em">Account</div>
         <div class="settings-group">
-          <div class="settings-item" onclick="openDisplayNameEdit()"><span class="settings-label">Display name</span><span class="settings-val" id="disp-name">—</span></div>
+          <div class="settings-item"><span class="settings-label">Display name</span><span class="settings-val" id="disp-name">—</span></div>
           <div class="settings-item"><span class="settings-label">Email</span><span class="settings-val" id="disp-email">—</span></div>
-          <div class="settings-item" onclick="toggleNotifications()"><span class="settings-label">Notifications</span><span class="settings-val" id="notif-setting">On</span></div>
+          <div class="settings-item"><span class="settings-label">Age</span><span class="settings-val" id="disp-age">—</span></div>
+          <div class="settings-item"><span class="settings-label">Subscription</span><span class="settings-val" id="disp-sub">Free</span></div>
+          <div class="settings-item"><span class="settings-label">Notifications</span><span class="settings-val">On</span></div>
         </div>
         <div style="font-size:12px;color:var(--muted);padding:0 4px 8px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em">Your Buddy</div>
         <div class="settings-group">
@@ -623,15 +528,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <div class="settings-group">
           <div class="settings-item"><span class="settings-label">Focus duration</span><span class="settings-val">25 min</span></div>
           <div class="settings-item"><span class="settings-label">Break duration</span><span class="settings-val">5 min</span></div>
-          <div class="settings-item" onclick="openVoicePicker()"><span class="settings-label">Buddy voice</span><span class="settings-val" id="voice-setting-display">Default</span></div>
           <div class="settings-item"><span class="settings-label">AI coaching</span><span class="settings-val">Enabled</span></div>
           <div class="settings-item"><span class="settings-label">Buddy hype alerts</span><span class="settings-val">On</span></div>
         </div>
-      </div>
-      <div style="font-size:12px;color:var(--muted);padding:0 4px 8px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em">Legal</div>
-      <div class="settings-group">
-        <a href="privacy.html" class="settings-item" style="text-decoration:none;color:var(--text)"><span class="settings-label">Privacy Policy</span><span class="settings-val"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 10l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></a>
-        <a href="accessibility.html" class="settings-item" style="text-decoration:none;color:var(--text)"><span class="settings-label">Accessibility</span><span class="settings-val"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 10l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></a>
       </div>
       <button class="btn-logout" onclick="logout()">Log out</button>
       <div style="height:20px"></div>
@@ -716,7 +615,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
       <div class="modal-handle"></div>
       <div style="font-size:28px;margin-bottom:10px">⚡</div>
       <div class="modal-title">Unlock ParaHype Pro</div>
-      <div class="modal-sub">Personalize your experience and get more from your hype buddy.</div>
+      <div class="modal-sub">Start your 7-day free trial. Then $9.99/mo or save 15% with yearly.</div>
       <div class="modal-perks">
         <div class="perk-row"><div class="perk-dot"></div><span>Rename your buddy to anything you want</span></div>
         <div class="perk-row"><div class="perk-dot"></div><span>Unlimited AI coach messages</span></div>
@@ -724,25 +623,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <div class="perk-row"><div class="perk-dot"></div><span>Priority hype notifications</span></div>
         <div class="perk-row"><div class="perk-dot"></div><span>Early access to new features</span></div>
       </div>
-      <div id="sub-tiers" style="display:flex;gap:8px;margin-bottom:16px">
-        <div class="sub-tier" id="sub-weekly" onclick="selectSubTier('weekly')" style="flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;transition:all 0.15s">
-          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">Weekly</div>
-          <div style="font-family:var(--font-head);font-size:18px;font-weight:700">$2.99</div>
-          <div style="font-size:10px;color:var(--muted)">/week</div>
-        </div>
-        <div class="sub-tier selected" id="sub-monthly" onclick="selectSubTier('monthly')" style="flex:1;background:rgba(124,58,237,0.08);border:1.5px solid var(--accent);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;position:relative;transition:all 0.15s">
-          <div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:9px;font-weight:600;padding:2px 8px;border-radius:6px;white-space:nowrap">Best value</div>
-          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">Monthly</div>
-          <div style="font-family:var(--font-head);font-size:18px;font-weight:700">$9.99</div>
-          <div style="font-size:10px;color:var(--muted)">/month</div>
-        </div>
-        <div class="sub-tier" id="sub-yearly" onclick="selectSubTier('yearly')" style="flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;transition:all 0.15s">
-          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">Yearly</div>
-          <div style="font-family:var(--font-head);font-size:18px;font-weight:700">$79.99</div>
-          <div style="font-size:10px;color:var(--muted)">/year · save 33%</div>
-        </div>
-      </div>
-      <button class="btn-subscribe" id="sub-btn" onclick="confirmSubscribe()">Subscribe — $9.99 / month</button>
+      <button class="btn-subscribe" onclick="goToSubscribe()">Start 7-Day Free Trial →</button>
+      <button class="btn-subscribe" onclick="confirmSubscribe()" style="background:rgba(124,58,237,0.15);color:var(--accent2);box-shadow:none;font-size:13px;font-weight:500;margin-bottom:6px">Already subscribed? Activate Pro</button>
       <button class="btn-cancel-modal" onclick="closeSubscribeModal()">Maybe later</button>
     </div>
   </div>
@@ -759,100 +641,22 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     </div>
   </div>
 
-  <!-- DISPLAY NAME EDIT -->
-  <div class="modal-overlay" id="name-edit-modal" onclick="if(event.target===this)this.classList.remove('open')">
-    <div class="modal-sheet">
-      <div class="modal-handle"></div>
-      <div class="modal-title">Change display name</div>
-      <div class="modal-sub">This changes how you appear in the app. Your account email stays the same.</div>
-      <div class="task-edit-fields">
-        <div class="task-edit-field">
-          <label>Display name</label>
-          <input type="text" id="edit-display-name" placeholder="Your name..." maxlength="30"/>
-        </div>
+  <!-- RESET PASSWORD MODAL -->
+  <div class="reset-modal" id="reset-modal" onclick="if(event.target===this)closeResetModal()">
+    <div class="reset-box">
+      <div id="reset-form-view">
+        <div class="modal-title">Reset your password</div>
+        <div class="modal-sub">Enter the email you signed up with and we'll send you a link to reset your password.</div>
+        <div class="field"><label>Email</label><input type="email" placeholder="you@email.com" id="reset-email"/></div>
+        <div class="auth-error" id="reset-error"></div>
+        <button class="btn-primary" onclick="sendReset()">Send reset link</button>
+        <button class="btn-back-login" onclick="closeResetModal()">← Back to login</button>
       </div>
-      <button class="btn-subscribe" onclick="saveDisplayName()">Save name</button>
-      <button class="btn-cancel-modal" onclick="document.getElementById('name-edit-modal').classList.remove('open')">Cancel</button>
-    </div>
-  </div>
-
-  <!-- PARENT CONSENT (shown for ages 6-12) -->
-  <div class="modal-overlay" id="parent-consent-modal" onclick="if(event.target===this)this.classList.remove('open')">
-    <div class="modal-sheet">
-      <div class="modal-handle"></div>
-      <div style="font-size:28px;margin-bottom:10px">👨‍👩‍👧</div>
-      <div class="modal-title">Parent or guardian needed</div>
-      <div class="modal-sub">This user is under 13. A parent or guardian must complete signup and consent to our <a href="privacy.html" style="color:var(--accent2)">Privacy Policy</a>.</div>
-      <div class="task-edit-fields">
-        <div class="task-edit-field">
-          <label>Parent/guardian name</label>
-          <input type="text" id="parent-name" placeholder="Parent's full name"/>
-        </div>
-        <div class="task-edit-field">
-          <label>Parent/guardian email</label>
-          <input type="email" id="parent-email" placeholder="parent@email.com"/>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:8px;margin-top:4px">
-          <input type="checkbox" id="parent-consent-check" style="accent-color:var(--accent);width:16px;height:16px;margin-top:2px;flex-shrink:0"/>
-          <label for="parent-consent-check" style="font-size:12px;color:var(--muted);line-height:1.5;cursor:pointer">I am the parent or legal guardian of this child and I consent to their use of ParaHype and agree to the Privacy Policy.</label>
-        </div>
+      <div id="reset-success-view" class="reset-success">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" fill="rgba(16,185,129,0.12)" stroke="#10B981" stroke-width="2"/><path d="M16 24l6 6 10-12" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <p>Check your inbox! We've sent a password reset link to <strong id="reset-sent-email"></strong>. It may take a few minutes.</p>
+        <button class="btn-back-login" onclick="closeResetModal()" style="margin-top:16px">← Back to login</button>
       </div>
-      <button class="btn-subscribe" onclick="submitParentConsent()">Create account with consent</button>
-      <button class="btn-cancel-modal" onclick="document.getElementById('parent-consent-modal').classList.remove('open')">Cancel</button>
-    </div>
-  </div>
-
-  <!-- TASK EDIT MODAL -->
-  <div class="modal-overlay" id="task-edit-modal" onclick="if(event.target===this)this.classList.remove('open')">
-    <div class="modal-sheet">
-      <div class="modal-handle"></div>
-      <div class="modal-title">Edit task</div>
-      <div class="modal-sub" id="task-edit-sub">Update your task details.</div>
-      <div class="task-edit-fields">
-        <div class="task-edit-field">
-          <label>Task name</label>
-          <input type="text" id="task-edit-title" placeholder="Task name..."/>
-        </div>
-        <div class="task-edit-field">
-          <label>Due date</label>
-          <input type="date" id="task-edit-date"/>
-        </div>
-        <div class="task-edit-field">
-          <label>Repeat</label>
-          <select id="task-edit-recurrence">
-            <option value="">One-time</option>
-            <option value="daily">Daily</option>
-            <option value="weekdays">Weekdays</option>
-            <option value="weekly">Weekly</option>
-          </select>
-        </div>
-      </div>
-      <button class="btn-subscribe" onclick="saveTaskEdit()">Save changes</button>
-      <button class="btn-cancel-modal" onclick="document.getElementById('task-edit-modal').classList.remove('open')">Cancel</button>
-    </div>
-  </div>
-
-  <!-- TASK DELETE CONFIRM -->
-  <div class="modal-overlay" id="task-delete-modal" onclick="if(event.target===this)this.classList.remove('open')">
-    <div class="modal-sheet">
-      <div class="modal-handle"></div>
-      <div style="font-size:28px;margin-bottom:10px">🗑️</div>
-      <div class="modal-title">Delete task?</div>
-      <div class="modal-sub" id="task-delete-name">This will remove the task and all its steps.</div>
-      <button class="btn-subscribe" style="background:var(--red)" onclick="confirmDeleteTask()">Delete task</button>
-      <button class="btn-cancel-modal" onclick="document.getElementById('task-delete-modal').classList.remove('open')">Keep it</button>
-    </div>
-  </div>
-
-  <!-- VOICE PICKER -->
-  <div class="modal-overlay" id="voice-picker-modal" onclick="if(event.target===this)this.classList.remove('open')">
-    <div class="modal-sheet">
-      <div class="modal-handle"></div>
-      <div class="modal-title">Choose buddy voice</div>
-      <div class="modal-sub">Pick a voice for your buddy's speech. Tap "Test" to preview.</div>
-      <div class="voice-list" id="voice-list"></div>
-      <button class="btn-subscribe" onclick="saveVoiceChoice()">Save voice</button>
-      <button class="btn-cancel-modal" onclick="document.getElementById('voice-picker-modal').classList.remove('open')">Cancel</button>
     </div>
   </div>
 
@@ -870,133 +674,155 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
 <script>
 // ═══════════════════════════════════════
-// WORKER API BASE URL
-// ═══════════════════════════════════════
-const WORKER_URL = 'https://parahype-api.betha-a.workers.dev';
-
-// ═══════════════════════════════════════
-// VIBE DEFINITIONS (display-side — Worker has its own copy for AI prompts)
-// The keys here match the Worker's VIBES keys: akil, trinity, layla, alissa, riyan, lex
+// VIBE DEFINITIONS
 // ═══════════════════════════════════════
 const VIBES = {
-  akil: {
-    id:'akil', name:'Akil', label:'Hype Beast', emoji:'🔥',
-    color:'#F59E0B', glow:'rgba(245,158,11,0.3)', bg:'rgba(245,158,11,0.08)',
-    tagColor:'#F59E0B', tagBg:'rgba(245,158,11,0.1)',
-    sample:'"YOOOO you just crushed that! 🔥🔥 That\'s literally INSANE!!"',
-    timerBtn:'LET\'S GOOO 🔥',
-    nudge:'YOU ARE UNSTOPPABLE. Let\'s get these habits done and DOMINATE today!!'
+  hype: {
+    id: 'hype',
+    name: 'Akil',
+    label: 'Hype Beast',
+    emoji: '🔥',
+    color: '#F59E0B',
+    glow: 'rgba(245,158,11,0.3)',
+    bg: 'rgba(245,158,11,0.08)',
+    tagColor: '#F59E0B',
+    tagBg: 'rgba(245,158,11,0.1)',
+    sample: '"YOOOO you just crushed that! 🔥🔥 That\'s literally INSANE!!"',
+    timerBtn: 'LET\'S GOOO 🔥',
+    nudge: 'YOU ARE UNSTOPPABLE. Let\'s get these habits done and DOMINATE today!!',
+    personality: `Your name is Akil. You are the HYPE BEAST — pure energy, celebration, and fire. You speak like the world's most enthusiastic hype person.
+STYLE: Use caps for emphasis, fire emojis, exclamation marks, sports energy. Be LOUD about wins. Make everything feel like a championship moment.
+NEVER be calm. NEVER be quiet. Everything is the best thing ever.
+Sample phrases: "YOOO", "LET'S GOOO", "YOU'RE BUILT DIFFERENT", "THAT'S INSANE", "W behavior fr fr"`
   },
-  trinity: {
-    id:'trinity', name:'Trinity', label:'Zen', emoji:'🌊',
-    color:'#0D9488', glow:'rgba(13,148,136,0.3)', bg:'rgba(13,148,136,0.08)',
-    tagColor:'#0D9488', tagBg:'rgba(13,148,136,0.1)',
-    sample:'"Take a breath. You\'re doing exactly what you need to do right now."',
-    timerBtn:'Begin gently',
-    nudge:'Take a breath. You have everything you need for today. Let\'s move slowly and with intention.'
+  zen: {
+    id: 'zen',
+    name: 'Trinity',
+    label: 'Zen',
+    emoji: '🌊',
+    color: '#0D9488',
+    glow: 'rgba(13,148,136,0.3)',
+    bg: 'rgba(13,148,136,0.08)',
+    tagColor: '#0D9488',
+    tagBg: 'rgba(13,148,136,0.1)',
+    sample: '"Take a breath. You\'re doing exactly what you need to do right now."',
+    timerBtn: 'Begin gently',
+    nudge: 'Take a breath. You have everything you need for today. Let\'s move slowly and with intention.',
+    personality: `Your name is Trinity. You are ZEN — calm, grounding, and deeply peaceful. You speak softly and with intention.
+STYLE: Short sentences. No pressure. Gentle observations. Mindfulness language. Breathing cues. Nature metaphors.
+NEVER rush. NEVER pressure. NEVER use exclamation marks more than once per response.
+Sample phrases: "Take your time", "One breath at a time", "You're exactly where you need to be", "Notice how you feel"`
   },
-  layla: {
-    id:'layla', name:'Gabe', label:'Gentle', emoji:'💜',
-    color:'#C084FC', glow:'rgba(192,132,252,0.3)', bg:'rgba(192,132,252,0.08)',
-    tagColor:'#C084FC', tagBg:'rgba(192,132,252,0.1)',
-    sample:'"No rush at all. I\'m right here whenever you\'re ready. You\'re safe."',
-    timerBtn:'Ready when you are',
-    nudge:'No pressure today. I\'m here with you every step. Even one small thing counts.'
+  gentle: {
+    id: 'gentle',
+    name: 'Layla',
+    label: 'Gentle',
+    emoji: '💜',
+    color: '#C084FC',
+    glow: 'rgba(192,132,252,0.3)',
+    bg: 'rgba(192,132,252,0.08)',
+    tagColor: '#C084FC',
+    tagBg: 'rgba(192,132,252,0.1)',
+    sample: '"No rush at all. I\'m right here whenever you\'re ready. You\'re safe."',
+    timerBtn: 'Ready when you are',
+    nudge: 'No pressure today. I\'m here with you every step. Even one small thing counts.',
+    personality: `Your name is Layla. You are GENTLE — warm, patient, and completely non-judgmental. You never pressure.
+STYLE: Soft, reassuring. Use "whenever you're ready", "no rush", "I'm here". Validate feelings before giving advice. Never give more than 2 tasks at once.
+NEVER use urgency language. NEVER mention failure or missed streaks harshly.
+Sample phrases: "You're safe here", "That sounds really hard", "Whenever you're ready", "I'm proud of you just for showing up"`
   },
-  alissa: {
-    id:'alissa', name:'Alissa', label:'Competitive', emoji:'🏆',
-    color:'#EF4444', glow:'rgba(239,68,68,0.3)', bg:'rgba(239,68,68,0.08)',
-    tagColor:'#EF4444', tagBg:'rgba(239,68,68,0.1)',
-    sample:'"You\'re 200 XP behind your buddy. That gap closes TODAY."',
-    timerBtn:'Beat yesterday →',
-    nudge:'Your buddy already checked in 2 habits. The leaderboard doesn\'t wait. Move.'
+  competitive: {
+    id: 'competitive',
+    name: 'Alissa',
+    label: 'Competitive',
+    emoji: '🏆',
+    color: '#EF4444',
+    glow: 'rgba(239,68,68,0.3)',
+    bg: 'rgba(239,68,68,0.08)',
+    tagColor: '#EF4444',
+    tagBg: 'rgba(239,68,68,0.1)',
+    sample: '"You\'re 200 XP behind your buddy. That gap closes TODAY."',
+    timerBtn: 'Beat yesterday →',
+    nudge: 'Your buddy already checked in 2 habits. The leaderboard doesn\'t wait. Move.',
+    personality: `Your name is Alissa. You are COMPETITIVE — driven, numbers-focused, push hard. You treat habits like athletic performance.
+STYLE: Use stats, rankings, comparisons. Reference XP gaps, streaks as records, sessions as performance. Motivate through competition and achievement.
+NEVER let the user feel comfortable with "good enough". Always push for the next level.
+Sample phrases: "The gap closes today", "Your personal best is waiting", "Beat yesterday's you", "Champions don't wait for motivation"`
   },
-  riyan: {
-    id:'riyan', name:'Riyan', label:'Coach', emoji:'🎯',
-    color:'#3B82F6', glow:'rgba(59,130,246,0.3)', bg:'rgba(59,130,246,0.08)',
-    tagColor:'#3B82F6', tagBg:'rgba(59,130,246,0.1)',
-    sample:'"3 habits left. Start with #2 — it\'s the fastest. 25 minutes. Go."',
-    timerBtn:'Execute',
-    nudge:'Status: 3/6 habits complete. Priority: Evening journal. Time to next deadline: 4 hours. Begin.'
+  coach: {
+    id: 'coach',
+    name: 'Riyan',
+    label: 'Coach',
+    emoji: '🎯',
+    color: '#3B82F6',
+    glow: 'rgba(59,130,246,0.3)',
+    bg: 'rgba(59,130,246,0.08)',
+    tagColor: '#3B82F6',
+    tagBg: 'rgba(59,130,246,0.1)',
+    sample: '"3 habits left. Start with #2 — it\'s the fastest. 25 minutes. Go."',
+    timerBtn: 'Execute',
+    nudge: 'Status: 3/6 habits complete. Priority: Evening journal. Time to next deadline: 4 hours. Begin.',
+    personality: `Your name is Riyan. You are THE COACH — direct, structured, no fluff. You give clear instructions and expect execution.
+STYLE: Bullet points, numbered steps, specific time estimates. No small talk. Give the exact next action. Acknowledge feelings briefly then redirect to action.
+NEVER ramble. NEVER over-explain. Say exactly what needs to happen and trust the user to do it.
+Sample phrases: "Here's the plan:", "Next action:", "Time-box this to 25 minutes", "Good. What's next?"`
   },
-  lex: {
-    id:'lex', name:'Lex', label:'Bestie', emoji:'✨',
-    color:'#EC4899', glow:'rgba(236,72,153,0.3)', bg:'rgba(236,72,153,0.08)',
-    tagColor:'#EC4899', tagBg:'rgba(236,72,153,0.1)',
-    sample:'"Okay bestie real talk — have you eaten today? Let\'s do this together 💕"',
-    timerBtn:'Let\'s do this together 💕',
-    nudge:'Hey babe, just checking in on you. How are you actually doing? I\'m here 💕'
+  bestie: {
+    id: 'bestie',
+    name: 'Lex',
+    label: 'Bestie',
+    emoji: '✨',
+    color: '#EC4899',
+    glow: 'rgba(236,72,153,0.3)',
+    bg: 'rgba(236,72,153,0.08)',
+    tagColor: '#EC4899',
+    tagBg: 'rgba(236,72,153,0.1)',
+    sample: '"Okay bestie real talk — have you eaten today? Let\'s do this together 💕"',
+    timerBtn: 'Let\'s do this together 💕',
+    nudge: 'Hey babe, just checking in on you. How are you actually doing? I\'m here 💕',
+    personality: `Your name is Lex. You are THE BESTIE — warm, personal, like texting your closest friend who totally gets you.
+STYLE: Casual texting energy, terms of endearment (babe, bestie, love), check-ins on the whole person not just tasks. Relatable, funny, real.
+NEVER be formal. NEVER forget to check how the person is doing before diving into tasks.
+Sample phrases: "okay real talk", "bestie I need you to hear this", "you literally got this", "lowkey proud of you", "ngl that sounds hard"`
   }
 };
-const VIBE_ORDER = ['akil','trinity','layla','alissa','riyan','lex'];
 
-// ═══════════════════════════════════════
-// LEVELS
-// ═══════════════════════════════════════
-const LEVELS = [
-  {name:'Starter',min:0,next:500},
-  {name:'Building',min:500,next:1500},
-  {name:'Focused',min:1500,next:3000},
-  {name:'Unstoppable',min:3000,next:6000},
-  {name:'Legend',min:6000,next:12000}
-];
-function getLevel(xp){
-  let lvl = LEVELS[0];
-  for(let i=0;i<LEVELS.length;i++) if(xp>=LEVELS[i].min) lvl=LEVELS[i];
-  return lvl;
-}
+const VIBE_ORDER = ['hype','zen','gentle','competitive','coach','bestie'];
 
 // ═══════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════
+localStorage.setItem('ph_returning','true');
 if(window.speechSynthesis){window.speechSynthesis.getVoices();window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();}
 
-let authToken = localStorage.getItem('ph_token') || null;
-let currentUser = null;   // {id, name, email, initials, xpTotal, buddyVibe, buddyCustomName}
-let currentVibe = null;   // vibe key string
-let buddyName = null;     // custom name or null
-let isSubscribed = localStorage.getItem('ph_subscribed') === 'true';
+let currentUser = null;
+let currentVibe = localStorage.getItem('ph_vibe') || null;
 let pendingVibe = null;
-
-// Data from API
-let habits = [];          // [{id, name, streak, ...}]
-let completedHabitIds = [];
-let dailyXP = 0;
-let xpTotal = 0;
-let streak = 0;
-let rewards = [];
-let tasks = [];           // [{id, title, dueDate, status, steps, stepsTotal, stepsDone, ...}]
-let expandedTaskId = null; // which task card is expanded on home
-let addTaskVisible = false;
-
-// UI state
-let coachOpen = false;
-let micListening = false;
-let voiceMuted = false;
-let timerSecs = 25*60;
-let timerRunning = false;
-let timerInterval = null;
-let timerMode = 'work';
-const CIRC = 163.4;
-
-// ═══════════════════════════════════════
-// API HELPERS
-// ═══════════════════════════════════════
-async function api(path, options = {}) {
-  const headers = { 'Content-Type': 'application/json' };
-  if (authToken) headers['Authorization'] = 'Bearer ' + authToken;
-  const res = await fetch(WORKER_URL + path, { ...options, headers: { ...headers, ...(options.headers||{}) } });
-  const data = await res.json();
-  if (!res.ok) throw { status: res.status, ...data };
-  return data;
-}
+let isSubscribed = localStorage.getItem('ph_subscribed') === 'true';
+let buddyName = localStorage.getItem('ph_buddy_name') || null; // null = use vibe default name
+let coachHistory = [];
+let habits = [
+  {id:1,name:'Morning medication',done:true,streak:12},
+  {id:2,name:'10 min walk',done:true,streak:5},
+  {id:3,name:'Drink 8 glasses of water',done:true,streak:3},
+  {id:4,name:'Evening journal',done:false,streak:7},
+  {id:5,name:'Read 15 minutes',done:false,streak:2},
+  {id:6,name:'Screen-free wind down',done:false,streak:0},
+];
+let xpPoints=340,timerSecs=25*60,timerRunning=false,timerInterval=null,timerMode='work';
+let coachOpen=false,micListening=false,voiceMuted=false;
+const CIRC=163.4;
+const rewards=[
+  {name:'Coffee break',emoji:'☕',pts:500},{name:'Game 30 min',emoji:'🎮',pts:1000},
+  {name:'Movie night',emoji:'🎬',pts:2000},{name:'Shopping treat',emoji:'🛍️',pts:5000},
+  {name:'Spa day',emoji:'🧖',pts:10000},{name:'Weekend trip',emoji:'✈️',pts:25000},
+];
 
 // ═══════════════════════════════════════
 // HELPERS
 // ═══════════════════════════════════════
-function getVibe() { return VIBES[currentVibe] || VIBES.lex; }
+function getVibe() { return VIBES[currentVibe] || VIBES.bestie; }
 function getBuddyName() { return buddyName || getVibe().name; }
-function isHabitDone(habitId) { return completedHabitIds.indexOf(habitId) !== -1; }
 
 function applyVibeTheme() {
   const v = getVibe();
@@ -1004,25 +830,12 @@ function applyVibeTheme() {
   document.documentElement.style.setProperty('--vibe-glow', v.glow);
 }
 
-function showLoading(text='Loading your hype...') {
-  const el=document.getElementById('loading-overlay');
-  const txt=document.getElementById('loading-text');
-  if(txt) txt.textContent=text;
-  if(el) el.classList.add('show');
-}
-function hideLoading() {
-  const el=document.getElementById('loading-overlay');
-  if(el) el.classList.remove('show');
-}
-
-// ═══════════════════════════════════════
-// UPDATE ALL VIBE UI
-// ═══════════════════════════════════════
 function updateAllVibeUI() {
   const v = getVibe();
   const name = getBuddyName();
   applyVibeTheme();
 
+  // Home buddy icon & name
   const homeIcon = document.getElementById('home-buddy-icon');
   if(homeIcon){ homeIcon.textContent = v.emoji; homeIcon.style.borderColor = v.color; homeIcon.style.background = v.bg; }
   const homeBuddyName = document.getElementById('home-buddy-name');
@@ -1030,6 +843,7 @@ function updateAllVibeUI() {
   const nudge = document.getElementById('daily-nudge');
   if(nudge) nudge.textContent = v.nudge;
 
+  // Buddy screen
   const aviDisplay = document.getElementById('buddy-avi-display');
   if(aviDisplay) aviDisplay.textContent = v.emoji;
   const displayName = document.getElementById('buddy-display-name');
@@ -1044,11 +858,13 @@ function updateAllVibeUI() {
     vibeTag.style.border = `0.5px solid ${v.tagColor}44`;
   }
 
+  // Chat buddy labels
   const chatEmoji = document.getElementById('chat-buddy-emoji');
   if(chatEmoji) chatEmoji.textContent = v.emoji;
   const chatLabel = document.getElementById('chat-buddy-label');
   if(chatLabel) chatLabel.textContent = name;
 
+  // Coach panel
   const coachAvi = document.getElementById('coach-avatar-sm');
   if(coachAvi){ coachAvi.textContent = v.emoji; coachAvi.style.borderColor = v.color; }
   const coachNameLabel = document.getElementById('coach-name-label');
@@ -1058,17 +874,17 @@ function updateAllVibeUI() {
   const coachInput = document.getElementById('coach-input');
   if(coachInput) coachInput.placeholder = `Talk to ${name.split(' ')[0]}...`;
 
-  const talkLabel = document.getElementById('btn-talk-label');
-  if(talkLabel) talkLabel.textContent = `Talk to ${name.split(' ')[0]}`;
-
+  // Timer button
   const timerBtn = document.getElementById('timer-btn');
   if(timerBtn && !timerRunning) timerBtn.textContent = v.timerBtn;
 
+  // Me screen vibe setting
   const vibeSetting = document.getElementById('vibe-setting-display');
   if(vibeSetting) vibeSetting.textContent = `${v.emoji} ${name} · ${v.label}`;
   const buddyNameSetting = document.getElementById('buddy-name-setting');
   if(buddyNameSetting) buddyNameSetting.textContent = name;
 
+  // Rename UI
   const renameBtn = document.getElementById('btn-rename');
   const lockIcon = document.getElementById('buddy-lock');
   const nudgeEl = document.getElementById('rename-nudge');
@@ -1089,7 +905,7 @@ function updateAllVibeUI() {
 function updateClock(){
   const now=new Date();
   const t=now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
-  document.querySelectorAll('.clock-sync').forEach(el=>el.textContent=t);
+  ['home-time','habits-time'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t;});
   const day=now.toLocaleDateString('en-US',{weekday:'long'});
   const date=now.toLocaleDateString('en-US',{month:'numeric',day:'numeric',year:'numeric'});
   const sub=document.getElementById('home-sub');
@@ -1097,54 +913,6 @@ function updateClock(){
 }
 updateClock();
 setInterval(updateClock,10000);
-
-// ═══════════════════════════════════════
-// DAILY QUOTE / WORD OF THE DAY
-// ═══════════════════════════════════════
-const DAILY_QUOTES = [
-  {word:'Momentum',quote:"You don't need motivation to start. You need to start to find motivation."},
-  {word:'Progress',quote:"Done is better than perfect. Every tiny step counts."},
-  {word:'Resilience',quote:"It's not about never falling. It's about getting up one more time than you fall."},
-  {word:'Focus',quote:"You don't have to see the whole staircase. Just take the first step."},
-  {word:'Patience',quote:"Your brain works differently, not wrong. Give yourself the grace you'd give a friend."},
-  {word:'Courage',quote:"Starting is the hardest part. Everything after that is just momentum."},
-  {word:'Rest',quote:"Rest is not the opposite of productivity. It's the foundation of it."},
-  {word:'Growth',quote:"The fact that you're here, trying, says more about you than any streak ever could."},
-  {word:'Kindness',quote:"Talk to yourself like someone you love. Your brain is doing its best."},
-  {word:'Spark',quote:"Your chaos is not a flaw. It's energy waiting to be aimed."},
-  {word:'Breathe',quote:"When everything feels urgent, nothing is. Pause. Pick one thing. Begin."},
-  {word:'Enough',quote:"You did enough today. You are enough today. Full stop."},
-  {word:'Begin',quote:"The perfect moment to start is the one you stop waiting for."},
-  {word:'Steady',quote:"Consistency isn't doing it perfectly. It's showing up imperfectly, again and again."},
-  {word:'Trust',quote:"Trust the process. Trust the tiny steps. Trust yourself more than the doubt."},
-  {word:'Ease',quote:"If it feels too hard, make it smaller. Then smaller again. Then just do that."},
-  {word:'Now',quote:"Not tomorrow. Not later. Just this one small thing, right now."},
-  {word:'Grace',quote:"Missing a day doesn't erase your progress. It just means you're human."},
-  {word:'Power',quote:"You've survived every hard day so far. That's a 100% success rate."},
-  {word:'Joy',quote:"Celebrate what you did, not what you didn't. The wins matter more than the gaps."},
-  {word:'Flow',quote:"Your brain doesn't lack attention. It just needs the right spark to lock in."},
-  {word:'Anchor',quote:"One habit. One step. One breath. That's your anchor for today."},
-  {word:'Rise',quote:"Every expert was once a beginner who didn't quit."},
-  {word:'Calm',quote:"You don't have to have it all figured out. Just figure out the next step."},
-  {word:'Bloom',quote:"Growth happens in the messy middle, not just at the finish line."},
-  {word:'Grit',quote:"It's not talent. It's showing up on the days you really don't want to."},
-  {word:'Light',quote:"You bring something to this world that no one else can. Don't dim that."},
-  {word:'Move',quote:"Action cures anxiety. Even the tiniest action."},
-  {word:'Peace',quote:"You don't owe the world your productivity. You owe yourself peace."},
-  {word:'Wild',quote:"Your different brain is your superpower. The world needs how you think."},
-  {word:'Shine',quote:"You're not behind. You're on your own timeline, and it's valid."},
-];
-
-function setDailyQuote() {
-  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
-  const idx = dayOfYear % DAILY_QUOTES.length;
-  const q = DAILY_QUOTES[idx];
-  const label = document.getElementById('quote-label');
-  const quote = document.getElementById('daily-quote');
-  if(label) label.textContent = `✦ ${q.word}`;
-  if(quote) quote.textContent = q.quote;
-}
-setDailyQuote();
 
 // ═══════════════════════════════════════
 // VIBE ONBOARDING
@@ -1183,16 +951,17 @@ function selectVibe(id) {
   if(btn) btn.classList.add('ready');
 }
 
-async function confirmVibe() {
+function confirmVibe() {
   if(!pendingVibe) return;
   currentVibe = pendingVibe;
-  buddyName = null;
-  try { await api('/api/vibe', { method:'POST', body:JSON.stringify({vibe:currentVibe}) }); } catch(e){ console.warn('Vibe save error:',e); }
+  localStorage.setItem('ph_vibe', currentVibe);
+  if(!buddyName) buddyName = null;
   updateAllVibeUI();
+  scheduleSave();
   document.getElementById('vibe-screen').classList.remove('active');
   document.getElementById('tab-bar').style.display = 'flex';
   goTab('home');
-  await loadAllData();
+  renderAll();
   updateClock();
 }
 
@@ -1234,18 +1003,110 @@ function selectVibeChange(id) {
   }
 }
 
-async function saveVibeChange() {
+function saveVibeChange() {
   if(!pendingVibe) return;
   currentVibe = pendingVibe;
-  if(!buddyName) buddyName = null;
-  try { await api('/api/vibe', { method:'POST', body:JSON.stringify({vibe:currentVibe}) }); } catch(e){ console.warn(e); }
+  localStorage.setItem('ph_vibe', currentVibe);
+  if(!localStorage.getItem('ph_buddy_name')) buddyName = null;
+  coachHistory = [];
   updateAllVibeUI();
+  scheduleSave();
   document.getElementById('vibe-change-sheet').classList.remove('open');
+}
+
+// ═══════════════════════════════════════
+// API CONFIG — routes through Cloudflare Worker
+// ⚠️ Replace with your deployed worker URL after deploying worker.js
+// e.g. https://parahype-api.YOUR-USERNAME.workers.dev
+// ═══════════════════════════════════════
+const WORKER_URL = 'https://parahype-api.betha-a.workers.dev';
+
+// ── Password hashing (SHA-256, client-side) ──
+async function hashPassword(password) {
+  const msgBuffer = new TextEncoder().encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// ── Unique user ID generator ──
+function generateUID() {
+  return 'ph_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+}
+
+// ── Loading overlay ──
+function showLoading(text = 'Loading your hype...') {
+  const el = document.getElementById('loading-overlay');
+  const txt = document.getElementById('loading-text');
+  if (txt) txt.textContent = text;
+  if (el) el.classList.add('show');
+}
+
+function hideLoading() {
+  const el = document.getElementById('loading-overlay');
+  if (el) el.classList.remove('show');
+}
+
+// ── DB helpers ──
+async function dbCall(action, body) {
+  try {
+    const res = await fetch(`${WORKER_URL}/db`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action, ...body })
+    });
+    if (!res.ok) {
+      console.warn('DB error:', await res.text());
+      return null;
+    }
+    return await res.json();
+  } catch(e) {
+    console.warn('DB call failed:', e);
+    return null;
+  }
+}
+
+async function dbFindUser(email) {
+  const res = await dbCall('findOne', { filter: { email } });
+  return res?.document || null;
+}
+
+async function dbCreateUser(userData) {
+  const res = await dbCall('insertOne', { document: userData });
+  return res?.insertedId || null;
+}
+
+async function dbSaveUser(email, fields) {
+  await dbCall('updateOne', {
+    filter: { email },
+    update: { $set: { ...fields, updatedAt: new Date().toISOString() } },
+    upsert: true
+  });
+}
+
+// Save current app state to DB (debounced — waits 1.5s after last change)
+let saveTimer = null;
+function scheduleSave() {
+  if (!currentUser?.email) return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    dbSaveUser(currentUser.email, {
+      vibe:         currentVibe,
+      buddyName:    buddyName,
+      isSubscribed: isSubscribed,
+      xpTotal:      xpPoints,
+      xpToday:      xpPoints,
+      streak:       parseInt(document.getElementById('streak-num')?.textContent || '0'),
+      habits:       habits,
+      lastSeen:     new Date().toISOString(),
+    });
+  }, 1500);
 }
 
 // ═══════════════════════════════════════
 // GOOGLE AUTH
 // ═══════════════════════════════════════
+// ⚠️ Replace YOUR_GOOGLE_CLIENT_ID with your actual Client ID
 const GOOGLE_CLIENT_ID = '790361257297-3c3ua1tj1hhnuea7ffc8d59fuovm8sg6.apps.googleusercontent.com';
 let googleTokenClient = null;
 
@@ -1259,20 +1120,46 @@ function initGoogleAuth(){
       try{
         const res=await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+tokenResponse.access_token}});
         const info=await res.json();
+        const name=info.given_name||info.name||'Friend';
+        const email=info.email||'';
+        const picture=info.picture||null;
+
         showLoading('Signing you in...');
-        // Send profile to Worker's Google auth endpoint
-        const data = await api('/api/auth/google', {
-          method:'POST',
-          body:JSON.stringify({ profile: { email:info.email, name:info.given_name||info.name||'', picture:info.picture||null } })
-        });
-        authToken = data.token;
-        localStorage.setItem('ph_token', authToken);
+
+        // Check if user exists in DB, create if not
+        let dbUser = await dbFindUser(email);
+        const isFree = isFreeMember(email);
+        if(!dbUser) {
+          dbUser = {
+            uid: generateUID(),
+            name, email, picture,
+            fromGoogle: true,
+            passwordHash: null,
+            vibe: null, buddyName: null,
+            isSubscribed: isFree,
+            isFreeMember: isFree,
+            xpTotal: 0, xpToday: 0, streak: 0,
+            habits: [],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            lastSeen: new Date().toISOString(),
+          };
+          await dbCreateUser(dbUser);
+        } else {
+          restoreUserState(dbUser);
+          // Check free member on every login
+          if(isFree && !dbUser.isSubscribed) {
+            isSubscribed = true;
+            localStorage.setItem('ph_subscribed', 'true');
+            await dbSaveUser(email, { isSubscribed: true, isFreeMember: true });
+          }
+        }
+
         hideLoading();
-        await enterApp(data.user, info.picture||null);
+        loginUser({name, email, picture, fromGoogle:true, dbUser});
       }catch(e){
         hideLoading();
-        console.error('Google auth error:',e);
-        showAuthError(e.error || 'Google sign-in failed. Please try again.');
+        loginUser({name:'Friend',email:'',picture:null,fromGoogle:true});
       }
     }
   });
@@ -1288,21 +1175,17 @@ function triggerGoogleSignIn(){
 window.addEventListener('load',()=>{
   const poll=setInterval(()=>{if(typeof google!=='undefined'){initGoogleAuth();clearInterval(poll);}},200);
   setTimeout(()=>clearInterval(poll),5000);
-  // Auto-login if token exists
-  tryAutoLogin();
 });
 
 // ═══════════════════════════════════════
 // AUTH
 // ═══════════════════════════════════════
 function switchTab(el,mode){
-  if(resetMode) hideResetPassword();
   document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('login-fields').style.display=mode==='login'?'block':'none';
   document.getElementById('signup-fields').style.display=mode==='signup'?'block':'none';
   document.getElementById('auth-btn').textContent=mode==='login'?'Continue':'Create account';
-  clearAuthError();
 }
 
 function showAuthError(msg) {
@@ -1316,113 +1199,240 @@ function clearAuthError() {
   document.querySelectorAll('.field input').forEach(i => i.classList.remove('invalid'));
 }
 
-function isValidEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()); }
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
+
+// ═══════════════════════════════════════
+// PASSWORD SHOW/HIDE
+// ═══════════════════════════════════════
+function togglePw(inputId, btn) {
+  const inp = document.getElementById(inputId);
+  if (!inp) return;
+  const showing = inp.type === 'text';
+  inp.type = showing ? 'password' : 'text';
+  btn.innerHTML = showing
+    ? `<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M1.5 9s3-5.5 7.5-5.5S16.5 9 16.5 9s-3 5.5-7.5 5.5S1.5 9 1.5 9z" stroke="currentColor" stroke-width="1.3"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.3"/></svg>`
+    : `<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 2l14 14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M7.6 7.6a2.5 2.5 0 003.3 3.3" stroke="currentColor" stroke-width="1.3"/><path d="M4.2 5.5C2.6 6.8 1.5 9 1.5 9s3 5.5 7.5 5.5c1.4 0 2.6-.4 3.7-1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M14.5 12c1.2-1.2 2-2.8 2-3s-3-5.5-7.5-5.5c-.5 0-1 .05-1.5.14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>`;
+}
+
+// ═══════════════════════════════════════
+// DATE OF BIRTH DROPDOWNS
+// ═══════════════════════════════════════
+(function populateDOB() {
+  const daySelect = document.getElementById('signup-dob-day');
+  const yearSelect = document.getElementById('signup-dob-year');
+  if (daySelect) {
+    for (let d = 1; d <= 31; d++) {
+      const opt = document.createElement('option');
+      opt.value = d; opt.textContent = d;
+      daySelect.appendChild(opt);
+    }
+  }
+  if (yearSelect) {
+    const currentYear = new Date().getFullYear();
+    for (let y = currentYear - 10; y >= currentYear - 100; y--) {
+      const opt = document.createElement('option');
+      opt.value = y; opt.textContent = y;
+      yearSelect.appendChild(opt);
+    }
+  }
+})();
+
+function getDOBAge() {
+  const m = parseInt(document.getElementById('signup-dob-month')?.value);
+  const d = parseInt(document.getElementById('signup-dob-day')?.value);
+  const y = parseInt(document.getElementById('signup-dob-year')?.value);
+  if (!m || !d || !y) return null;
+  const dob = new Date(y, m - 1, d);
+  const today = new Date();
+  let age = today.getFullYear() - dob.getFullYear();
+  const monthDiff = today.getMonth() - dob.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) age--;
+  return { dob: `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`, age };
+}
+
+// ═══════════════════════════════════════
+// FORGOT PASSWORD MODAL
+// ═══════════════════════════════════════
+function openResetModal() {
+  document.getElementById('reset-modal').classList.add('open');
+  document.getElementById('reset-form-view').style.display = 'block';
+  document.getElementById('reset-success-view').style.display = 'none';
+  const err = document.getElementById('reset-error');
+  if (err) err.classList.remove('visible');
+  setTimeout(() => document.getElementById('reset-email')?.focus(), 100);
+}
+
+function closeResetModal() {
+  document.getElementById('reset-modal').classList.remove('open');
+}
+
+async function sendReset() {
+  const email = document.getElementById('reset-email')?.value.trim();
+  const errEl = document.getElementById('reset-error');
+  if (errEl) errEl.classList.remove('visible');
+  if (!email || !isValidEmail(email)) {
+    if (errEl) { errEl.textContent = 'Please enter a valid email address.'; errEl.classList.add('visible'); }
+    return;
+  }
+  // Check if user exists
+  showLoading('Sending reset link...');
+  const user = await dbFindUser(email);
+  hideLoading();
+  if (!user) {
+    if (errEl) { errEl.textContent = 'No account found with that email.'; errEl.classList.add('visible'); }
+    return;
+  }
+  // In production, this would trigger an actual email via your backend.
+  // For now, generate a temporary reset token and save it.
+  const resetToken = Math.random().toString(36).substr(2, 12);
+  await dbSaveUser(email, { resetToken, resetRequestedAt: new Date().toISOString() });
+
+  document.getElementById('reset-form-view').style.display = 'none';
+  document.getElementById('reset-success-view').style.display = 'block';
+  document.getElementById('reset-sent-email').textContent = email;
+}
+
+// ═══════════════════════════════════════
+// FREE / HONORARY MEMBERS
+// ═══════════════════════════════════════
+// Add emails of people you want to honor with a free Pro subscription.
+// When these users sign up or log in, they'll automatically get Pro unlocked.
+const FREE_MEMBERS = [
+  // 'friend@example.com',
+  // 'earlyuser@example.com',
+];
+
+function isFreeMember(email) {
+  if (!email) return false;
+  return FREE_MEMBERS.includes(email.toLowerCase().trim());
+}
 
 async function doAuth(){
-  if(resetMode) { await sendPasswordReset(); return; }
   clearAuthError();
   const isLogin = document.getElementById('login-fields').style.display !== 'none';
 
   if(isLogin) {
     const email = document.getElementById('login-email').value.trim();
     const pass  = document.getElementById('login-pass').value;
+
     if(!email) { document.getElementById('login-email').classList.add('invalid'); showAuthError('Please enter your email address.'); return; }
     if(!isValidEmail(email)) { document.getElementById('login-email').classList.add('invalid'); showAuthError('Please enter a valid email address.'); return; }
     if(!pass || pass.length < 6) { document.getElementById('login-pass').classList.add('invalid'); showAuthError('Password must be at least 6 characters.'); return; }
 
     showLoading('Signing you in...');
-    try {
-      const data = await api('/api/auth/login', { method:'POST', body:JSON.stringify({email, password:pass}) });
-      authToken = data.token;
-      localStorage.setItem('ph_token', authToken);
-      hideLoading();
-      await enterApp(data.user);
-    } catch(e) {
-      hideLoading();
-      if(e.status===401) { document.getElementById('login-pass').classList.add('invalid'); showAuthError('Incorrect email or password.'); }
-      else if(e.status===400 && e.error?.includes('Google')) { showAuthError('This account uses Google sign-in. Use the Google button below.'); }
-      else showAuthError(e.error || 'Login failed. Please try again.');
+    const hashed = await hashPassword(pass);
+    const user = await dbFindUser(email);
+    hideLoading();
+
+    if(!user) {
+      showAuthError('No account found with that email. Please sign up first.');
+      return;
     }
+    if(user.passwordHash !== hashed) {
+      document.getElementById('login-pass').classList.add('invalid');
+      showAuthError('Incorrect password. Please try again.');
+      return;
+    }
+
+    // ✅ Authenticated — restore their saved state
+    restoreUserState(user);
+
+    // Check if this is an honorary free member
+    if(isFreeMember(email) && !user.isSubscribed) {
+      isSubscribed = true;
+      localStorage.setItem('ph_subscribed', 'true');
+      await dbSaveUser(email, { isSubscribed: true, isFreeMember: true });
+    }
+
+    loginUser({ name: user.name, email: user.email, picture: user.picture || null, fromGoogle: false, dbUser: user });
 
   } else {
     const name  = document.getElementById('signup-name').value.trim();
     const email = document.getElementById('signup-email').value.trim();
     const pass  = document.getElementById('signup-pass').value;
-    const dob   = document.getElementById('signup-dob').value;
+    const dobData = getDOBAge();
+
     if(!name) { document.getElementById('signup-name').classList.add('invalid'); showAuthError('Please enter your first name.'); return; }
-    if(!dob) { document.getElementById('signup-dob').classList.add('invalid'); showAuthError('Please enter your date of birth.'); return; }
-    const age = getAge(dob);
-    if(age < 6) { showAuthError('ParaHype requires users to be at least 6 years old.'); return; }
     if(!email) { document.getElementById('signup-email').classList.add('invalid'); showAuthError('Please enter your email address.'); return; }
     if(!isValidEmail(email)) { document.getElementById('signup-email').classList.add('invalid'); showAuthError('Please enter a valid email address.'); return; }
     if(!pass || pass.length < 6) { document.getElementById('signup-pass').classList.add('invalid'); showAuthError('Password must be at least 6 characters.'); return; }
+    if(!dobData) { showAuthError('Please enter your full date of birth.'); return; }
+    if(dobData.age < 13) { showAuthError('You must be at least 13 years old to use ParaHype.'); return; }
 
-    // Ages 6-12: require parent consent
-    if(age < 13) {
-      pendingSignupData = { name, email, password: pass, dob };
-      document.getElementById('parent-consent-modal').classList.add('open');
+    showLoading('Creating your account...');
+
+    // Check if account already exists
+    const existing = await dbFindUser(email);
+    if(existing) {
+      hideLoading();
+      document.getElementById('signup-email').classList.add('invalid');
+      showAuthError('An account with that email already exists. Please log in.');
       return;
     }
 
-    showLoading('Creating your account...');
-    try {
-      const data = await api('/api/auth/signup', { method:'POST', body:JSON.stringify({name, email, password:pass, dob}) });
-      authToken = data.token;
-      localStorage.setItem('ph_token', authToken);
-      hideLoading();
-      await enterApp(data.user);
-    } catch(e) {
-      hideLoading();
-      if(e.status===409) { document.getElementById('signup-email').classList.add('invalid'); showAuthError('An account with that email already exists. Please log in.'); }
-      else showAuthError(e.error || 'Signup failed. Please try again.');
+    const isFree = isFreeMember(email);
+    const hashed = await hashPassword(pass);
+    const uid = generateUID();
+    const newUser = {
+      uid,
+      name,
+      email,
+      passwordHash: hashed,
+      picture: null,
+      fromGoogle: false,
+      dob: dobData.dob,
+      age: dobData.age,
+      vibe: null,
+      buddyName: null,
+      isSubscribed: isFree,
+      isFreeMember: isFree,
+      xpTotal: 0,
+      xpToday: 0,
+      streak: 0,
+      habits: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      lastSeen: new Date().toISOString(),
+    };
+
+    await dbCreateUser(newUser);
+    hideLoading();
+
+    // If free member, activate Pro locally
+    if(isFree) {
+      isSubscribed = true;
+      localStorage.setItem('ph_subscribed', 'true');
     }
+
+    // ✅ Account created — go to onboarding
+    loginUser({ name, email, picture: null, fromGoogle: false, dbUser: newUser });
   }
 }
 
-// ═══════════════════════════════════════
-// AUTO-LOGIN (returning user with stored JWT)
-// ═══════════════════════════════════════
-async function tryAutoLogin() {
-  if(!authToken) return;
-  showLoading('Welcome back...');
-  try {
-    const data = await api('/api/auth/me');
-    hideLoading();
-    await enterApp({
-      id: data.id,
-      name: data.name || data.displayName,
-      email: data.email,
-      initials: data.initials,
-      xpTotal: data.xpTotal,
-      buddyVibe: data.buddyVibe,
-      buddyCustomName: data.buddyCustomName
-    });
-  } catch(e) {
-    hideLoading();
-    // Token expired or invalid — stay on login
-    authToken = null;
-    localStorage.removeItem('ph_token');
+function restoreUserState(dbUser) {
+  if(!dbUser) return;
+  if(dbUser.vibe)         { currentVibe = dbUser.vibe; localStorage.setItem('ph_vibe', currentVibe); }
+  if(dbUser.buddyName)    { buddyName = dbUser.buddyName; localStorage.setItem('ph_buddy_name', buddyName); }
+  if(dbUser.isSubscribed) { isSubscribed = true; localStorage.setItem('ph_subscribed', 'true'); }
+  if(dbUser.xpToday)      xpPoints = dbUser.xpToday;
+  if(dbUser.habits && dbUser.habits.length > 0) habits = dbUser.habits;
+  if(dbUser.streak) {
+    const el = document.getElementById('streak-num');
+    if(el) el.textContent = dbUser.streak;
   }
 }
 
-// ═══════════════════════════════════════
-// ENTER APP (after any auth method)
-// ═══════════════════════════════════════
-async function enterApp(user, picture=null) {
-  currentUser = user;
-  xpTotal = user.xpTotal || 0;
+function loginUser({name,email,picture,fromGoogle=false,dbUser=null}){
+  const initials=name.slice(0,2).toUpperCase();
+  currentUser={name,email,initials,picture,fromGoogle};
 
-  // Set vibe from server
-  currentVibe = user.buddyVibe || null;
-  buddyName = user.buddyCustomName || null;
-
-  // Set user display
-  const initials = user.initials || (user.name||'?').slice(0,2).toUpperCase();
-  document.getElementById('home-greeting').textContent = `Hey, ${user.name||'there'} ✦`;
-  const homeAvatar = document.getElementById('home-avatar');
-  const profileAvi = document.getElementById('profile-avi');
-  if(picture) {
-    [homeAvatar, profileAvi].forEach(el=>{
+  document.getElementById('home-greeting').textContent=`Hey, ${name} ✦`;
+  const homeAvatar=document.getElementById('home-avatar');
+  const profileAvi=document.getElementById('profile-avi');
+  if(picture){
+    [homeAvatar,profileAvi].forEach(el=>{
       if(!el) return;
       el.style.backgroundImage=`url(${picture})`;
       el.style.backgroundSize='cover';
@@ -1430,60 +1440,60 @@ async function enterApp(user, picture=null) {
       el.textContent='';
     });
   } else {
-    if(homeAvatar) homeAvatar.textContent = initials;
-    if(profileAvi) profileAvi.textContent = initials;
+    if(homeAvatar) homeAvatar.textContent=initials;
+    if(profileAvi) profileAvi.textContent=initials;
+  }
+  const chevron=`<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 10l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+  document.getElementById('profile-name').textContent=name;
+  document.getElementById('disp-name').innerHTML=name+' '+chevron;
+  const emailDisp=document.getElementById('disp-email');
+  if(emailDisp) emailDisp.innerHTML=(email||'—')+' '+chevron;
+
+  // Age display
+  const ageDisp=document.getElementById('disp-age');
+  if(ageDisp && dbUser?.age) ageDisp.textContent=dbUser.age+' years old';
+  else if(ageDisp) ageDisp.textContent='—';
+
+  // Subscription display
+  const subDisp=document.getElementById('disp-sub');
+  if(subDisp) {
+    if(dbUser?.isFreeMember || isFreeMember(email)) {
+      subDisp.innerHTML='<span style="color:var(--amber);font-weight:600">✦ Honorary Pro</span>';
+    } else if(isSubscribed) {
+      subDisp.innerHTML='<span style="color:var(--green);font-weight:600">Pro</span>';
+    } else {
+      subDisp.innerHTML='<a href="subscribe.html" style="color:var(--accent2);text-decoration:none;font-weight:500">Upgrade to Pro →</a>';
+    }
   }
 
-  const chevron = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 10l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
-  document.getElementById('profile-name').textContent = user.name || 'You';
-  document.getElementById('disp-name').innerHTML = (user.name||'—') + ' ' + chevron;
-  document.getElementById('disp-email').innerHTML = (user.email||'—') + ' ' + chevron;
-
-  // Update profile subtitle with level
-  const lvl = getLevel(xpTotal);
-  document.getElementById('profile-sub').textContent = `Level — ${lvl.name}`;
+  // Update last seen in DB
+  if(email) dbSaveUser(email, { name, picture: picture||null, lastSeen: new Date().toISOString() });
 
   document.getElementById('login-screen').classList.remove('active');
 
-  // First time (no vibe set)? → Onboarding. Returning? → Home.
-  if(!currentVibe) {
+  // First time? Go to vibe onboarding. Returning? Skip to home.
+  if(!currentVibe){
     buildVibeGrid();
     document.getElementById('vibe-screen').classList.add('active');
   } else {
     updateAllVibeUI();
-    document.getElementById('tab-bar').style.display = 'flex';
+    document.getElementById('tab-bar').style.display='flex';
     goTab('home');
-    await loadAllData();
+    renderAll();
     updateClock();
   }
 }
 
-// ═══════════════════════════════════════
-// LOAD ALL DATA FROM API
-// ═══════════════════════════════════════
-async function loadAllData() {
-  try {
-    // Parallel fetch: habits, daily log, rewards, streak
-    const [habitsRes, dailyRes, rewardsRes, streakRes, tasksRes] = await Promise.all([
-      api('/api/habits').catch(()=>({habits:[]})),
-      api('/api/daily').catch(()=>({daily:{xpEarned:0,completedHabits:[]}})),
-      api('/api/rewards').catch(()=>({rewards:[],xpTotal:0})),
-      api('/api/stats/streak').catch(()=>({streak:0})),
-      api('/api/tasks').catch(()=>({tasks:[]})),
-    ]);
+function goToLanding(){localStorage.removeItem('ph_returning');window.location.href='landing.html';}
 
-    habits = habitsRes.habits || [];
-    completedHabitIds = dailyRes.daily?.completedHabits || [];
-    dailyXP = dailyRes.daily?.xpEarned || 0;
-    if(rewardsRes.xpTotal !== undefined) xpTotal = rewardsRes.xpTotal;
-    rewards = rewardsRes.rewards || [];
-    streak = streakRes.streak || 0;
-    tasks = tasksRes.tasks || [];
-
-    renderAll();
-  } catch(e) {
-    console.warn('Load data error:', e);
-  }
+function logout(){
+  currentUser=null;coachHistory=[];
+  document.getElementById('tab-bar').style.display='none';
+  ['home','habits','rewards','buddy','me','vibe'].forEach(t=>{
+    const el=document.getElementById(t+'-screen');if(el)el.classList.remove('active');
+  });
+  document.getElementById('login-screen').classList.add('active');
+  closeCoach();
 }
 
 // ═══════════════════════════════════════
@@ -1500,403 +1510,80 @@ function goTab(tab){
   if(coachOpen&&tab!=='home') closeCoach();
 }
 
-function goToLanding(){ window.location.href='landing.html'; }
-
-function logout(){
-  authToken = null;
-  currentUser = null;
-  currentVibe = null;
-  buddyName = null;
-  habits = [];
-  completedHabitIds = [];
-  localStorage.removeItem('ph_token');
-  localStorage.removeItem('ph_subscribed');
-  document.getElementById('tab-bar').style.display='none';
-  ['home','habits','rewards','buddy','me','vibe'].forEach(t=>{
-    const el=document.getElementById(t+'-screen');if(el)el.classList.remove('active');
-  });
-  document.getElementById('login-screen').classList.add('active');
-  closeCoach();
-}
-
 // ═══════════════════════════════════════
 // RENDER
 // ═══════════════════════════════════════
-function renderAll(){ renderHomeHabits(); renderFullHabits(); renderRewards(); renderHomeTasks(); updateStats(); }
+function renderAll(){renderHomeHabits();renderFullHabits();renderRewards();updateStats();}
 
 function renderHomeHabits(){
   const el=document.getElementById('home-habit-list');if(!el) return;
-  el.innerHTML=habits.slice(0,4).map(h=>{
-    const done = isHabitDone(h.id);
-    return `<div class="habit-item" onclick="toggleHabit('${h.id}')">
-      <div class="habit-icon-wrap ${done?'done':'todo'}">
-        ${done?`<svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8l4 4 7-7" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`
+  el.innerHTML=habits.slice(0,4).map(h=>`
+    <div class="habit-item" onclick="toggleHabit(${h.id})">
+      <div class="habit-icon-wrap ${h.done?'done':'todo'}">
+        ${h.done?`<svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8l4 4 7-7" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`
         :`<svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="#A78BFA" stroke-width="1" fill="none"/><path d="M8 5v3l2 1.5" stroke="#A78BFA" stroke-width="1.2" stroke-linecap="round" fill="none"/></svg>`}
       </div>
       <div style="flex:1">
-        <div class="habit-name ${done?'done':''}">${h.name}</div>
-        <div class="habit-xp">${done?'+20 XP earned':(h.streak||0)+'d streak · +20 XP'}</div>
+        <div class="habit-name ${h.done?'done':''}">${h.name}</div>
+        <div class="habit-xp">${h.done?'+25 XP earned':h.streak+'d streak · +25 XP'}</div>
       </div>
-      <div class="check-ring ${done?'done':''}">
-        ${done?`<svg width="11" height="11" viewBox="0 0 11 11"><polyline points="2,5.5 4.5,8 9,3" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`:''}
+      <div class="check-ring ${h.done?'done':''}">
+        ${h.done?`<svg width="11" height="11" viewBox="0 0 11 11"><polyline points="2,5.5 4.5,8 9,3" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`:''}
       </div>
-    </div>`;
-  }).join('');
+    </div>`).join('');
 }
 
 function renderFullHabits(){
   const el=document.getElementById('full-habit-list');if(!el) return;
-  el.innerHTML=habits.map(h=>{
-    const done = isHabitDone(h.id);
-    const s = h.streak||0;
-    return `<div class="habit-full" onclick="toggleHabit('${h.id}')">
-      <div class="check-ring ${done?'done':''}" style="width:28px;height:28px;flex-shrink:0">
-        ${done?`<svg width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`:''}
+  el.innerHTML=habits.map(h=>`
+    <div class="habit-full" onclick="toggleHabit(${h.id})">
+      <div class="check-ring ${h.done?'done':''}" style="width:28px;height:28px;flex-shrink:0">
+        ${h.done?`<svg width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`:''}
       </div>
       <div style="flex:1">
-        <div class="habit-name ${done?'done':''}">${h.name}</div>
-        <div class="streak-dots">${[6,5,4,3,2,1,0].map(i=>`<div class="sdot${i<s?' on':''}${i===0&&!done?' today':''}"></div>`).join('')}</div>
+        <div class="habit-name ${h.done?'done':''}">${h.name}</div>
+        <div class="streak-dots">${[6,5,4,3,2,1,0].map(i=>`<div class="sdot${i<h.streak?' on':''}${i===0&&!h.done?' today':''}"></div>`).join('')}</div>
       </div>
-      <div style="font-size:12px;color:var(--muted)">${s}d</div>
-    </div>`;
-  }).join('');
+      <div style="font-size:12px;color:var(--muted)">${h.streak}d</div>
+    </div>`).join('');
 }
 
 function renderRewards(){
   const el=document.getElementById('reward-grid');if(!el) return;
-  // Use rewards from API if available, fallback to defaults
-  const rewardList = rewards.length > 0 ? rewards : [
-    {name:'Coffee break',emoji:'☕',xp_required:500},
-    {name:'Game 30 min',emoji:'🎮',xp_required:1000},
-    {name:'Movie night',emoji:'🎬',xp_required:2000},
-    {name:'Shopping treat',emoji:'🛍️',xp_required:5000},
-    {name:'Spa day',emoji:'🧖',xp_required:10000},
-    {name:'Weekend trip',emoji:'✈️',xp_required:25000},
-  ];
-  el.innerHTML=rewardList.map(r=>{
-    const unlocked = r.unlocked !== undefined ? r.unlocked : xpTotal >= r.xp_required;
+  el.innerHTML=rewards.map(r=>{
+    const unlocked=xpPoints>=r.pts;
     return `<div class="reward-tile ${unlocked?'unlocked':'locked'}">
       <div class="r-emoji">${r.emoji}</div>
       <div class="r-name">${r.name}</div>
-      <div class="r-pts">${(r.xp_required||0).toLocaleString()} XP</div>
+      <div class="r-pts">${r.pts.toLocaleString()} XP</div>
       <div class="r-badge ${unlocked?'':'locked'}">${unlocked?'Unlocked':'Locked'}</div>
     </div>`;
   }).join('');
-
-  const lvl = getLevel(xpTotal);
-  const nextLvl = LEVELS.find(l=>l.min>xpTotal) || lvl;
-  const pct = Math.min(100, Math.round(((xpTotal-lvl.min)/(nextLvl.min-lvl.min||1))*100));
+  const pct=Math.min(100,Math.round((xpPoints/1000)*100));
   const bar=document.getElementById('xp-bar');if(bar) bar.style.width=pct+'%';
-  const lbl=document.getElementById('xp-count-label');if(lbl) lbl.textContent=`${xpTotal} / ${nextLvl.min} XP`;
-  const lvlLabel=document.getElementById('xp-level-label');if(lvlLabel) lvlLabel.textContent=`Level — ${lvl.name}`;
+  const lbl=document.getElementById('xp-count-label');if(lbl) lbl.textContent=`${xpPoints} / 1000 XP`;
 }
 
 function updateStats(){
-  const doneCount = completedHabitIds.length;
-  const el=document.getElementById('habits-num');if(el) el.textContent=`${doneCount}/${habits.length}`;
-  const xel=document.getElementById('xp-num');if(xel) xel.textContent=dailyXP;
-  const sel=document.getElementById('streak-num');if(sel) sel.textContent=streak;
-
-  // Buddy card stats mirror your own for now (AI buddy)
-  const bs=document.getElementById('buddy-streak-val');if(bs) bs.textContent=streak;
-  const bh=document.getElementById('buddy-habits-val');if(bh) bh.textContent=`${doneCount}/${habits.length}`;
-  const bx=document.getElementById('buddy-xp-val');if(bx) bx.textContent=dailyXP;
+  const done=habits.filter(h=>h.done).length;
+  const el=document.getElementById('habits-num');if(el) el.textContent=`${done}/${habits.length}`;
+  const xel=document.getElementById('xp-num');if(xel) xel.textContent=xpPoints;
 }
 
-// ═══════════════════════════════════════
-// TOGGLE HABIT (calls Worker API)
-// ═══════════════════════════════════════
-async function toggleHabit(habitId){
-  try {
-    const data = await api('/api/daily/toggle', { method:'POST', body:JSON.stringify({habitId}) });
-    completedHabitIds = data.daily?.completedHabits || [];
-    dailyXP = data.daily?.xpEarned || 0;
-    if(data.xpTotal !== undefined) xpTotal = data.xpTotal;
-    if(data.habits) habits = data.habits;
-    renderAll();
-  } catch(e) {
-    console.warn('Toggle habit error:', e);
-  }
+function toggleHabit(id){
+  const h=habits.find(h=>h.id===id);if(!h) return;
+  h.done=!h.done;
+  if(h.done){h.streak++;xpPoints+=25;}else{h.streak=Math.max(0,h.streak-1);xpPoints=Math.max(0,xpPoints-25);}
+  renderAll();
+  scheduleSave();
 }
 
-// ═══════════════════════════════════════
-// ADD HABIT (calls Worker API)
-// ═══════════════════════════════════════
-async function addHabit(){
+function addHabit(){
   const inp=document.getElementById('new-habit-input');
   const name=inp.value.trim();if(!name) return;
-  inp.value='';
-  try {
-    const data = await api('/api/habits', { method:'POST', body:JSON.stringify({name}) });
-    if(data.habit) habits.push(data.habit);
-    renderAll();
-  } catch(e) {
-    console.warn('Add habit error:', e);
-  }
-}
-
-// ═══════════════════════════════════════
-// TASKS — Home rendering
-// ═══════════════════════════════════════
-function getDueClass(dueDate) {
-  if(!dueDate) return 'future';
-  const today = new Date().toISOString().slice(0,10);
-  if(dueDate < today) return 'overdue';
-  if(dueDate === today) return 'today';
-  const d = new Date(dueDate);
-  const now = new Date();
-  const diff = Math.ceil((d - now) / (1000*60*60*24));
-  if(diff <= 3) return 'upcoming';
-  return 'future';
-}
-
-function getDueLabel(dueDate) {
-  if(!dueDate) return '';
-  const today = new Date().toISOString().slice(0,10);
-  if(dueDate < today) return 'Overdue';
-  if(dueDate === today) return 'Today';
-  const d = new Date(dueDate + 'T00:00:00');
-  const now = new Date();
-  const diff = Math.ceil((d - now) / (1000*60*60*24));
-  if(diff === 1) return 'Tomorrow';
-  if(diff <= 7) {
-    return d.toLocaleDateString('en-US',{weekday:'short'});
-  }
-  return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
-}
-
-function renderHomeTasks() {
-  const sectionRow = document.getElementById('tasks-section-row');
-  const el = document.getElementById('home-task-list');
-  if(!el) return;
-
-  const activeTasks = tasks.filter(t => t.status === 'active');
-
-  // Sort: daily tasks first, then overdue, then today, then by due date
-  activeTasks.sort((a,b) => {
-    if(a.recurrence && !b.recurrence) return -1;
-    if(!a.recurrence && b.recurrence) return 1;
-    const aClass = getDueClass(a.dueDate);
-    const bClass = getDueClass(b.dueDate);
-    const order = {overdue:0, today:1, upcoming:2, future:3};
-    return (order[aClass]||3) - (order[bClass]||3);
-  });
-
-  if(activeTasks.length === 0 && !addTaskVisible) {
-    if(sectionRow) sectionRow.style.display = 'flex';
-    el.innerHTML = '';
-    return;
-  }
-
-  if(sectionRow) sectionRow.style.display = 'flex';
-
-  el.innerHTML = activeTasks.map(t => {
-    const expanded = expandedTaskId === t.id;
-    const dueClass = getDueClass(t.dueDate);
-    const dueLabel = getDueLabel(t.dueDate);
-    const steps = t.steps || [];
-    const done = t.stepsDone || 0;
-    const total = t.stepsTotal || steps.length;
-    const isDaily = !!t.recurrence;
-
-    let stepsHTML = '';
-    if(expanded) {
-      const stepsListHTML = steps.length > 0 ? steps.map(s => `<div class="task-step-item">
-          <div class="task-step-check ${s.completed?'done':''}" onclick="event.stopPropagation();toggleTaskStep('${t.id}','${s.id}')">
-            ${s.completed?`<svg width="9" height="9" viewBox="0 0 9 9"><polyline points="1.5,4.5 3.5,6.5 7.5,2.5" fill="none" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>`:''}
-          </div>
-          <span class="task-step-name ${s.completed?'done':''}">${s.title}</span>
-          ${s.time_estimate||s.timeEstimate?`<span class="task-step-time">${s.time_estimate||s.timeEstimate}</span>`:''}
-        </div>`).join('') : '';
-
-      stepsHTML = `<div class="task-steps-expand">
-        ${stepsListHTML}
-        <div class="task-actions">
-          <button class="task-action-btn complete" onclick="event.stopPropagation();completeTask('${t.id}')">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Done
-          </button>
-          <button class="task-action-btn edit" onclick="event.stopPropagation();openTaskEdit('${t.id}')">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8.5 1.5l2 2-6 6H2.5v-2l6-6z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Edit
-          </button>
-          <button class="task-action-btn delete" onclick="event.stopPropagation();openTaskDelete('${t.id}')">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 3.5h6M4.5 3.5V2.5h3v1M4.5 5v4M7.5 5v4M3.5 3.5l.5 7h4l.5-7" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Delete
-          </button>
-        </div>
-      </div>`;
-    }
-
-    const badges = [];
-    if(isDaily) badges.push(`<span class="task-due today" style="background:rgba(124,58,237,0.12);color:var(--accent2)">🔁 Daily</span>`);
-    if(dueLabel && !isDaily) badges.push(`<span class="task-due ${dueClass}">${dueLabel}</span>`);
-
-    return `<div class="task-card ${t.status==='completed'?'completed':''}" onclick="toggleTaskExpand('${t.id}')">
-      <div class="task-top">
-        <span class="task-title ${t.status==='completed'?'done':''}">${t.title}</span>
-        <div style="display:flex;gap:4px;flex-shrink:0">${badges.join('')}</div>
-      </div>
-      ${total > 0 ? `<div class="task-progress">
-        ${Array.from({length:total}).map((_,i) => `<div class="task-prog-seg ${i<done?'done':''}"></div>`).join('')}
-      </div>` : ''}
-      <div class="task-meta">${total>0?`${done} of ${total} steps`:'No steps'} · +${t.xpReward||50} XP${isDaily?' · resets daily':''}</div>
-      ${stepsHTML}
-    </div>`;
-  }).join('');
-}
-
-function toggleTaskExpand(taskId) {
-  expandedTaskId = expandedTaskId === taskId ? null : taskId;
-  renderHomeTasks();
-}
-
-function toggleAddTask() {
-  addTaskVisible = !addTaskVisible;
-  const row = document.getElementById('add-task-row');
-  const opts = document.getElementById('add-task-options');
-  if(row) row.style.display = addTaskVisible ? 'flex' : 'none';
-  if(opts) opts.style.display = addTaskVisible ? 'block' : 'none';
-  if(addTaskVisible) document.getElementById('new-task-input')?.focus();
-}
-
-async function addManualTask() {
-  const inp = document.getElementById('new-task-input');
-  const dateInp = document.getElementById('new-task-date');
-  const dailyCheck = document.getElementById('new-task-daily');
-  const title = inp?.value.trim();
-  if(!title) return;
-  const dueDate = dateInp?.value || null;
-  const recurrence = dailyCheck?.checked ? 'daily' : null;
-  inp.value = '';
-  if(dateInp) dateInp.value = '';
-  if(dailyCheck) dailyCheck.checked = false;
-
-  try {
-    const data = await api('/api/tasks', {
-      method:'POST',
-      body:JSON.stringify({ title, dueDate, source:'manual', recurrence })
-    });
-    if(data.task) tasks.unshift(data.task);
-    addTaskVisible = false;
-    document.getElementById('add-task-row').style.display = 'none';
-    document.getElementById('add-task-options').style.display = 'none';
-    renderHomeTasks();
-  } catch(e) { console.warn('Add task error:', e); }
-}
-
-async function toggleTaskStep(taskId, stepId) {
-  try {
-    const data = await api(`/api/tasks/${taskId}/steps/${stepId}/toggle`, { method:'POST' });
-    // Update local task data
-    const task = tasks.find(t => t.id === taskId);
-    if(task) {
-      task.steps = data.steps || task.steps;
-      task.stepsTotal = data.stepsTotal ?? task.stepsTotal;
-      task.stepsDone = data.stepsDone ?? task.stepsDone;
-      task.status = data.task?.status || task.status;
-    }
-    if(data.xpTotal !== undefined) xpTotal = data.xpTotal;
-    if(data.xpAwarded > 0) showXPPop(`+${data.xpAwarded} XP`);
-    if(data.allDone) {
-      // Task auto-completed
-      dailyXP += data.xpAwarded || 0;
-    }
-    renderHomeTasks();
-    updateStats();
-    renderRewards();
-  } catch(e) { console.warn('Toggle step error:', e); }
-}
-
-// ═══════════════════════════════════════
-// TASK EDIT / COMPLETE / DELETE
-// ═══════════════════════════════════════
-let editingTaskId = null;
-let deletingTaskId = null;
-
-function openTaskEdit(taskId) {
-  const task = tasks.find(t => t.id === taskId);
-  if(!task) return;
-  editingTaskId = taskId;
-  document.getElementById('task-edit-title').value = task.title;
-  document.getElementById('task-edit-date').value = task.dueDate || '';
-  document.getElementById('task-edit-recurrence').value = task.recurrence || '';
-  document.getElementById('task-edit-sub').textContent = `Editing: ${task.title}`;
-  document.getElementById('task-edit-modal').classList.add('open');
-}
-
-async function saveTaskEdit() {
-  if(!editingTaskId) return;
-  const title = document.getElementById('task-edit-title').value.trim();
-  const dueDate = document.getElementById('task-edit-date').value || null;
-  const recurrence = document.getElementById('task-edit-recurrence').value || null;
-  if(!title) return;
-
-  try {
-    const data = await api(`/api/tasks/${editingTaskId}`, {
-      method:'PUT',
-      body:JSON.stringify({ title, dueDate, recurrence })
-    });
-    // Update local task
-    const task = tasks.find(t => t.id === editingTaskId);
-    if(task) {
-      task.title = title;
-      task.dueDate = dueDate;
-      task.recurrence = recurrence;
-    }
-    if(data.xpTotal !== undefined) xpTotal = data.xpTotal;
-    document.getElementById('task-edit-modal').classList.remove('open');
-    editingTaskId = null;
-    renderHomeTasks();
-    updateStats();
-  } catch(e) { console.warn('Edit task error:', e); }
-}
-
-async function completeTask(taskId) {
-  try {
-    const data = await api(`/api/tasks/${taskId}`, {
-      method:'PUT',
-      body:JSON.stringify({ status:'completed' })
-    });
-    const task = tasks.find(t => t.id === taskId);
-    if(task) task.status = 'completed';
-    if(data.xpTotal !== undefined) xpTotal = data.xpTotal;
-    const xpEarned = task?.xpReward || 50;
-    showXPPop(`+${xpEarned} XP`);
-    dailyXP += xpEarned;
-    expandedTaskId = null;
-    renderHomeTasks();
-    updateStats();
-    renderRewards();
-  } catch(e) { console.warn('Complete task error:', e); }
-}
-
-function openTaskDelete(taskId) {
-  const task = tasks.find(t => t.id === taskId);
-  if(!task) return;
-  deletingTaskId = taskId;
-  document.getElementById('task-delete-name').textContent = `"${task.title}" will be removed along with all its steps. This can't be undone.`;
-  document.getElementById('task-delete-modal').classList.add('open');
-}
-
-async function confirmDeleteTask() {
-  if(!deletingTaskId) return;
-  try {
-    await api(`/api/tasks/${deletingTaskId}`, { method:'DELETE' });
-    tasks = tasks.filter(t => t.id !== deletingTaskId);
-    document.getElementById('task-delete-modal').classList.remove('open');
-    deletingTaskId = null;
-    expandedTaskId = null;
-    renderHomeTasks();
-  } catch(e) { console.warn('Delete task error:', e); }
-}
-
-function showXPPop(text) {
-  const pop = document.createElement('div');
-  pop.className = 'xp-pop';
-  pop.textContent = text;
-  document.body.appendChild(pop);
-  setTimeout(() => pop.remove(), 1300);
+  habits.push({id:Date.now(),name,done:false,streak:0});
+  inp.value='';renderAll();
+  scheduleSave();
 }
 
 // ═══════════════════════════════════════
@@ -1916,13 +1603,7 @@ function toggleTimer(){
       timerSecs--;updateTimerDisplay();
       if(timerSecs<=0){
         clearInterval(timerInterval);timerRunning=false;
-        if(timerMode==='work'){
-          // Record focus session via API
-          api('/api/daily/focus', { method:'POST', body:JSON.stringify({minutes:25}) })
-            .then(d=>{ if(d.xpTotal!==undefined) xpTotal=d.xpTotal; dailyXP+=(d.xpEarned||50); updateStats(); renderRewards(); })
-            .catch(()=>{});
-          timerMode='break';timerSecs=5*60;
-        }
+        if(timerMode==='work'){xpPoints+=75;timerMode='break';timerSecs=5*60;updateStats();renderRewards();scheduleSave();}
         else{timerMode='work';timerSecs=25*60;}
         document.getElementById('timer-btn').textContent=v.timerBtn;
         document.getElementById('timer-mode').textContent=timerMode==='work'?'Ready to focus':'Break done!';
@@ -1941,42 +1622,22 @@ function updateTimerDisplay(){
 }
 
 // ═══════════════════════════════════════
-// BUDDY CHAT (hype messages via API)
+// BUDDY
 // ═══════════════════════════════════════
-async function sendHype(){
+function sendHype(){
   const inp=document.getElementById('hype-input');
   const text=inp.value.trim();if(!text) return;
   inp.value='';
   const chat=document.getElementById('buddy-chat');
   const div=document.createElement('div');div.className='msg-bubble msg-user';div.textContent=text;
   chat.appendChild(div);chat.scrollTop=chat.scrollHeight;
-
   const name=getBuddyName();
-
-  // Try sending via API for XP + AI response
-  try {
-    // Use the /api/buddies/hype if we have a buddyPairId, otherwise use /ai for a quick response
-    const data = await api('/ai', {
-      method:'POST',
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:200,
-        system:`You are ${name}, a hype buddy on ParaHype. Respond in 1-2 SHORT sentences like a real friend texting. Use ${getVibe().label} energy. React specifically to what they said. Use 1-2 emojis. Never be generic.`,
-        messages:[{role:'user',content:text}]
-      })
-    });
-    const reply = data.content?.find(c=>c.type==='text')?.text || `${name.split(' ')[0]} loved that! Keep the hype going 💜`;
-    const aiDiv=document.createElement('div');aiDiv.className='msg-bubble msg-ai';
-    aiDiv.innerHTML=`<div class="msg-ai-name"><span>${getVibe().emoji}</span><span>${name}</span></div>${reply}`;
-    chat.appendChild(aiDiv);chat.scrollTop=chat.scrollHeight;
-    dailyXP += 15; updateStats();
-  } catch(e) {
-    const fallback = `${name.split(' ')[0]} loved that! +15 XP for spreading the hype 💜`;
-    const aiDiv=document.createElement('div');aiDiv.className='msg-bubble msg-ai';
-    aiDiv.innerHTML=`<div class="msg-ai-name"><span>${getVibe().emoji}</span><span>${name}</span></div>${fallback}`;
-    chat.appendChild(aiDiv);chat.scrollTop=chat.scrollHeight;
-    dailyXP += 15; updateStats();
-  }
+  setTimeout(()=>{
+    const reply=document.createElement('div');reply.className='msg-bubble msg-ai';
+    reply.innerHTML=`<div class="msg-ai-name"><span>${getVibe().emoji}</span><span>${name}</span></div>${name.split(' ')[0]} loved that! +15 XP for spreading the hype 💜`;
+    chat.appendChild(reply);chat.scrollTop=chat.scrollHeight;
+    xpPoints+=15;updateStats();renderRewards();
+  },1200);
 }
 
 // ═══════════════════════════════════════
@@ -1994,8 +1655,12 @@ function startRename(){
 function saveRename(){
   const inp=document.getElementById('buddy-name-input');
   const newName=inp?inp.value.trim():'';
-  if(newName) buddyName = newName;
-  cancelRename(); updateAllVibeUI();
+  if(newName){
+    buddyName=newName;
+    localStorage.setItem('ph_buddy_name',buddyName);
+  }
+  cancelRename();updateAllVibeUI();
+  scheduleSave();
 }
 
 function cancelRename(){
@@ -2011,17 +1676,9 @@ function cancelRename(){
 function inviteFriend(){
   const inviterName=currentUser?currentUser.name:'Your friend';
   const appUrl='https://parahype.app';
-  const message=`${inviterName} invited you to join ParaHype — the hype buddy app for neurodivergent brains! Come be my buddy and let's keep each other on track 💜\n\n${appUrl}`;
+  const message=`${inviterName} invited you to join ParaHype — the ADHD hype buddy app! Come be my buddy and let's keep each other on track 💜\n\n${appUrl}`;
   const subject=`${inviterName} wants you on ParaHype!`;
-  if(navigator.share){
-    navigator.share({title:'Join me on ParaHype!',text:message,url:appUrl}).catch(()=>{
-      // Fallback if share fails
-      document.getElementById('invite-email-link').href=`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
-      document.getElementById('invite-sms-link').href=`sms:?&body=${encodeURIComponent(message)}`;
-      document.getElementById('invite-modal').classList.add('open');
-    });
-    return;
-  }
+  if(navigator.share){navigator.share({title:'Join me on ParaHype!',text:message,url:appUrl});return;}
   document.getElementById('invite-email-link').href=`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
   document.getElementById('invite-sms-link').href=`sms:?&body=${encodeURIComponent(message)}`;
   document.getElementById('invite-modal').classList.add('open');
@@ -2030,41 +1687,19 @@ function inviteFriend(){
 // ═══════════════════════════════════════
 // SUBSCRIBE
 // ═══════════════════════════════════════
-let selectedSubTier = 'monthly';
-const SUB_PRICES = { weekly:'$2.99 / week', monthly:'$9.99 / month', yearly:'$79.99 / year' };
-
-function openSubscribeModal(){
-  selectedSubTier = 'monthly';
-  updateSubTierUI();
-  document.getElementById('subscribe-modal').classList.add('open');
-}
+function openSubscribeModal(){document.getElementById('subscribe-modal').classList.add('open');}
 function closeSubscribeModal(){document.getElementById('subscribe-modal').classList.remove('open');}
 function handleModalOverlayClick(e){if(e.target===document.getElementById('subscribe-modal'))closeSubscribeModal();}
 
-function selectSubTier(tier) {
-  selectedSubTier = tier;
-  updateSubTierUI();
-}
-
-function updateSubTierUI() {
-  ['weekly','monthly','yearly'].forEach(t => {
-    const el = document.getElementById('sub-'+t);
-    if(!el) return;
-    if(t === selectedSubTier) {
-      el.style.borderColor = 'var(--accent)';
-      el.style.background = 'rgba(124,58,237,0.08)';
-    } else {
-      el.style.borderColor = 'var(--border)';
-      el.style.background = 'var(--bg)';
-    }
-  });
-  const btn = document.getElementById('sub-btn');
-  if(btn) btn.textContent = `Subscribe — ${SUB_PRICES[selectedSubTier]}`;
+function goToSubscribe(){
+  closeSubscribeModal();
+  window.location.href='subscribe.html';
 }
 
 function confirmSubscribe(){
   isSubscribed=true;localStorage.setItem('ph_subscribed','true');
   closeSubscribeModal();updateAllVibeUI();
+  scheduleSave();
   setTimeout(()=>{
     const nudge=document.getElementById('rename-nudge');if(!nudge) return;
     const congrats=document.createElement('div');
@@ -2076,317 +1711,17 @@ function confirmSubscribe(){
 }
 
 // ═══════════════════════════════════════
-// PASSWORD TOGGLE
+// VOICE
 // ═══════════════════════════════════════
-function togglePassVis(inputId, btn) {
-  const inp = document.getElementById(inputId);
-  if(!inp) return;
-  const showing = inp.type === 'text';
-  inp.type = showing ? 'password' : 'text';
-  btn.innerHTML = showing
-    ? `<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M1.5 9s3-5.5 7.5-5.5S16.5 9 16.5 9s-3 5.5-7.5 5.5S1.5 9 1.5 9z" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.2"/></svg>`
-    : `<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M1.5 9s3-5.5 7.5-5.5S16.5 9 16.5 9s-3 5.5-7.5 5.5S1.5 9 1.5 9z" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.2"/><line x1="2" y1="2" x2="16" y2="16" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>`;
-}
-
-// ═══════════════════════════════════════
-// PASSWORD RESET
-// ═══════════════════════════════════════
-let resetMode = false;
-
-function showResetPassword() {
-  resetMode = true;
-  clearAuthError();
-  document.getElementById('login-fields').style.display = 'none';
-  document.getElementById('signup-fields').style.display = 'none';
-  document.getElementById('reset-fields').style.display = 'block';
-  document.getElementById('auth-btn').textContent = 'Reset password';
-  const loginEmail = document.getElementById('login-email').value.trim();
-  if(loginEmail) document.getElementById('reset-email').value = loginEmail;
-  document.querySelector('.auth-tabs').style.display = 'none';
-}
-
-function hideResetPassword() {
-  resetMode = false;
-  document.getElementById('reset-fields').style.display = 'none';
-  document.getElementById('login-fields').style.display = 'block';
-  document.querySelector('.auth-tabs').style.display = 'flex';
-  document.getElementById('auth-btn').textContent = 'Continue';
-}
-
-async function sendPasswordReset() {
-  clearAuthError();
-  const email = document.getElementById('reset-email').value.trim();
-  const pass = document.getElementById('reset-pass').value;
-  const confirm = document.getElementById('reset-pass-confirm').value;
-
-  if(!email) { document.getElementById('reset-email').classList.add('invalid'); showAuthError('Please enter your email address.'); return; }
-  if(!isValidEmail(email)) { document.getElementById('reset-email').classList.add('invalid'); showAuthError('Please enter a valid email address.'); return; }
-  if(!pass || pass.length < 6) { document.getElementById('reset-pass').classList.add('invalid'); showAuthError('Password must be at least 6 characters.'); return; }
-  if(pass !== confirm) { document.getElementById('reset-pass-confirm').classList.add('invalid'); showAuthError('Passwords do not match.'); return; }
-
-  showLoading('Resetting password...');
-  try {
-    await api('/api/auth/reset-password', { method:'POST', body:JSON.stringify({ email, newPassword: pass }) });
-    hideLoading();
-    hideResetPassword();
-    document.getElementById('login-email').value = email;
-    document.getElementById('login-pass').value = '';
-    const errEl = document.getElementById('auth-error');
-    if(errEl) {
-      errEl.textContent = 'Password reset! Please log in with your new password.';
-      errEl.style.background = 'rgba(16,185,129,0.08)';
-      errEl.style.borderColor = 'rgba(16,185,129,0.3)';
-      errEl.style.color = '#10B981';
-      errEl.classList.add('visible');
-      setTimeout(()=>{ errEl.classList.remove('visible'); errEl.style.background=''; errEl.style.borderColor=''; errEl.style.color=''; }, 4000);
-    }
-  } catch(e) {
-    hideLoading();
-    showAuthError(e.error || 'Could not reset password. Please check your email and try again.');
-  }
-}
-
-// ═══════════════════════════════════════
-// NOTIFICATIONS TOGGLE
-// ═══════════════════════════════════════
-let notificationsOn = localStorage.getItem('ph_notif') !== 'off';
-
-function updateNotifDisplay() {
-  const el = document.getElementById('notif-setting');
-  if(el) el.textContent = notificationsOn ? 'On' : 'Off';
-}
-
-function toggleNotifications() {
-  notificationsOn = !notificationsOn;
-  localStorage.setItem('ph_notif', notificationsOn ? 'on' : 'off');
-  updateNotifDisplay();
-  if(notificationsOn && 'Notification' in window && Notification.permission === 'default') {
-    Notification.requestPermission();
-  }
-}
-
-updateNotifDisplay();
-
-// ═══════════════════════════════════════
-// DISPLAY NAME EDIT
-// ═══════════════════════════════════════
-function openDisplayNameEdit() {
-  const inp = document.getElementById('edit-display-name');
-  if(inp) inp.value = currentUser?.name || '';
-  document.getElementById('name-edit-modal').classList.add('open');
-  setTimeout(()=>inp?.focus(), 200);
-}
-
-async function saveDisplayName() {
-  const inp = document.getElementById('edit-display-name');
-  const newName = inp?.value.trim();
-  if(!newName) return;
-
-  try {
-    await api('/api/auth/update-name', { method:'POST', body:JSON.stringify({ displayName: newName }) });
-    if(currentUser) currentUser.name = newName;
-    document.getElementById('home-greeting').textContent = `Hey, ${newName} ✦`;
-    document.getElementById('profile-name').textContent = newName;
-    const chevron = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 10l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
-    document.getElementById('disp-name').innerHTML = newName + ' ' + chevron;
-    const initials = newName.slice(0,2).toUpperCase();
-    const homeAvatar = document.getElementById('home-avatar');
-    const profileAvi = document.getElementById('profile-avi');
-    if(homeAvatar && !homeAvatar.style.backgroundImage) homeAvatar.textContent = initials;
-    if(profileAvi && !profileAvi.style.backgroundImage) profileAvi.textContent = initials;
-    document.getElementById('name-edit-modal').classList.remove('open');
-  } catch(e) { console.warn('Update name error:', e); }
-}
-
-// ═══════════════════════════════════════
-// AGE VERIFICATION & PARENT CONSENT
-// ═══════════════════════════════════════
-let signupAge = null;
-let pendingSignupData = null;
-
-function getAge(dob) {
-  const birth = new Date(dob + 'T00:00:00');
-  const now = new Date();
-  let age = now.getFullYear() - birth.getFullYear();
-  const monthDiff = now.getMonth() - birth.getMonth();
-  if(monthDiff < 0 || (monthDiff === 0 && now.getDate() < birth.getDate())) age--;
-  return age;
-}
-
-function checkSignupAge() {
-  const dob = document.getElementById('signup-dob').value;
-  const msg = document.getElementById('signup-age-msg');
-  if(!dob || !msg) return;
-
-  signupAge = getAge(dob);
-
-  if(signupAge < 6) {
-    msg.style.display = 'block';
-    msg.style.color = 'var(--red)';
-    msg.textContent = 'ParaHype requires users to be at least 6 years old.';
-  } else if(signupAge < 13) {
-    msg.style.display = 'block';
-    msg.style.color = 'var(--amber)';
-    msg.textContent = '👨‍👩‍👧 A parent or guardian will need to complete signup for users under 13.';
-  } else {
-    msg.style.display = 'block';
-    msg.style.color = 'var(--green)';
-    msg.textContent = '✓ Age verified';
-    setTimeout(()=>{ msg.style.display = 'none'; }, 2000);
-  }
-}
-
-async function submitParentConsent() {
-  const parentName = document.getElementById('parent-name').value.trim();
-  const parentEmail = document.getElementById('parent-email').value.trim();
-  const consentCheck = document.getElementById('parent-consent-check').checked;
-
-  if(!parentName) { showAuthError('Please enter parent/guardian name.'); return; }
-  if(!parentEmail || !isValidEmail(parentEmail)) { showAuthError('Please enter a valid parent/guardian email.'); return; }
-  if(!consentCheck) { showAuthError('Please check the consent box to continue.'); return; }
-  if(!pendingSignupData) return;
-
-  document.getElementById('parent-consent-modal').classList.remove('open');
-  showLoading('Creating account...');
-
-  try {
-    const data = await api('/api/auth/signup', {
-      method:'POST',
-      body:JSON.stringify({
-        ...pendingSignupData,
-        parentName,
-        parentEmail,
-        isMinor: true,
-        dob: pendingSignupData.dob
-      })
-    });
-    authToken = data.token;
-    localStorage.setItem('ph_token', authToken);
-    hideLoading();
-    await enterApp(data.user);
-  } catch(e) {
-    hideLoading();
-    showAuthError(e.error || 'Signup failed. Please try again.');
-  }
-  pendingSignupData = null;
-}
-
-// ═══════════════════════════════════════
-// VOICE (TTS with voice picker)
-// ═══════════════════════════════════════
-let selectedVoiceName = localStorage.getItem('ph_voice') || null;
-let pendingVoiceName = null;
-
-function getAvailableVoices() {
-  if(!window.speechSynthesis) return [];
-  return window.speechSynthesis.getVoices().filter(v => v.lang.startsWith('en'));
-}
-
-function getBestVoice() {
-  const voices = getAvailableVoices();
-  if(!voices.length) return null;
-  // If user picked one, use it
-  if(selectedVoiceName) {
-    const picked = voices.find(v => v.name === selectedVoiceName);
-    if(picked) return picked;
-  }
-  // Otherwise rank by quality
-  const ranked = [
-    'Samantha', 'Zarvox', 'Karen', 'Daniel', 'Moira', 'Tessa',
-    'Google US English', 'Google UK English Female', 'Google UK English Male',
-    'Microsoft Zira', 'Microsoft David', 'Microsoft Jenny',
-    'Nicky', 'Alex', 'Fiona', 'Veena'
-  ];
-  for(const name of ranked) {
-    const match = voices.find(v => v.name.includes(name));
-    if(match) return match;
-  }
-  return voices.find(v => v.lang === 'en-US') || voices[0];
-}
-
-function cleanForSpeech(text) {
-  return text
-    .replace(/[\u{1F000}-\u{1FFFF}|\u{2600}-\u{27BF}|\u{2B50}|\u{FE00}-\u{FEFF}|\u{200D}|\u{20E3}|\u{E0020}-\u{E007F}|\u{2702}-\u{27B0}|\u{1F900}-\u{1F9FF}|\u{1FA00}-\u{1FA6F}|\u{1FA70}-\u{1FAFF}|\u{2300}-\u{23FF}|\u{2934}-\u{2935}|\u{25AA}-\u{25FE}|\u{2B05}-\u{2B07}|\u{3030}|\u{303D}|\u{3297}|\u{3299}|\u{00A9}|\u{00AE}|\u{2122}|\u{23CF}|\u{23E9}-\u{23F3}|\u{23F8}-\u{23FA}|\u{200B}-\u{200F}|\u{2028}-\u{202F}|\u{205F}-\u{2060}|\u{FEFF}]/gu, '')
-    .replace(/[✦✧★☆●◯♦♥♠♣▶►◀◄■□▪▫△▽⚡⚙️⭐✨✔✕✖✗✘→←↑↓↗↘↙↖•‣⁃–—…~`|<>{}[\]#*_]/g, '')
-    .replace(/\s{2,}/g, ' ')
-    .trim();
-}
-
 function speak(text){
   if(!window.speechSynthesis||voiceMuted) return;
   window.speechSynthesis.cancel();
-  const clean = cleanForSpeech(text);
-  if(!clean) return;
-  const utt=new SpeechSynthesisUtterance(clean);
-  const voice = getBestVoice();
-  if(voice) utt.voice=voice;
+  const utt=new SpeechSynthesisUtterance(text);
+  const voices=window.speechSynthesis.getVoices();
+  const preferred=voices.find(v=>v.name.includes('Samantha')||v.name.includes('Google US English')||v.name.includes('Karen')||v.name.includes('Moira'))||voices.find(v=>v.lang==='en-US')||voices[0];
+  if(preferred) utt.voice=preferred;
   utt.rate=0.95;utt.pitch=1.05;utt.volume=1;
   window.speechSynthesis.speak(utt);
-}
-
-function openVoicePicker() {
-  const voices = getAvailableVoices();
-  const list = document.getElementById('voice-list');
-  if(!list) return;
-  pendingVoiceName = selectedVoiceName;
-
-  const currentBest = getBestVoice();
-  list.innerHTML = voices.map(v => {
-    const isSelected = selectedVoiceName ? v.name === selectedVoiceName : v.name === currentBest?.name;
-    return `<div class="voice-option ${isSelected?'selected':''}" onclick="selectVoiceOption(this,'${v.name.replace(/'/g,"\\'")}')">
-      <div>
-        <div class="voice-opt-name">${v.name}</div>
-        <div class="voice-opt-lang">${v.lang}${v.localService?' · offline':''}</div>
-      </div>
-      <button class="btn-voice-test" onclick="event.stopPropagation();testVoice('${v.name.replace(/'/g,"\\'")}')">Test</button>
-    </div>`;
-  }).join('');
-
-  if(voices.length === 0) {
-    list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">No voices available on this device</div>';
-  }
-
-  document.getElementById('voice-picker-modal').classList.add('open');
-}
-
-function selectVoiceOption(el, name) {
-  document.querySelectorAll('.voice-option').forEach(o => o.classList.remove('selected'));
-  el.classList.add('selected');
-  pendingVoiceName = name;
-}
-
-function testVoice(name) {
-  if(!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const voices = window.speechSynthesis.getVoices();
-  const voice = voices.find(v => v.name === name);
-  const utt = new SpeechSynthesisUtterance("Hey! I'm your hype buddy. Let's go!");
-  if(voice) utt.voice = voice;
-  utt.rate = 0.95; utt.pitch = 1.05;
-  window.speechSynthesis.speak(utt);
-}
-
-function saveVoiceChoice() {
-  selectedVoiceName = pendingVoiceName;
-  if(selectedVoiceName) {
-    localStorage.setItem('ph_voice', selectedVoiceName);
-  } else {
-    localStorage.removeItem('ph_voice');
-  }
-  const display = document.getElementById('voice-setting-display');
-  if(display) display.textContent = selectedVoiceName ? selectedVoiceName.split(' ').slice(0,2).join(' ') : 'Default';
-  document.getElementById('voice-picker-modal').classList.remove('open');
-}
-
-function updateVoiceDisplay() {
-  const display = document.getElementById('voice-setting-display');
-  if(!display) return;
-  if(selectedVoiceName) {
-    display.textContent = selectedVoiceName.split(' ').slice(0,2).join(' ');
-  } else {
-    const best = getBestVoice();
-    display.textContent = best ? best.name.split(' ').slice(0,2).join(' ') : 'Default';
-  }
 }
 
 function toggleMute(){
@@ -2400,52 +1735,12 @@ function toggleMute(){
 }
 
 // ═══════════════════════════════════════
-// AI COACH (uses Worker's /api/coach/chat endpoint)
+// AI COACH
 // ═══════════════════════════════════════
-let coachHasBriefed = false;
 function toggleCoach(){
   coachOpen=!coachOpen;
   document.getElementById('coach-panel').classList.toggle('open',coachOpen);
-  if(coachOpen) {
-    document.getElementById('coach-input').focus();
-    // Auto-brief on first open each session
-    const activeTasks = tasks.filter(t=>t.status==='active');
-    const remainingHabits = habits.length - completedHabitIds.length;
-    const overdueTasks = activeTasks.filter(t => t.dueDate && t.dueDate < new Date().toISOString().slice(0,10));
-    const dailyTasks = activeTasks.filter(t => t.recurrence);
-    const incompleteDailySteps = dailyTasks.reduce((n,t) => n + ((t.stepsTotal||0) - (t.stepsDone||0)), 0);
-
-    if(!coachHasBriefed && (activeTasks.length > 0 || remainingHabits > 0)) {
-      coachHasBriefed = true;
-      const msgs=document.getElementById('coach-msgs');
-      const typingDiv=document.createElement('div');typingDiv.className='coach-msg';typingDiv.id='coach-typing';
-      typingDiv.innerHTML=`<span style="color:var(--muted);font-style:italic">${getBuddyName().split(' ')[0]} is checking your status...</span>`;
-      msgs.appendChild(typingDiv);msgs.scrollTop=msgs.scrollHeight;
-      setCoachThinking(true);
-
-      // Build a context-aware briefing request
-      let briefingPrompt = 'Give me my daily briefing. ';
-      if(overdueTasks.length > 0) briefingPrompt += `I have ${overdueTasks.length} overdue task(s) — flag those urgently. `;
-      if(dailyTasks.length > 0) briefingPrompt += `I have ${dailyTasks.length} daily task(s) with ${incompleteDailySteps} steps remaining. `;
-      if(remainingHabits > 0) briefingPrompt += `${remainingHabits} habits still to do. `;
-      briefingPrompt += 'What should I focus on right now?';
-
-      api('/api/coach/chat', { method:'POST', body:JSON.stringify({message:briefingPrompt}) })
-        .then(data => {
-          setCoachThinking(false);
-          const typing=document.getElementById('coach-typing');if(typing) typing.remove();
-          const reply = data.reply || "Let's check in on your progress!";
-          const aiDiv=document.createElement('div');aiDiv.className='coach-msg';
-          aiDiv.innerHTML=reply.replace(/\n/g,'<br>');
-          msgs.appendChild(aiDiv);msgs.scrollTop=msgs.scrollHeight;
-          speak(reply);
-        })
-        .catch(() => {
-          setCoachThinking(false);
-          const typing=document.getElementById('coach-typing');if(typing) typing.remove();
-        });
-    }
-  }
+  if(coachOpen) document.getElementById('coach-input').focus();
 }
 
 function closeCoach(){coachOpen=false;document.getElementById('coach-panel').classList.remove('open');}
@@ -2455,92 +1750,70 @@ function setCoachThinking(thinking){
   if(avi) avi.classList.toggle('thinking',thinking);
 }
 
-async function sendCoach(){
+function buildCoachSystemPrompt(){
+  const v=getVibe();
+  const name=getBuddyName();
+  const donHabits=habits.filter(h=>h.done).length;
+  const today=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  const userName=currentUser?currentUser.name:'friend';
+
+  return `${v.personality}
+
+YOUR ACTUAL NAME IS: ${name}
+The user's name is: ${userName}
+Today is: ${today}
+Habits completed: ${donHabits} out of ${habits.length}
+XP today: ${xpPoints}
+Habit list: ${habits.map(h=>(h.done?'✓ ':'○ ')+h.name).join(', ')}
+
+CORE RULES FOR ALL VIBES:
+- Never lecture or make the user feel broken
+- Break tasks into tiny Pomodoro-sized (25 min) chunks when asked
+- When breaking down tasks: acknowledge deadline, assign chunks to specific days, lead with easiest first, end with "Start with this right now:"
+- Keep emotional support responses to 2-3 sentences
+- Render newlines as actual line breaks in task lists
+- Never say "Great question!" "Absolutely!" or "I'd be happy to help!"
+- You KNOW what ADHD feels like from the inside — shame spirals, paralysis, hyperfocus, time blindness`;
+}
+
+function sendCoach(){
   const inp=document.getElementById('coach-input');
   const text=inp.value.trim();if(!text) return;
   inp.value='';
-
+  coachHistory.push({role:'user',content:text});
   const msgs=document.getElementById('coach-msgs');
   const userDiv=document.createElement('div');userDiv.className='coach-user';userDiv.textContent=text;
   msgs.appendChild(userDiv);
-
   const typingDiv=document.createElement('div');typingDiv.className='coach-msg';typingDiv.id='coach-typing';
   typingDiv.innerHTML=`<span style="color:var(--muted);font-style:italic">${getBuddyName().split(' ')[0]} is typing...</span>`;
   msgs.appendChild(typingDiv);msgs.scrollTop=msgs.scrollHeight;
   setCoachThinking(true);
 
-  try {
-    const data = await api('/api/coach/chat', { method:'POST', body:JSON.stringify({message:text}) });
+  fetch(`${WORKER_URL}/ai`,{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:buildCoachSystemPrompt(),messages:coachHistory})
+  })
+  .then(r=>r.json())
+  .then(d=>{
     setCoachThinking(false);
-    const reply = data.reply || "I'm right here with you.";
+    const reply=d.content?.find(c=>c.type==='text')?.text||"I'm right here with you.";
+    coachHistory.push({role:'assistant',content:reply});
+    if(coachHistory.length>20) coachHistory=coachHistory.slice(-20);
     const typing=document.getElementById('coach-typing');if(typing) typing.remove();
     const aiDiv=document.createElement('div');aiDiv.className='coach-msg';
     aiDiv.innerHTML=reply.replace(/\n/g,'<br>');
-    msgs.appendChild(aiDiv);
-
-    // If the coach created a task, show it as a card in the chat
-    if(data.createdTask) {
-      const t = data.createdTask;
-      tasks.unshift(t);
-      const taskCard = document.createElement('div');
-      taskCard.className = 'coach-task-card';
-      const steps = t.steps || [];
-      taskCard.innerHTML = `
-        <div class="coach-task-title">📋 ${t.title}
-          ${t.dueDate?`<span class="task-due ${getDueClass(t.dueDate)}" style="font-size:9px">${getDueLabel(t.dueDate)}</span>`:''}
-        </div>
-        ${steps.map(s => `<div class="task-step-item">
-          <div class="task-step-check" onclick="toggleTaskStepFromCoach('${t.id}','${s.id}',this)">
-          </div>
-          <span class="task-step-name">${s.title}</span>
-          ${s.time_estimate||s.timeEstimate?`<span class="task-step-time">${s.time_estimate||s.timeEstimate}</span>`:''}
-        </div>`).join('')}
-        <div style="margin-top:6px;display:flex;gap:3px">
-          ${steps.map((_,i) => `<div class="task-prog-seg" style="height:3px;flex:1;border-radius:2px;background:rgba(124,58,237,0.12)"></div>`).join('')}
-        </div>
-        <div style="font-size:9px;color:var(--muted);margin-top:4px">0/${steps.length} steps · +${t.xpReward||50} XP</div>
-      `;
-      msgs.appendChild(taskCard);
-      renderHomeTasks();
-    }
-
-    msgs.scrollTop=msgs.scrollHeight;
+    msgs.appendChild(aiDiv);msgs.scrollTop=msgs.scrollHeight;
     speak(reply);
-  } catch(e) {
+  })
+  .catch(()=>{
     setCoachThinking(false);
     const typing=document.getElementById('coach-typing');if(typing) typing.remove();
-    const fallback = e.reply || "Having a little trouble connecting — but I'm still here with you. Try again?";
+    const fallback="Having a little trouble connecting — but I'm still here with you. Try again?";
     const aiDiv=document.createElement('div');aiDiv.className='coach-msg';
     aiDiv.innerHTML=fallback;
     msgs.appendChild(aiDiv);msgs.scrollTop=msgs.scrollHeight;
     speak(fallback);
-  }
-}
-
-async function toggleTaskStepFromCoach(taskId, stepId, el) {
-  try {
-    const data = await api(`/api/tasks/${taskId}/steps/${stepId}/toggle`, { method:'POST' });
-    const task = tasks.find(t => t.id === taskId);
-    if(task) {
-      task.steps = data.steps || task.steps;
-      task.stepsTotal = data.stepsTotal ?? task.stepsTotal;
-      task.stepsDone = data.stepsDone ?? task.stepsDone;
-      task.status = data.task?.status || task.status;
-    }
-    if(data.xpTotal !== undefined) xpTotal = data.xpTotal;
-    if(data.xpAwarded > 0) showXPPop(`+${data.xpAwarded} XP`);
-    // Update the check UI in coach
-    if(data.step?.completed) {
-      el.classList.add('done');
-      el.innerHTML = `<svg width="9" height="9" viewBox="0 0 9 9"><polyline points="1.5,4.5 3.5,6.5 7.5,2.5" fill="none" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>`;
-      el.nextElementSibling?.classList.add('done');
-    } else {
-      el.classList.remove('done');
-      el.innerHTML = '';
-      el.nextElementSibling?.classList.remove('done');
-    }
-    renderHomeTasks(); updateStats(); renderRewards();
-  } catch(e) { console.warn('Coach step toggle error:', e); }
+  });
 }
 
 function toggleMic(){
@@ -2561,62 +1834,8 @@ function toggleMic(){
 // EVENTS
 // ═══════════════════════════════════════
 document.getElementById('home-screen').addEventListener('click',e=>{
-  if(e.target.closest('.hype-icon-wrap')) toggleCoach();
+  if(e.target.closest('.hype-icon-wrap')||e.target.closest('.hype-msg')) toggleCoach();
 });
-
-// ═══════════════════════════════════════
-// SPLASH SCREEN
-// ═══════════════════════════════════════
-setTimeout(()=>{
-  const splash = document.getElementById('splash-screen');
-  if(splash) { splash.classList.add('hide'); setTimeout(()=>splash.remove(), 500); }
-}, 1500);
-
-// ═══════════════════════════════════════
-// SERVICE WORKER & PWA INSTALL
-// ═══════════════════════════════════════
-if('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
-}
-
-let deferredInstallPrompt = null;
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredInstallPrompt = e;
-  // Show install banner if not previously dismissed
-  if(!localStorage.getItem('ph_pwa_dismissed')) {
-    setTimeout(()=>{
-      const banner = document.getElementById('pwa-install');
-      if(banner) banner.classList.add('show');
-    }, 5000); // Show after 5 seconds
-  }
-});
-
-function installPWA() {
-  if(!deferredInstallPrompt) return;
-  deferredInstallPrompt.prompt();
-  deferredInstallPrompt.userChoice.then(result => {
-    deferredInstallPrompt = null;
-    document.getElementById('pwa-install')?.classList.remove('show');
-  });
-}
-
-function dismissPWA() {
-  document.getElementById('pwa-install')?.classList.remove('show');
-  localStorage.setItem('ph_pwa_dismissed', 'true');
-}
-
-// Detect if running as installed PWA — hide install banner
-if(window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-  const banner = document.getElementById('pwa-install');
-  if(banner) banner.style.display = 'none';
-}
-
-// Update voice display once voices load
-if(window.speechSynthesis) {
-  window.speechSynthesis.onvoiceschanged = () => updateVoiceDisplay();
-  setTimeout(updateVoiceDisplay, 500);
-}
 </script>
 </body>
 </html>
