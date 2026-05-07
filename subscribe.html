@@ -114,12 +114,6 @@ body{min-height:100%;background:var(--bg);color:var(--text);font-family:var(--fo
 .stripe-secure svg{width:14px;height:14px;color:var(--green)}
 .stripe-note{font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6}
 
-/* ── Placeholder for Stripe (before user configures) ── */
-.stripe-placeholder{padding:24px;background:rgba(124,58,237,0.06);border:1.5px dashed var(--border-bright);border-radius:16px;text-align:center}
-.stripe-placeholder-title{font-size:15px;font-weight:700;margin-bottom:8px;color:var(--text-secondary)}
-.stripe-placeholder-steps{font-size:13px;color:var(--muted);line-height:1.8;text-align:left;max-width:380px;margin:0 auto}
-.stripe-placeholder-steps code{background:rgba(124,58,237,0.12);padding:2px 7px;border-radius:6px;font-size:12px;font-family:var(--mono);color:var(--accent2)}
-
 /* ── Comparison table ── */
 .compare{padding:40px 24px 80px;max-width:700px;margin:0 auto}
 .compare-title{font-size:22px;font-weight:900;text-align:center;letter-spacing:-0.02em;margin-bottom:8px}
@@ -311,27 +305,23 @@ body{min-height:100%;background:var(--bg);color:var(--text);font-family:var(--fo
   <div class="stripe-section-sub">Powered by Stripe. 7-day free trial. Cancel anytime.</div>
 
   <div class="stripe-container">
-
-    <div style="display:flex;flex-direction:column;gap:20px;align-items:center">
-      <div style="text-align:center;width:100%">
-        <div style="font-size:14px;font-weight:700;color:#A78BFA;margin-bottom:4px;font-family:var(--font)">Pro Monthly</div>
-        <div style="font-size:12px;color:var(--muted);margin-bottom:14px">7-day free trial · then $9.99/mo</div>
+    <div style="display:flex;flex-direction:column;gap:24px;align-items:center">
+      <div style="text-align:center">
+        <div style="font-size:13px;font-weight:600;color:#A78BFA;margin-bottom:12px">Monthly — $9.99/mo</div>
         <stripe-buy-button
           buy-button-id="buy_btn_1TTuR6CdQ5XIZU4oAZpTySv0"
           publishable-key="pk_live_51TJiNKCdQ5XIZU4o3FD7VrqX2ATH2FNzdfZgMdyDHAcUYezfjEcmweGW7XEDs1CBvARSV3ohZogDgitH8NBv1G8k006GRF2nsB"
         ></stripe-buy-button>
       </div>
       <div style="height:1px;width:80%;background:rgba(124,58,237,0.15)"></div>
-      <div style="text-align:center;width:100%">
-        <div style="font-size:14px;font-weight:700;color:#10B981;margin-bottom:4px;font-family:var(--font)">Pro Yearly <span style="font-size:11px;background:rgba(16,185,129,0.12);color:#10B981;padding:2px 8px;border-radius:8px;margin-left:6px;font-weight:600">SAVE 15%</span></div>
-        <div style="font-size:12px;color:var(--muted);margin-bottom:14px">$8.49/mo · billed $101.89/year</div>
+      <div style="text-align:center">
+        <div style="font-size:13px;font-weight:600;color:#10B981;margin-bottom:12px">Yearly — Save 15%</div>
         <stripe-buy-button
           buy-button-id="buy_btn_1TTuQ2CdQ5XIZU4opNTuhulB"
           publishable-key="pk_live_51TJiNKCdQ5XIZU4o3FD7VrqX2ATH2FNzdfZgMdyDHAcUYezfjEcmweGW7XEDs1CBvARSV3ohZogDgitH8NBv1G8k006GRF2nsB"
         ></stripe-buy-button>
       </div>
     </div>
-
   </div>
 
   <div class="stripe-secure">
@@ -489,7 +479,7 @@ body{min-height:100%;background:var(--bg);color:var(--text);font-family:var(--fo
     </div>
     <span class="footer-brand">ParaHype</span>
   </div>
-  <div class="footer-copy">© 2026 Loadingdrbetha Group LLC. All rights reserved.</div>
+  <div class="footer-copy">© 2025 Loadingdrbetha Group LLC. All rights reserved.</div>
   <div class="footer-links">
     <a href="landing.html">Home</a>
     <a href="#">Privacy</a>
