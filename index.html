@@ -609,8 +609,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <div class="settings-group">
           <div class="settings-item" onclick="openDisplayNameEdit()"><span class="settings-label">Display name</span><span class="settings-val" id="disp-name">—</span></div>
           <div class="settings-item"><span class="settings-label">Email</span><span class="settings-val" id="disp-email">—</span></div>
-          <div class="settings-item"><span class="settings-label">Age</span><span class="settings-val" id="disp-age">—</span></div>
-<div class="settings-item"><span class="settings-label">Subscription</span><span class="settings-val" id="disp-sub">Free</span></div>
           <div class="settings-item" onclick="toggleNotifications()"><span class="settings-label">Notifications</span><span class="settings-val" id="notif-setting">On</span></div>
         </div>
         <div style="font-size:12px;color:var(--muted);padding:0 4px 8px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em">Your Buddy</div>
@@ -1321,7 +1319,7 @@ function clearAuthError() {
 
 function isValidEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()); }
 const FREE_MEMBERS = [
-  // 'alicia.betha@gmail.com',
+  // 'friend@example.com',
 ];
 function isFreeMember(email) {
   if (!email) return false;
@@ -1399,7 +1397,7 @@ async function tryAutoLogin() {
     hideLoading();
     await enterApp({
       id: data.id,
-      name: data.name || data.displayName,
+      name: data.displayName || data.name,
       email: data.email,
       initials: data.initials,
       xpTotal: data.xpTotal,
@@ -1418,6 +1416,8 @@ async function tryAutoLogin() {
 // ENTER APP (after any auth method)
 // ═══════════════════════════════════════
 async function enterApp(user, picture=null) {
+  // Prefer displayName (user-updated) over name (original signup name)
+  if(user.displayName) user.name = user.displayName;
   currentUser = user;
   xpTotal = user.xpTotal || 0;
 
@@ -1507,6 +1507,7 @@ function goTab(tab){
   const tb=document.getElementById('tab-'+tab);if(tb)tb.classList.add('active');
   if(tab==='buddy') updateAllVibeUI();
   if(coachOpen&&tab!=='home') closeCoach();
+  updateClock();
 }
 
 function goToLanding(){ window.location.href='landing.html'; }
@@ -2040,7 +2041,7 @@ function inviteFriend(){
 // SUBSCRIBE
 // ═══════════════════════════════════════
 let selectedSubTier = 'monthly';
-const SUB_PRICES = { weekly:'$2.99 / week', monthly:'$9.99 / month', yearly:'$99.99 / year' };
+const SUB_PRICES = { weekly:'$2.99 / week', monthly:'$9.99 / month', yearly:'$79.99 / year' };
 function goToSubscribe(){
   closeSubscribeModal();
   window.location.href='subscribe.html';
