@@ -738,7 +738,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         </div>
         <div class="sub-tier" id="sub-yearly" onclick="selectSubTier('yearly')" style="flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;transition:all 0.15s">
           <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">Yearly</div>
-          <div style="font-family:var(--font-head);font-size:18px;font-weight:700">$79.99</div>
+          <div style="font-family:var(--font-head);font-size:18px;font-weight:700">$101.90</div>
           <div style="font-size:10px;color:var(--muted)">/year · save 33%</div>
         </div>
       </div>
@@ -896,8 +896,8 @@ const VIBES = {
     timerBtn:'Begin gently',
     nudge:'Take a breath. You have everything you need for today. Let\'s move slowly and with intention.'
   },
-  layla: {
-    id:'layla', name:'Gabe', label:'Gentle', emoji:'💜',
+  gabe
+    id:'gabe', name:'Gabe', label:'Gentle', emoji:'💜',
     color:'#C084FC', glow:'rgba(192,132,252,0.3)', bg:'rgba(192,132,252,0.08)',
     tagColor:'#C084FC', tagBg:'rgba(192,132,252,0.1)',
     sample:'"No rush at all. I\'m right here whenever you\'re ready. You\'re safe."',
@@ -2041,7 +2041,7 @@ function inviteFriend(){
 // SUBSCRIBE
 // ═══════════════════════════════════════
 let selectedSubTier = 'monthly';
-const SUB_PRICES = { weekly:'$2.99 / week', monthly:'$9.99 / month', yearly:'$79.99 / year' };
+const SUB_PRICES = { weekly:'$2.99 / week', monthly:'$9.99 / month', yearly:'$101.90 / year' };
 function goToSubscribe(){
   closeSubscribeModal();
   window.location.href='subscribe.html';
