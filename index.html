@@ -738,7 +738,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         </div>
         <div class="sub-tier" id="sub-yearly" onclick="selectSubTier('yearly')" style="flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;transition:all 0.15s">
           <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">Yearly</div>
-          <div style="font-family:var(--font-head);font-size:18px;font-weight:700">$101.90</div>
+          <div style="font-family:var(--font-head);font-size:18px;font-weight:700">$79.99</div>
           <div style="font-size:10px;color:var(--muted)">/year · save 33%</div>
         </div>
       </div>
@@ -896,8 +896,8 @@ const VIBES = {
     timerBtn:'Begin gently',
     nudge:'Take a breath. You have everything you need for today. Let\'s move slowly and with intention.'
   },
-  gabe
-    id:'gabe', name:'Gabe', label:'Gentle', emoji:'💜',
+  layla: {
+    id:'layla', name:'Gabe', label:'Gentle', emoji:'💜',
     color:'#C084FC', glow:'rgba(192,132,252,0.3)', bg:'rgba(192,132,252,0.08)',
     tagColor:'#C084FC', tagBg:'rgba(192,132,252,0.1)',
     sample:'"No rush at all. I\'m right here whenever you\'re ready. You\'re safe."',
@@ -1056,8 +1056,16 @@ function updateAllVibeUI() {
   if(coachNameLabel) coachNameLabel.textContent = name;
   const coachVibeLabel = document.getElementById('coach-vibe-label');
   if(coachVibeLabel) coachVibeLabel.textContent = `${v.label} mode`;
+  const personality = getCoachPersonality();
   const coachInput = document.getElementById('coach-input');
-  if(coachInput) coachInput.placeholder = `Talk to ${name.split(' ')[0]}...`;
+  if(coachInput) coachInput.placeholder = personality.inputPlaceholder || `Talk to ${name.split(' ')[0]}...`;
+
+  // Update the welcome message to match vibe
+  const coachMsgs = document.getElementById('coach-msgs');
+  if(coachMsgs && coachMsgs.children.length <= 1 && !coachHasBriefed) {
+    const firstMsg = coachMsgs.querySelector('.coach-msg');
+    if(firstMsg) firstMsg.textContent = personality.welcome;
+  }
 
   const talkLabel = document.getElementById('btn-talk-label');
   if(talkLabel) talkLabel.textContent = `Talk to ${name.split(' ')[0]}`;
@@ -1240,6 +1248,13 @@ async function saveVibeChange() {
   currentVibe = pendingVibe;
   if(!buddyName) buddyName = null;
   try { await api('/api/vibe', { method:'POST', body:JSON.stringify({vibe:currentVibe}) }); } catch(e){ console.warn(e); }
+  // Reset coach for new personality
+  coachHasBriefed = false;
+  const coachMsgs = document.getElementById('coach-msgs');
+  if(coachMsgs) {
+    const personality = getCoachPersonality();
+    coachMsgs.innerHTML = `<div class="coach-msg">${personality.welcome}</div>`;
+  }
   updateAllVibeUI();
   document.getElementById('vibe-change-sheet').classList.remove('open');
 }
@@ -2041,7 +2056,7 @@ function inviteFriend(){
 // SUBSCRIBE
 // ═══════════════════════════════════════
 let selectedSubTier = 'monthly';
-const SUB_PRICES = { weekly:'$2.99 / week', monthly:'$9.99 / month', yearly:'$101.90 / year' };
+const SUB_PRICES = { weekly:'$2.99 / week', monthly:'$9.99 / month', yearly:'$79.99 / year' };
 function goToSubscribe(){
   closeSubscribeModal();
   window.location.href='subscribe.html';
@@ -2287,6 +2302,116 @@ async function submitParentConsent() {
 // ═══════════════════════════════════════
 // VOICE (TTS with voice picker)
 // ═══════════════════════════════════════
+
+// Vibe-specific voice profiles: each buddy gets unique speech characteristics
+const VIBE_VOICE_PROFILES = {
+  akil: {
+    rate: 1.12,   // fast, hyper energy
+    pitch: 1.15,  // higher, animated
+    volume: 1,
+    // Prefer energetic male voices
+    preferredVoices: ['Aaron','Daniel','Google US English','Microsoft David','Alex','Tom','Fred'],
+    testPhrase: "YOOOO let's get it! You are BUILT DIFFERENT! Time to crush it!"
+  },
+  trinity: {
+    rate: 0.82,   // slow, measured, calming
+    pitch: 0.92,  // lower, grounding
+    volume: 0.9,
+    preferredVoices: ['Samantha','Karen','Google UK English Female','Microsoft Zira','Moira','Fiona','Tessa'],
+    testPhrase: "Take a deep breath. You are exactly where you need to be right now."
+  },
+  layla: {
+    rate: 0.88,   // gentle pace
+    pitch: 1.05,  // warm, soft
+    volume: 0.85,
+    preferredVoices: ['Samantha','Karen','Tessa','Google UK English Female','Microsoft Zira','Moira','Nicky'],
+    testPhrase: "No rush at all. I'm right here with you. You're doing great, okay?"
+  },
+  alissa: {
+    rate: 1.05,   // sharp, direct
+    pitch: 1.0,   // confident, assertive
+    volume: 1,
+    preferredVoices: ['Samantha','Karen','Google US English','Microsoft Zira','Tessa','Nicky','Fiona'],
+    testPhrase: "You're falling behind. That gap closes TODAY. No excuses. Move."
+  },
+  riyan: {
+    rate: 0.95,   // clear, deliberate
+    pitch: 0.95,  // steady, authoritative
+    volume: 1,
+    preferredVoices: ['Daniel','Aaron','Google UK English Male','Microsoft David','Alex','Tom','Rishi'],
+    testPhrase: "Three habits remaining. Start with number two, it's the fastest win. Go."
+  },
+  lex: {
+    rate: 1.0,    // conversational, natural
+    pitch: 1.2,   // upbeat, warm, expressive
+    volume: 0.95,
+    preferredVoices: ['Samantha','Nicky','Karen','Google US English','Microsoft Jenny','Tessa','Moira'],
+    testPhrase: "Okay bestie, real talk, have you eaten today? Let's do this together!"
+  }
+};
+
+function getVibeVoiceProfile() {
+  const vibeKey = currentVibe || 'akil';
+  return VIBE_VOICE_PROFILES[vibeKey] || VIBE_VOICE_PROFILES.akil;
+}
+
+// Vibe-specific coach personality: how each buddy talks, motivates, and frames goals
+const VIBE_COACH_PERSONALITY = {
+  akil: {
+    welcome: "LET'S GO!! I'm Akil, your hype beast. I'm here to help you CRUSH your goals, build unshakable confidence, and stack wins all day. Tell me what we're conquering today!",
+    briefingStyle: "Respond as Akil the Hype Beast — charismatic, hyper, lively, and competitive. Frame everything as a challenge to CRUSH. Push the user to build confidence, self-esteem, and productivity. Use high energy language. Celebrate every small win like it's a championship. Make them feel unstoppable. Get them fired up about their habits and tasks. Give advice on crushing goals and developing new discipline. Fuel their dopamine.",
+    briefingOpener: "Let's CRUSH today! Here's what I need you to lock in on — we're building confidence, discipline, and stacking that dopamine.",
+    fallback: "Ayo, my signal's glitching but I'm STILL here for you! Try me again — we got goals to CRUSH!",
+    defaultReply: "Let's GET IT! I'm locked in with you!",
+    inputPlaceholder: "What are we crushing today?"
+  },
+  trinity: {
+    welcome: "Welcome. I'm Trinity, your calm anchor. I'm here to help you find focus without the overwhelm — one mindful step at a time. What's weighing on you today?",
+    briefingStyle: "Respond as Trinity the Zen guide — calm, grounded, mindful, and reassuring. Frame tasks as gentle intentions, not demands. Emphasize one thing at a time. Acknowledge feelings first, then guide action. Use calm, spacious language. Help the user find stillness in their day and approach habits with self-compassion.",
+    briefingOpener: "Let's breathe into today. Here's what's on your plate — and remember, you don't have to do it all at once.",
+    fallback: "A small pause in our connection. That's okay — take a breath. I'm here when you're ready to try again.",
+    defaultReply: "I'm right here with you. One step at a time.",
+    inputPlaceholder: "What's on your mind?"
+  },
+  layla: {
+    welcome: "Hey, it's Gabe. I'm so glad you're here. There's no pressure to do anything right now — I just want to check in. How are you feeling today?",
+    briefingStyle: "Respond as Gabe the Gentle buddy — warm, nurturing, patient, and emotionally safe. Never pressure. Frame tasks as invitations, not obligations. Validate feelings. Use soft, caring language. Remind the user that even showing up counts. Focus on emotional wellbeing alongside productivity. Make them feel safe and supported.",
+    briefingOpener: "Hey, I'm glad you showed up today. Here's what we have — no pressure, just possibilities.",
+    fallback: "I had a little hiccup connecting, but I'm still right here with you. No rush — try again whenever you're ready.",
+    defaultReply: "I'm here for you. You're doing better than you think.",
+    inputPlaceholder: "I'm here for you..."
+  },
+  alissa: {
+    welcome: "Hey. I'm Alissa. I don't do excuses — I do results. Let's look at where you stand and figure out how to WIN today. What's the play?",
+    briefingStyle: "Respond as Alissa the Competitor — direct, driven, no-nonsense, and accountability-focused. Frame tasks as challenges to beat. Reference streaks, XP, and progress like it's a scoreboard. Push the user to outperform yesterday. Use sharp, motivating language. Create healthy urgency without being mean. Make them want to prove themselves.",
+    briefingOpener: "Status check. Here's where you stand — and here's what it's gonna take to WIN today.",
+    fallback: "Connection dropped. That's not gonna stop us. Hit me again — we've got a scoreboard to climb.",
+    defaultReply: "No excuses. Let's make moves.",
+    inputPlaceholder: "What's the game plan?"
+  },
+  riyan: {
+    welcome: "Hey, I'm Riyan. I'm your strategic coach. I'll help you prioritize, plan, and execute efficiently. What's on deck today — let's map it out.",
+    briefingStyle: "Respond as Riyan the Coach — tactical, structured, calm-confident, and efficiency-focused. Frame tasks with clear priorities, time estimates, and logical order. Use data-driven language (streaks, completion rates, time). Give actionable next steps. Be direct but supportive. Focus on systems and execution over emotion.",
+    briefingOpener: "Morning brief. Here's your status and the optimal plan of attack for today.",
+    fallback: "Connection interrupted. Re-engage when ready — the plan hasn't changed.",
+    defaultReply: "Noted. Let's keep executing.",
+    inputPlaceholder: "What needs to get done?"
+  },
+  lex: {
+    welcome: "Hiii! It's Lex! Okay I'm SO happy you opened the app today. Real talk — how are you ACTUALLY doing? Let's figure out today together!",
+    briefingStyle: "Respond as Lex the Bestie — warm, chatty, emotionally expressive, and genuinely caring. Talk like a supportive best friend. Use conversational language, check in on how they're feeling. Mix encouragement with gentle accountability. Be real but always loving. Celebrate efforts, not just results. Make them feel seen and cared about.",
+    briefingOpener: "Okay babe, let me check what's going on today — I've got your back!",
+    fallback: "Ugh, my connection glitched! I'm still here though — try again? I'm not going anywhere!",
+    defaultReply: "I'm here for you always! Let's figure this out together.",
+    inputPlaceholder: "Talk to me bestie..."
+  }
+};
+
+function getCoachPersonality() {
+  const vibeKey = currentVibe || 'akil';
+  return VIBE_COACH_PERSONALITY[vibeKey] || VIBE_COACH_PERSONALITY.akil;
+}
+
 let selectedVoiceName = localStorage.getItem('ph_voice') || null;
 let pendingVoiceName = null;
 
@@ -2303,9 +2428,15 @@ function getBestVoice() {
     const picked = voices.find(v => v.name === selectedVoiceName);
     if(picked) return picked;
   }
-  // Otherwise rank by quality
+  // Use vibe-specific preferred voices first
+  const profile = getVibeVoiceProfile();
+  for(const name of profile.preferredVoices) {
+    const match = voices.find(v => v.name.includes(name));
+    if(match) return match;
+  }
+  // Fallback: general quality ranking
   const ranked = [
-    'Samantha', 'Zarvox', 'Karen', 'Daniel', 'Moira', 'Tessa',
+    'Samantha', 'Karen', 'Daniel', 'Moira', 'Tessa',
     'Google US English', 'Google UK English Female', 'Google UK English Male',
     'Microsoft Zira', 'Microsoft David', 'Microsoft Jenny',
     'Nicky', 'Alex', 'Fiona', 'Veena'
@@ -2333,7 +2464,8 @@ function speak(text){
   const utt=new SpeechSynthesisUtterance(clean);
   const voice = getBestVoice();
   if(voice) utt.voice=voice;
-  utt.rate=0.95;utt.pitch=1.05;utt.volume=1;
+  const profile = getVibeVoiceProfile();
+  utt.rate=profile.rate;utt.pitch=profile.pitch;utt.volume=profile.volume;
   window.speechSynthesis.speak(utt);
 }
 
@@ -2373,9 +2505,10 @@ function testVoice(name) {
   window.speechSynthesis.cancel();
   const voices = window.speechSynthesis.getVoices();
   const voice = voices.find(v => v.name === name);
-  const utt = new SpeechSynthesisUtterance("Hey! I'm your hype buddy. Let's go!");
+  const profile = getVibeVoiceProfile();
+  const utt = new SpeechSynthesisUtterance(profile.testPhrase);
   if(voice) utt.voice = voice;
-  utt.rate = 0.95; utt.pitch = 1.05;
+  utt.rate = profile.rate; utt.pitch = profile.pitch; utt.volume = profile.volume;
   window.speechSynthesis.speak(utt);
 }
 
@@ -2430,14 +2563,17 @@ function toggleCoach(){
 
     if(!coachHasBriefed && (activeTasks.length > 0 || remainingHabits > 0)) {
       coachHasBriefed = true;
+      const personality = getCoachPersonality();
       const msgs=document.getElementById('coach-msgs');
       const typingDiv=document.createElement('div');typingDiv.className='coach-msg';typingDiv.id='coach-typing';
       typingDiv.innerHTML=`<span style="color:var(--muted);font-style:italic">${getBuddyName().split(' ')[0]} is checking your status...</span>`;
       msgs.appendChild(typingDiv);msgs.scrollTop=msgs.scrollHeight;
       setCoachThinking(true);
 
-      // Build a context-aware briefing request
-      let briefingPrompt = 'Give me my daily briefing. ';
+      // Build a context-aware briefing request with vibe personality
+      let briefingPrompt = `[STYLE: ${personality.briefingStyle}] `;
+      briefingPrompt += personality.briefingOpener + ' ';
+      briefingPrompt += 'Give me my daily briefing. ';
       if(overdueTasks.length > 0) briefingPrompt += `I have ${overdueTasks.length} overdue task(s) — flag those urgently. `;
       if(dailyTasks.length > 0) briefingPrompt += `I have ${dailyTasks.length} daily task(s) with ${incompleteDailySteps} steps remaining. `;
       if(remainingHabits > 0) briefingPrompt += `${remainingHabits} habits still to do. `;
@@ -2447,7 +2583,7 @@ function toggleCoach(){
         .then(data => {
           setCoachThinking(false);
           const typing=document.getElementById('coach-typing');if(typing) typing.remove();
-          const reply = data.reply || "Let's check in on your progress!";
+          const reply = data.reply || personality.defaultReply;
           const aiDiv=document.createElement('div');aiDiv.className='coach-msg';
           aiDiv.innerHTML=reply.replace(/\n/g,'<br>');
           msgs.appendChild(aiDiv);msgs.scrollTop=msgs.scrollHeight;
@@ -2472,6 +2608,7 @@ async function sendCoach(){
   const inp=document.getElementById('coach-input');
   const text=inp.value.trim();if(!text) return;
   inp.value='';
+  const personality = getCoachPersonality();
 
   const msgs=document.getElementById('coach-msgs');
   const userDiv=document.createElement('div');userDiv.className='coach-user';userDiv.textContent=text;
@@ -2482,10 +2619,13 @@ async function sendCoach(){
   msgs.appendChild(typingDiv);msgs.scrollTop=msgs.scrollHeight;
   setCoachThinking(true);
 
+  // Prepend vibe personality instructions to every message
+  const vibeMessage = `[STYLE: ${personality.briefingStyle}] ${text}`;
+
   try {
-    const data = await api('/api/coach/chat', { method:'POST', body:JSON.stringify({message:text}) });
+    const data = await api('/api/coach/chat', { method:'POST', body:JSON.stringify({message:vibeMessage}) });
     setCoachThinking(false);
-    const reply = data.reply || "I'm right here with you.";
+    const reply = data.reply || personality.defaultReply;
     const typing=document.getElementById('coach-typing');if(typing) typing.remove();
     const aiDiv=document.createElement('div');aiDiv.className='coach-msg';
     aiDiv.innerHTML=reply.replace(/\n/g,'<br>');
@@ -2522,7 +2662,7 @@ async function sendCoach(){
   } catch(e) {
     setCoachThinking(false);
     const typing=document.getElementById('coach-typing');if(typing) typing.remove();
-    const fallback = e.reply || "Having a little trouble connecting — but I'm still here with you. Try again?";
+    const fallback = e.reply || personality.fallback;
     const aiDiv=document.createElement('div');aiDiv.className='coach-msg';
     aiDiv.innerHTML=fallback;
     msgs.appendChild(aiDiv);msgs.scrollTop=msgs.scrollHeight;
