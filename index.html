@@ -1977,28 +1977,34 @@ async function sendHype(){
   chat.appendChild(div);chat.scrollTop=chat.scrollHeight;
 
   const name=getBuddyName();
+  const v=getVibe();
+  const personality=getCoachPersonality();
 
-  // Try sending via API for XP + AI response
+  // Show typing indicator
+  const typingDiv=document.createElement('div');typingDiv.className='msg-bubble msg-ai';typingDiv.id='hype-typing';
+  typingDiv.innerHTML=`<div class="msg-ai-name"><span>${v.emoji}</span><span>${name}</span></div><span style="color:var(--muted);font-style:italic">${name.split(' ')[0]} is typing...</span>`;
+  chat.appendChild(typingDiv);chat.scrollTop=chat.scrollHeight;
+
   try {
-    // Use the /api/buddies/hype if we have a buddyPairId, otherwise use /ai for a quick response
-    const data = await api('/ai', {
+    // Route through /api/coach/chat with mode:'hype' — gets conversation memory, vibe personality, server-side XP
+    const data = await api('/api/coach/chat', {
       method:'POST',
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:200,
-        system:`You are ${name}, a hype buddy on ParaHype. Respond in 1-2 SHORT sentences like a real friend texting. Use ${getVibe().label} energy. React specifically to what they said. Use 1-2 emojis. Never be generic.`,
-        messages:[{role:'user',content:text}]
-      })
+      body:JSON.stringify({ message:text, mode:'hype' })
     });
-    const reply = data.content?.find(c=>c.type==='text')?.text || `${name.split(' ')[0]} loved that! Keep the hype going 💜`;
+    const typing=document.getElementById('hype-typing');if(typing) typing.remove();
+    const reply = data.reply || `${name.split(' ')[0]} loved that! Keep the hype going 💜`;
     const aiDiv=document.createElement('div');aiDiv.className='msg-bubble msg-ai';
-    aiDiv.innerHTML=`<div class="msg-ai-name"><span>${getVibe().emoji}</span><span>${name}</span></div>${reply}`;
+    aiDiv.innerHTML=`<div class="msg-ai-name"><span>${v.emoji}</span><span>${name}</span></div>${reply}`;
     chat.appendChild(aiDiv);chat.scrollTop=chat.scrollHeight;
-    dailyXP += 15; updateStats();
+    // XP is now awarded server-side
+    if(data.xpAwarded) { dailyXP += data.xpAwarded; }
+    if(data.xpTotal !== undefined) { xpTotal = data.xpTotal; }
+    updateStats();
   } catch(e) {
-    const fallback = `${name.split(' ')[0]} loved that! +15 XP for spreading the hype 💜`;
+    const typing=document.getElementById('hype-typing');if(typing) typing.remove();
+    const fallback = personality.fallback || `${name.split(' ')[0]} loved that! +15 XP for spreading the hype 💜`;
     const aiDiv=document.createElement('div');aiDiv.className='msg-bubble msg-ai';
-    aiDiv.innerHTML=`<div class="msg-ai-name"><span>${getVibe().emoji}</span><span>${name}</span></div>${fallback}`;
+    aiDiv.innerHTML=`<div class="msg-ai-name"><span>${v.emoji}</span><span>${name}</span></div>${fallback}`;
     chat.appendChild(aiDiv);chat.scrollTop=chat.scrollHeight;
     dailyXP += 15; updateStats();
   }
@@ -2579,7 +2585,7 @@ function toggleCoach(){
       if(remainingHabits > 0) briefingPrompt += `${remainingHabits} habits still to do. `;
       briefingPrompt += 'What should I focus on right now?';
 
-      api('/api/coach/chat', { method:'POST', body:JSON.stringify({message:briefingPrompt}) })
+      api('/api/coach/chat', { method:'POST', body:JSON.stringify({message:briefingPrompt, mode:'coach'}) })
         .then(data => {
           setCoachThinking(false);
           const typing=document.getElementById('coach-typing');if(typing) typing.remove();
@@ -2623,7 +2629,7 @@ async function sendCoach(){
   const vibeMessage = `[STYLE: ${personality.briefingStyle}] ${text}`;
 
   try {
-    const data = await api('/api/coach/chat', { method:'POST', body:JSON.stringify({message:vibeMessage}) });
+    const data = await api('/api/coach/chat', { method:'POST', body:JSON.stringify({message:vibeMessage, mode:'coach'}) });
     setCoachThinking(false);
     const reply = data.reply || personality.defaultReply;
     const typing=document.getElementById('coach-typing');if(typing) typing.remove();
