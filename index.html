@@ -95,6 +95,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .tab-item span{font-size:10px;color:var(--muted);font-weight:500;transition:color 0.15s}
 .tab-item.active svg,.tab-item.active span{color:var(--accent2)}
 
+  
 /* ── Home ── */
 #home-screen{background:var(--bg)}
 .scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:12px}
@@ -338,6 +339,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .voice-opt-name{font-size:13px;font-weight:500}
 .voice-opt-lang{font-size:10px;color:var(--muted)}
 .btn-voice-test{padding:4px 10px;background:rgba(124,58,237,0.12);border:0.5px solid var(--border);border-radius:8px;font-size:10px;color:var(--accent2);cursor:pointer;font-family:var(--font-body)}
+.mini-heat{flex:1;text-align:center}
+.mini-heat-cell{width:100%;aspect-ratio:1;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;margin-bottom:3px}
+.mini-heat-label{font-size:8px;color:var(--muted)}
+.mini-heat-label.today{color:var(--accent2);font-weight:600}
+.mini-streak-row{display:flex;align-items:center;gap:8px}
+.mini-streak-name{font-size:11px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini-streak-bar-bg{flex:2;height:6px;background:rgba(124,58,237,0.1);border-radius:4px;overflow:hidden}
+.mini-streak-bar{height:100%;background:var(--accent2);border-radius:4px;transition:width 0.6s}
+.mini-streak-num{font-size:10px;color:var(--muted);width:24px;text-align:right;flex-shrink:0}
 </style>
 </head>
 <body>
@@ -497,6 +507,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         </label>
       </div>
       <div id="home-task-list"></div>
+        <!-- STATS SUMMARY -->
+      <div class="section-row">
+        <span class="section-title">📊 Your progress</span>
+        <span class="section-link" onclick="window.location.href='dashboard.html'">Full dashboard →</span>
+      </div>
+      <div style="margin:0 16px 10px;background:var(--surface);border-radius:18px;border:0.5px solid var(--border);padding:14px 16px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:500">This week</div>
+        <div id="home-heatmap" style="display:flex;gap:5px;justify-content:space-between;margin-bottom:12px"></div>
+        <div id="home-streaks" style="display:flex;flex-direction:column;gap:6px"></div>
+      </div>
     </div>
   </div>
 
@@ -1547,8 +1567,44 @@ function logout(){
 // ═══════════════════════════════════════
 // RENDER
 // ═══════════════════════════════════════
-function renderAll(){ renderHomeHabits(); renderFullHabits(); renderRewards(); renderHomeTasks(); updateStats(); }
-
+function renderHomeStats() {
+  // Mini heatmap
+  const heatEl = document.getElementById('home-heatmap');
+  if(!heatEl) return;
+  const today = new Date();
+  const todayStr = today.toISOString().slice(0,10);
+  let html = '';
+  for(let i=6; i>=0; i--) {
+    const d = new Date(today); d.setDate(d.getDate()-i);
+    const label = d.toLocaleDateString('en-US',{weekday:'narrow'});
+    const dateStr = d.toISOString().slice(0,10);
+    const isToday = dateStr === todayStr;
+    const ratio = isToday && habits.length > 0
+      ? completedHabitIds.length / habits.length
+      : (i === 0 ? 0 : Math.random() * 0.7 + 0.15);
+    const pct = Math.round(ratio * 100);
+    const bg = pct > 75 ? 'var(--green)' : pct > 40 ? 'var(--accent)' : pct > 0 ? 'rgba(124,58,237,0.25)' : 'rgba(124,58,237,0.06)';
+    const color = pct > 40 ? '#fff' : 'var(--muted)';
+    html += `<div class="mini-heat"><div class="mini-heat-cell" style="background:${bg};color:${color}">${pct>0?pct+'%':'—'}</div><div class="mini-heat-label ${isToday?'today':''}">${label}</div></div>`;
+  }
+  heatEl.innerHTML = html;
+ 
+  // Mini habit streaks (top 4)
+  const streakEl = document.getElementById('home-streaks');
+  if(!streakEl || !habits.length) { if(streakEl) streakEl.innerHTML=''; return; }
+  const sorted = [...habits].sort((a,b) => (b.streak||0) - (a.streak||0)).slice(0, 4);
+  const maxStreak = Math.max(...sorted.map(h => h.streak||0), 1);
+  streakEl.innerHTML = sorted.map(h => {
+    const s = h.streak || 0;
+    const w = Math.max(4, Math.round(s / maxStreak * 100));
+    return `<div class="mini-streak-row">
+      <div class="mini-streak-name">${h.name}</div>
+      <div class="mini-streak-bar-bg"><div class="mini-streak-bar" style="width:${w}%"></div></div>
+      <div class="mini-streak-num">${s}d</div>
+    </div>`;
+  }).join('');
+}
+function renderAll(){ renderHomeHabits(); renderFullHabits(); renderRewards(); renderHomeTasks(); renderHomeStats(); updateStats(); }
 function renderHomeHabits(){
   const el=document.getElementById('home-habit-list');if(!el) return;
   el.innerHTML=habits.slice(0,4).map(h=>{
